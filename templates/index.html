@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Subir PDF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            {% if session.get('logged_in') %}
+                <li><a href="{{ url_for('profile') }}">Mi Perfil</a></li>
+                <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
+            {% else %}
+                <li><a href="#" id="btn-join">Únete</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Sube tu PDF</h1>
+        <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="pdf" accept="application/pdf" required>
+            <button type="submit">Generar Test</button>
+        </form>
+    </div>
+</body>
+</html>

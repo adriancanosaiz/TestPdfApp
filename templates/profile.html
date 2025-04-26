@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <li><a href="{{ url_for('profile') }}">Mi Perfil</a></li>
+            <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
+        </ul>
+    </nav>
+
+    <div class="profile-container">
+        <h1>Bienvenido, {{ user[1] }}</h1> <!-- Supone que el nombre de usuario está en la columna 1 -->
+        <p>Email: {{ user[2] }}</p>  <!-- Supone que el email está en la columna 2 -->
+
+        <h2>Editar Perfil</h2>
+        <form method="POST" action="{{ url_for('profile') }}">
+            <div>
+                <label for="username">Nuevo Nombre de Usuario</label>
+                <input type="text" id="username" name="username" value="{{ session['username'] }}" required>
+            </div>
+            <div>
+                <label for="email">Nuevo Email</label>
+                <input type="email" id="email" name="email" value="{{ session['email'] }}" required>
+            </div>
+            <div>
+                <label for="password">Nueva Contraseña</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Guardar cambios</button>
+        </form>
+
+        <a href="{{ url_for('logout') }}" class="btn-primary">Cerrar sesión</a>
+    </div>
+</body>
+</html>

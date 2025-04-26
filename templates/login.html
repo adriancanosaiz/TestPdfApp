@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión - TestApp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <li><a href="{{ url_for('register') }}">Registrarse</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <h1>Iniciar sesión</h1>
+        <form method="POST" action="{{ url_for('login') }}">
+            {{ form.hidden_tag() }}
+            <div>
+                <label for="username">Nombre de usuario:</label>
+                {{ form.username(size=20) }}
+            </div>
+            <div>
+                <label for="password">Contraseña:</label>
+                {{ form.password(size=20) }}
+            </div>
+            <div>
+                <button type="submit">Iniciar sesión</button>
+            </div>
+        </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado - TestApp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <li><a href="{{ url_for('index') }}">Subir PDF</a></li>
+            <li><a href="{{ url_for('test') }}">Prueba</a></li>
+            <li><a href="{{ url_for('profile') }}">Perfil</a></li>
+            <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <h1>Resultado de tu prueba</h1>
+        <p>Fecha: {{ resultado.fecha }}</p>
+        <p>Total de preguntas: {{ resultado.total_preguntas }}</p>
+        <p>Aciertos: {{ resultado.aciertos }}</p>
+        <p>Nota: {{ resultado.nota }}%</p>
+
+        <h2>Respuestas:</h2>
+        <ul>
+            {% for res in respuestas %}
+            <li>
+                <strong>{{ res.pregunta }}</strong><br>
+                Respuesta seleccionada: {{ res.seleccionada }}<br>
+                Respuesta correcta: {{ res.correcta }}<br>
+                {% if res.es_correcta %}
+                <span style="color: green;">Correcto</span>
+                {% else %}
+                <span style="color: red;">Incorrecto</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</body>
+</html>
