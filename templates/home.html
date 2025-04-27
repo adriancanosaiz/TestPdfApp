@@ -13,7 +13,7 @@
             <li><a href="{{ url_for('home') }}">Inicio</a></li>
             {% if session.get('logged_in') %}
                 <li><a href="{{ url_for('index') }}">Subir PDF</a></li>
-                <li><a href="{{ url_for('test') }}">Prueba</a></li>
+                <li><a href="{{ url_for('test') }}">Test</a></li>
                 <li><a href="{{ url_for('profile') }}">Perfil</a></li>
                 <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
             {% else %}
@@ -23,9 +23,31 @@
         </ul>
     </nav>
 
-    <div class="content">
-        <h1>Bienvenido a TestApp</h1>
-        <p>Sube un archivo PDF y genera un test basado en el contenido del archivo.</p>
+    <div class="home-container">
+        <h1>Bienvenido a <span style="color: #eabd08;">TestApp</span></h1>
+        <p>Crea tests de forma automática y práctica.</p>
+
+        <section class="features">
+            <h2>¿Qué puedes hacer con TestApp?</h2>
+            <ul>
+                <li><strong>Subir PDFs:</strong> Selecciona un documento y deja que la app genere preguntas tipo test automáticamente.</li>
+                <li><strong>Practicar Test:</strong> Responde las preguntas generadas para reforzar tu conocimiento.</li>
+                <li><strong>Seguimiento de progreso:</strong> Consulta tu historial de tests y mejoras.</li>
+                <li><strong>Perfil personalizado:</strong> Administra tus datos y preferencias de uso.</li>
+            </ul>
+        </section>
+
+        <section class="cta">
+            {% if not session.get('logged_in') %}
+                <p>¿Listo para empezar?</p>
+                <a href="{{ url_for('register') }}"><button>Crear cuenta</button></a>
+                <p>¿Ya tienes cuenta?</p>
+                <a href="{{ url_for('login') }}"><button>Iniciar sesión</button></a>
+            {% else %}
+                <p>¡Bienvenido de nuevo!</p>
+                <a href="{{ url_for('index') }}"><button>Subir un PDF</button></a>
+            {% endif %}
+        </section>
     </div>
 
 </body>

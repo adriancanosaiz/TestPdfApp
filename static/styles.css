@@ -1,124 +1,140 @@
 /* Estilos generales */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f7fc;
-    color: #333;
+    background-color: #fefae8; /* Fondo de la paleta */
+    color: #423606; /* Texto principal más oscuro */
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
+/* Estilos de la barra de navegación */
 nav {
-    background-color: #4CAF50;
-    padding: 1rem;
+    background-color: #eabd08; /* Amarillo fuerte */
+    padding: 0.8rem 0;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(66, 54, 6, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
 }
 
 nav ul {
     list-style: none;
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: 2rem;
     margin: 0;
     padding: 0;
 }
 
 nav a {
-    color: white;
+    color: #423606;
     text-decoration: none;
-    font-weight: bold;
-    transition: opacity 0.3s ease;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 
 nav a:hover {
-    opacity: 0.7;
+    opacity: 0.8;
+    background-color: #fee78a;
 }
 
+/* Contenedores generales */
 .container, .profile-container, .home-container, .register-container, .login-container {
-    max-width: 800px;
+    max-width: 900px;
+    width: 100%;
     margin: 40px auto;
     padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    background-color: #fef2c3;
+    box-shadow: 0 6px 15px rgba(66, 54, 6, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
 }
 
+/* Títulos */
 h1, h2 {
-    color: #2d3a47;
+    color: #423606;
     margin-bottom: 20px;
     font-size: 2rem;
     text-align: center;
 }
 
+/* Párrafos */
 p {
-    color: #555;
+    color: #715e12;
     font-size: 1.1rem;
     margin-bottom: 20px;
     line-height: 1.6;
 }
 
+/* Botones */
 button, .btn-primary {
     padding: 12px 25px;
     font-size: 1rem;
-    background-color: #007bff;
-    color: white;
+    background-color: #eabd08;
+    color: #423606;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 10px;
 }
 
 button:hover, .btn-primary:hover {
-    background-color: #0056b3;
+    background-color: #caa204;
 }
 
-/* Formularios */
+/* Formulario */
 form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
+/* Inputs */
 input[type="text"], input[type="email"], input[type="password"], input[type="file"] {
     padding: 12px;
     font-size: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #f8f8f8;
+    border: 1px solid #856d0e;
+    border-radius: 5px;
+    background-color: #fefae8;
     transition: border-color 0.3s ease;
+    color: #423606;
 }
 
 input[type="text"]:hover, input[type="email"]:hover, input[type="password"]:hover, input[type="file"]:hover {
-    border-color: #007bff;
+    border-color: #a18207;
 }
 
-button[type="submit"] {
-    width: 100%;
-    padding: 12px 20px;
-    background-color: #28a745;
-    color: white;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-button[type="submit"]:hover {
-    background-color: #218838;
-}
-
-/* Estilos para preguntas */
+/* Preguntas en tarjetas */
 .pregunta {
+    background-color: #fee78a;
+    padding: 20px;
     margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #f1f1f1;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(66, 54, 6, 0.1);
 }
 
 .pregunta h3 {
-    font-size: 1.2rem;
-    color: #444;
+    font-size: 1.3rem;
+    color: #423606;
+    margin-bottom: 10px;
 }
 
 label {
     font-size: 1rem;
     margin-bottom: 5px;
     cursor: pointer;
+    color: #423606;
 }
 
 input[type="radio"] {
@@ -132,12 +148,13 @@ input[type="radio"] {
 
 .resultado h3 {
     font-size: 1.2rem;
-    color: #333;
+    color: #423606;
 }
 
 .resultado p {
     font-size: 1rem;
     line-height: 1.6;
+    color: #715e12;
 }
 
 span {
@@ -145,89 +162,145 @@ span {
 }
 
 span.green {
-    color: green;
+    color: #4CAF50;
 }
 
 span.red {
-    color: red;
+    color: #dc3545;
 }
 
-/* Botón volver al inicio */
+/* Botón "Volver al inicio" */
 a button {
     padding: 12px 30px;
-    background-color: #6c757d;
-    color: white;
+    background-color: #a18207;
+    color: #fefae8;
     border: none;
     border-radius: 5px;
     font-size: 1.1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
 }
 
 a button:hover {
-    background-color: #5a6268;
+    background-color: #856d0e;
 }
 
-/* Estilos específicos de cada página */
-.home-container, .profile-container, .register-container, .login-container {
-    padding: 50px 20px;
-}
-
-.home-container h1 {
-    font-size: 2.5rem;
-    color: #333;
-}
-
-.home-container .btn-primary, .login-container button, .register-container button {
-    width: 100%;
+/* Estilos para el perfil */
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
 }
 
 .profile-container h1 {
     font-size: 2rem;
+    text-align: center;
+    color: #423606;
 }
 
 .profile-container form input {
     padding: 12px;
     font-size: 1rem;
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
 .profile-container form button {
-    width: 100%;
-    padding: 12px 20px;
+    width: 48%;
+    margin: 0 1% 20px 0;
 }
 
-/* Navegación y enlaces */
-nav ul {
+/* Estilo del botón "Cerrar Sesión" */
+button[type="button"].logout {
+    background-color: #dc3545;
+    width: 48%;
+}
+
+button[type="button"].logout:hover {
+    background-color: #c82333;
+}
+
+/* Asegura que los botones no se sobrepongan */
+.profile-container form {
     display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 0;
+    justify-content: space-between;
+    gap: 10px;
 }
 
-nav a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    padding: 0.5rem;
-}
-
-nav a:hover {
-    text-decoration: underline;
-}
-
-/* Agregar espacio entre elementos */
+/* Contenido de la página */
 .content {
     padding: 20px;
+    text-align: center;
 }
 
 .content h1 {
     font-size: 2.5rem;
-    color: #333;
+    color: #423606;
 }
 
 .content p {
     font-size: 1.1rem;
-    color: #555;
+    color: #715e12;
     margin-bottom: 30px;
+}
+
+/* Estilos para la página principal (home) */
+.home-container {
+    max-width: 900px;
+    width: 90%;
+    margin-top: 100px; /* espacio debajo del nav */
+    padding: 30px;
+    background-color: #fef2c3;
+    box-shadow: 0 6px 15px rgba(66, 54, 6, 0.2);
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Sección de características */
+.features {
+    margin-top: 40px;
+    text-align: left;
+}
+
+.features h2 {
+    font-size: 2rem;
+    color: #423606;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.features ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.features li {
+    background-color: #fee78a;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    color: #423606;
+    box-shadow: 0 4px 8px rgba(66, 54, 6, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.features li strong {
+    color: #a18207;
+}
+
+/* Sección de llamada a la acción (CTA) */
+.cta {
+    margin-top: 50px;
+}
+
+.cta p {
+    font-size: 1.2rem;
+    color: #715e12;
+    margin-bottom: 15px;
 }

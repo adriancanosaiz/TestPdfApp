@@ -1,0 +1,102 @@
+[
+    {
+        "pregunta": "¿Cuál es la función principal del tracto gastrointestinal?",
+        "opciones": [
+            "Almacenar alimentos para su uso posterior",
+            "Transformar los alimentos en nutrientes absorbibles",
+            "Eliminar los desechos del cuerpo",
+            "Producir hormonas para la digestión"
+        ],
+        "respuesta_correcta": "Transformar los alimentos en nutrientes absorbibles"
+    },
+    {
+        "pregunta": "¿Qué órgano conecta la faringe con el estómago?",
+        "opciones": [
+            "Tráquea",
+            "Laringe",
+            "Esófago",
+            "Duodeno"
+        ],
+        "respuesta_correcta": "Esófago"
+    },
+    {
+        "pregunta": "¿Cuáles de los siguientes son órganos digestivos accesorios de contacto indirecto?",
+        "opciones": [
+            "Dientes y lengua",
+            "Glándulas salivales y páncreas",
+            "Estómago e intestino delgado",
+            "Esófago y faringe"
+        ],
+        "respuesta_correcta": "Glándulas salivales y páncreas"
+    },
+    {
+        "pregunta": "¿Cuál de las siguientes NO es una función del sistema digestivo?",
+        "opciones": [
+            "Ingestión",
+            "Filtración",
+            "Secreción",
+            "Absorción"
+        ],
+        "respuesta_correcta": "Filtración"
+    },
+    {
+        "pregunta": "¿Qué tipo de epitelio se encuentra en el estómago y los intestinos?",
+        "opciones": [
+            "Plano estratificado",
+            "Cilíndrico simple",
+            "Cúbico simple",
+            "Pseudoestratificado columnar"
+        ],
+        "respuesta_correcta": "Cilíndrico simple"
+    },
+    {
+        "pregunta": "¿Qué plexo nervioso del sistema nervioso entérico controla la secreción en el tracto GI?",
+        "opciones": [
+            "Plexo mientérico (Auerbach)",
+            "Plexo submucoso (Meissner)",
+            "Plexo celíaco",
+            "Plexo hipogástrico"
+        ],
+        "respuesta_correcta": "Plexo submucoso (Meissner)"
+    },
+    {
+        "pregunta": "¿Qué división del sistema nervioso autónomo tiene una función inhibidora en la digestión?",
+        "opciones": [
+            "Parasimpático",
+            "Simpático",
+            "Entérico",
+            "Somático"
+        ],
+        "respuesta_correcta": "Simpático"
+    },
+    {
+        "pregunta": "¿Cuál es la función de las células parietales en el estómago?",
+        "opciones": [
+            "Secretar moco",
+            "Secretar pepsinógeno",
+            "Secretar HCl y factor intrínseco",
+            "Secretar gastrina"
+        ],
+        "respuesta_correcta": "Secretar HCl y factor intrínseco"
+    },
+    {
+        "pregunta": "¿Dónde se produce la mayor parte de la digestión y absorción de nutrientes?",
+        "opciones": [
+            "Estómago",
+            "Intestino delgado",
+            "Intestino grueso",
+            "Hígado"
+        ],
+        "respuesta_correcta": "Intestino delgado"
+    },
+    {
+        "pregunta": "¿Cuál es la función principal del intestino grueso?",
+        "opciones": [
+            "Digerir proteínas",
+            "Absorber la mayoría de los nutrientes",
+            "Absorber agua y formar heces",
+            "Producir enzimas digestivas"
+        ],
+        "respuesta_correcta": "Absorber agua y formar heces"
+    }
+]
