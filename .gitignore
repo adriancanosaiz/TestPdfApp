@@ -1,1 +1,13 @@
+# Ignorar archivos temporales, logs, y directorios de compilación
+venv/
+*.pyc
+__pycache__/
+instance/
+.webassets-cache
 .env
+*.db
+*.sqlite3
+uploads/
+*.pdf
+*.log
+test_app.py
