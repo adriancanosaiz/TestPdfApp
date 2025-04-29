@@ -184,7 +184,12 @@ def index():
             return 'No selected file'
 
         if pdf_file:
-            pdf_path = os.path.join('uploads', pdf_file.filename)
+            # Asegúrate de que el directorio 'uploads' exista
+            upload_folder = 'uploads'
+            if not os.path.exists(upload_folder):
+                os.makedirs(upload_folder)  # Crea el directorio si no existe
+
+            pdf_path = os.path.join(upload_folder, pdf_file.filename)
             pdf_file.save(pdf_path)
             texto = extraer_texto_pdf(pdf_path)
 
@@ -300,26 +305,27 @@ def ver_detalle_test(test_result_id):
 
     return render_template('detalle_test.html', test_info=test_info, respuestas=respuestas)
 
-@app.route('/historial')
+@app.route("/historial", methods=["GET"])
 def historial():
-    if 'user_id' not in session:
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))
+
+    user_id = session.get('user_id')  # Usamos .get() para evitar el KeyError
+    if not user_id:
+        flash("Debes iniciar sesión para ver tu historial.", "danger")
         return redirect(url_for('login'))
-
-    user_id = session['user_id']
     
-    # Obtener los resultados de los tests de la base de datos
+    # Obtener los resultados de los tests
     cur = mysql.connection.cursor()
-    cur.execute('SELECT id, fecha, total_preguntas, aciertos, nota FROM test_results WHERE user_id = %s', (user_id,))
-    historial = cur.fetchall()
-    cur.close()
-
+    cur.execute('SELECT * FROM test_results WHERE user_id = %s', (user_id,))
+    historial_tests = cur.fetchall()
+    
     # Obtener los PDFs subidos
-    cur = mysql.connection.cursor()
-    cur.execute('SELECT id, user_id, nombre_archivo FROM pdf_uploads WHERE user_id = %s', (user_id,))
+    cur.execute('SELECT * FROM pdf_uploads WHERE user_id = %s', (user_id,))
     historial_pdfs = cur.fetchall()
     cur.close()
 
-    return render_template('historial.html', historial=historial, historial_pdfs=historial_pdfs)
+    return render_template('historial.html', historial_tests=historial_tests, historial_pdfs=historial_pdfs)
 
 @app.route("/generar_test_desde_pdf/<int:pdf_id>", methods=["POST"])
 def generar_test_desde_pdf(pdf_id):

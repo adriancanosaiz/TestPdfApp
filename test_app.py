@@ -49,9 +49,10 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
 
 # Funciones auxiliares
-def extraer_texto_pdf(pdf_file):
+def extraer_texto_pdf(pdf_data):
     try:
-        reader = PyPDF2.PdfReader(pdf_file)
+        # Usamos PyPDF2 directamente con los datos binarios
+        reader = PyPDF2.PdfReader(pdf_data)
         texto = ""
         for page in reader.pages:
             texto += page.extract_text()
@@ -176,26 +177,29 @@ def index():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        if 'pdf_file' not in request.files:
+        if 'pdf' not in request.files:
             return 'No file part'
 
-        pdf_file = request.files['pdf_file']
+        pdf_file = request.files['pdf']
         if pdf_file.filename == '':
             return 'No selected file'
 
         if pdf_file:
-            pdf_path = os.path.join('uploads', pdf_file.filename)
-            pdf_file.save(pdf_path)
-            texto = extraer_texto_pdf(pdf_path)
+            pdf_data = pdf_file.read()  # Leer el contenido del PDF en binario
 
-            # Guardar en la base de datos pdf_uploads
+            # Guardar el PDF en la base de datos (en el campo BLOB)
             user_id = session['user_id']
             nombre_archivo = pdf_file.filename
+            fecha_subida = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Fecha de subida
+
             cur = mysql.connection.cursor()
-            cur.execute('INSERT INTO pdf_uploads (user_id, nombre_archivo, contenido_texto) VALUES (%s, %s, %s)',
-                        (user_id, nombre_archivo, texto))
+            cur.execute('INSERT INTO pdf_uploads (user_id, nombre_archivo, archivo_pdf, fecha_subida) VALUES (%s, %s, %s, %s)',
+                        (user_id, nombre_archivo, pdf_data, fecha_subida))
             mysql.connection.commit()
             cur.close()
+
+            # Extraer el texto del PDF
+            texto = extraer_texto_pdf(pdf_data)  # Aquí ya no es necesario guardar el archivo físicamente
 
             preguntas = generar_preguntas(texto)
             return render_template('test.html', preguntas=preguntas)

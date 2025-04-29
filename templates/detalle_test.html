@@ -4,38 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle del Test</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
 
-<div class="container mt-4">
-    <h1>Detalle del Test</h1>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <li><a href="{{ url_for('index') }}">Subir PDF</a></li>
+            <li><a href="{{ url_for('test') }}">Test</a></li>
+            <li><a href="{{ url_for('historial') }}">Ver historial de tests</a></li>
+            <li><a href="{{ url_for('profile') }}">Perfil</a></li>
+            <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
+        </ul>
+    </nav>
 
-    <p><strong>Fecha:</strong> {{ test_info[2] }}</p>
-    <p><strong>Total Preguntas:</strong> {{ test_info[3] }}</p>
-    <p><strong>Aciertos:</strong> {{ test_info[4] }}</p>
-    <p><strong>Nota:</strong> {{ test_info[5] }}%</p>
+    <div class="container">
+        <h1>Detalle del Test</h1>
 
-    <hr>
+        <div class="test-info">
+            <p><strong>Fecha:</strong> {{ test_info[2] }}</p>
+            <p><strong>Total Preguntas:</strong> {{ test_info[3] }}</p>
+            <p><strong>Aciertos:</strong> {{ test_info[4] }}</p>
+            <p><strong>Nota:</strong> {{ test_info[5] }}%</p>
+        </div>
 
-    <h2>Preguntas y Respuestas:</h2>
-    <ul class="list-group">
-        {% for respuesta in respuestas %}
-        <li class="list-group-item">
-            <strong>Pregunta:</strong> {{ respuesta[0] }}<br>
-            <strong>Respuesta seleccionada:</strong> {{ respuesta[2] }}<br>
-            <strong>Respuesta correcta:</strong> {{ respuesta[1] }}<br>
-            {% if respuesta[3] %}
-                <span class="text-success">✅ Correcto</span>
-            {% else %}
-                <span class="text-danger">❌ Incorrecto</span>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
+        <hr>
 
-    <a href="{{ url_for('historial') }}" class="btn btn-secondary mt-3">Volver al Historial</a>
-</div>
+        <h2>Preguntas y Respuestas:</h2>
+        <ul class="list-group">
+            {% for respuesta in respuestas %}
+            <li class="list-group-item">
+                <strong>Pregunta:</strong> {{ respuesta[0] }}<br>
+                <strong>Respuesta seleccionada:</strong> {{ respuesta[2] }}<br>
+                <strong>Respuesta correcta:</strong> {{ respuesta[1] }}<br>
+                {% if respuesta[3] %}
+                    <span class="green">✅ Correcto</span>
+                {% else %}
+                    <span class="red">❌ Incorrecto</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+
+        <a href="{{ url_for('historial') }}">
+            <button>Volver al Historial</button>
+        </a>
+    </div>
 
 </body>
 </html>
