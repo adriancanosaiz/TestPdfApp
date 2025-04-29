@@ -1,8 +1,8 @@
 /* Estilos generales */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #fefae8; /* Fondo de la paleta */
-    color: #423606; /* Texto principal más oscuro */
+    background-color: #fefae8; 
+    color: #423606; 
     margin: 0;
     padding: 0;
     display: flex;
@@ -14,7 +14,7 @@ body {
 
 /* Estilos de la barra de navegación */
 nav {
-    background-color: #eabd08; /* Amarillo fuerte */
+    background-color: #eabd08; 
     padding: 0.8rem 0;
     width: 100%;
     box-shadow: 0 2px 5px rgba(66, 54, 6, 0.1);
@@ -251,7 +251,7 @@ button[type="button"].logout:hover {
 .home-container {
     max-width: 900px;
     width: 90%;
-    margin-top: 100px; /* espacio debajo del nav */
+    margin-top: 100px; 
     padding: 30px;
     background-color: #fef2c3;
     box-shadow: 0 6px 15px rgba(66, 54, 6, 0.2);
@@ -303,4 +303,74 @@ button[type="button"].logout:hover {
     font-size: 1.2rem;
     color: #715e12;
     margin-bottom: 15px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .container, .profile-container, .home-container, .register-container, .login-container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .features li {
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    .profile-container form {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .profile-container form button {
+        width: 100%;
+    }
+
+    button, .btn-primary {
+        width: 100%;
+    }
+
+    h1, h2 {
+        font-size: 1.5rem;
+    }
+
+    .content h1 {
+        font-size: 2rem;
+    }
+
+    .content p {
+        font-size: 1rem;
+    }
+
+    .cta p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    nav ul {
+        gap: 1rem;
+    }
+
+    .container, .profile-container, .home-container, .register-container, .login-container {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    h1, h2 {
+        font-size: 1.2rem;
+    }
+
+    .features li {
+        font-size: 0.9rem;
+    }
+
+    .cta p {
+        font-size: 0.9rem;
+    }
 }
