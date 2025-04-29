@@ -10,4 +10,6 @@ instance/
 uploads/
 *.pdf
 *.log
-test_app.py
+test_app.pyuploads/
+build/
+dist/
