@@ -1,8 +1,8 @@
 /* Estilos generales */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #fefae8; 
-    color: #423606; 
+    background-color: #fefae8; /* Fondo de la paleta */
+    color: #423606; /* Texto principal más oscuro */
     margin: 0;
     padding: 0;
     display: flex;
@@ -10,11 +10,12 @@ body {
     align-items: center;
     min-height: 100vh;
     flex-direction: column;
+    padding-top: 70px;
 }
 
 /* Estilos de la barra de navegación */
 nav {
-    background-color: #eabd08; 
+    background-color: #eabd08; /* Amarillo fuerte */
     padding: 0.8rem 0;
     width: 100%;
     box-shadow: 0 2px 5px rgba(66, 54, 6, 0.1);
@@ -22,8 +23,22 @@ nav {
     top: 0;
     left: 0;
     z-index: 1000;
+    transition: top 0.3s ease; /* Añadido para transiciones suaves */
 }
 
+/* Menú Toggle (Icono de menú en móvil) */
+.menu-toggle {
+    display: none;
+}
+
+.menu-icon {
+    font-size: 30px;
+    color: #423606;
+    cursor: pointer;
+    display: none; /* Ocultar por defecto */
+}
+
+/* Barra de navegación para pantallas pequeñas */
 nav ul {
     list-style: none;
     display: flex;
@@ -45,6 +60,28 @@ nav a {
 nav a:hover {
     opacity: 0.8;
     background-color: #fee78a;
+}
+
+/* Estilos para el contenedor del menú desplegable en móvil */
+nav ul {
+    display: flex;
+    gap: 2rem;
+}
+
+nav ul li {
+    display: block;
+    width: 100%;
+}
+
+nav ul li a {
+    padding: 10px 20px;
+    text-align: center;
+    display: block;
+}
+
+/* Estilos cuando el menú está abierto */
+.menu-toggle:checked + .menu-icon + ul {
+    display: block;
 }
 
 /* Contenedores generales */
@@ -247,79 +284,126 @@ button[type="button"].logout:hover {
     margin-bottom: 30px;
 }
 
-/* Estilos para la página principal (home) */
-.home-container {
-    max-width: 900px;
-    width: 90%;
-    margin-top: 100px; 
-    padding: 30px;
-    background-color: #fef2c3;
-    box-shadow: 0 6px 15px rgba(66, 54, 6, 0.2);
+/* Tabla estilizada */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    font-size: 1rem;
+    background-color: #fffce0;
+    box-shadow: 0 4px 10px rgba(66, 54, 6, 0.1);
     border-radius: 10px;
-    text-align: center;
+    overflow: hidden;
 }
 
-/* Sección de características */
-.features {
-    margin-top: 40px;
-    text-align: left;
-}
-
-.features h2 {
-    font-size: 2rem;
+table thead {
+    background-color: #eabd08;
     color: #423606;
-    margin-bottom: 20px;
+}
+
+table thead th {
+    padding: 15px;
     text-align: center;
 }
 
-.features ul {
-    list-style-type: none;
-    padding: 0;
+table tbody td {
+    padding: 12px 15px;
+    text-align: center;
+    color: #423606;
+    border-top: 1px solid #ddd198;
 }
 
-.features li {
+/* Estilo para botones pequeños en la tabla */
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    background-color: #eabd08;
+    color: #423606;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-sm:hover {
+    background-color: #caa204;
+}
+
+/* Lista de preguntas y respuestas */
+.list-group {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.list-group-item {
     background-color: #fee78a;
-    padding: 15px 20px;
+    border: 1px solid #e1cd6d;
+    padding: 20px;
     margin-bottom: 15px;
     border-radius: 8px;
+    box-shadow: 0 3px 6px rgba(66, 54, 6, 0.08);
+}
+
+/* Datos del test */
+.test-info {
+    background-color: #fef2c3;
+    padding: 15px 25px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(66, 54, 6, 0.1);
+}
+
+.test-info p {
     font-size: 1.1rem;
-    color: #423606;
-    box-shadow: 0 4px 8px rgba(66, 54, 6, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.features li strong {
-    color: #a18207;
-}
-
-/* Sección de llamada a la acción (CTA) */
-.cta {
-    margin-top: 50px;
-}
-
-.cta p {
-    font-size: 1.2rem;
+    margin: 10px 0;
     color: #715e12;
-    margin-bottom: 15px;
 }
 
-/* Estilos responsivos */
-@media (max-width: 768px) {
+/* Estilos responsive */
+@media (max-width: 1024px) {
+    .container, .profile-container, .home-container, .register-container, .login-container {
+        padding: 15px;
+        margin: 30px auto;
+    }
+
     nav ul {
-        flex-direction: column;
         gap: 1rem;
     }
 
-    .container, .profile-container, .home-container, .register-container, .login-container {
-        margin: 20px;
-        padding: 15px;
+    .content h1 {
+        font-size: 2rem;
     }
 
-    .features li {
+    table thead th,
+    table tbody td {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    h1, h2 {
+        font-size: 1.5rem;
+    }
+
+    p, .content p, .test-info p {
         font-size: 1rem;
-        padding: 12px;
+    }
+
+    button, .btn-primary {
+        font-size: 0.95rem;
+        padding: 10px 20px;
+    }
+
+    .pregunta h3,
+    .resultado h3 {
+        font-size: 1.1rem;
     }
 
     .profile-container form {
@@ -327,50 +411,69 @@ button[type="button"].logout:hover {
         gap: 15px;
     }
 
-    .profile-container form button {
+    .profile-container form button,
+    button[type="button"].logout {
         width: 100%;
-    }
-
-    button, .btn-primary {
-        width: 100%;
-    }
-
-    h1, h2 {
-        font-size: 1.5rem;
-    }
-
-    .content h1 {
-        font-size: 2rem;
-    }
-
-    .content p {
-        font-size: 1rem;
-    }
-
-    .cta p {
-        font-size: 1rem;
+        margin: 0;
     }
 }
 
-@media (max-width: 480px) {
+/* Estilo para el ícono de menú (hamburguesa) */
+.menu-toggle {
+    display: none; /* El checkbox no es visible */
+}
+
+.menu-icon {
+    font-size: 30px;
+    color: #423606; /* Color del ícono */
+    cursor: pointer;
+    display: none; /* Ocultar por defecto en pantallas grandes */
+}
+
+/* Menú Toggle en pantallas pequeñas */
+@media (max-width: 768px) {
+    .menu-icon {
+        display: block; /* Muestra el ícono del menú en pantallas pequeñas */
+    }
+
+    /* Al marcar el checkbox, muestra el menú */
+    #menu-toggle:checked + .menu-icon + ul {
+        display: block; /* Muestra el menú al marcar el checkbox */
+    }
+
+    /* Estilos del menú desplegable */
     nav ul {
-        gap: 1rem;
+        display: none; /* Oculta el menú por defecto */
+        list-style: none;
+        flex-direction: column; /* Menú vertical en móviles */
+        width: 100%; /* Ocupa todo el ancho */
+        background-color: #eabd08; /* Color del fondo del menú */
+        position: absolute; /* Menú flotante */
+        top: 70px; /* Alineado justo debajo del navbar */
+        left: 0;
+        padding: 0;
     }
 
-    .container, .profile-container, .home-container, .register-container, .login-container {
-        margin: 10px;
-        padding: 10px;
+    /* Cuando el menú está visible */
+    #menu-toggle:checked + .menu-icon + ul {
+        display: flex;
     }
 
-    h1, h2 {
+    nav ul li {
+        width: 100%; /* Los ítems ocupan todo el ancho */
+        text-align: center; /* Alineación centrada */
+    }
+
+    nav ul li a {
+        padding: 15px;
         font-size: 1.2rem;
+        display: block;
+        color: #423606;
+        text-decoration: none;
+        background-color: #fee78a;
     }
 
-    .features li {
-        font-size: 0.9rem;
-    }
-
-    .cta p {
-        font-size: 0.9rem;
+    nav ul li a:hover {
+        background-color: #caa204;
     }
 }
