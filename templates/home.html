@@ -12,41 +12,59 @@
         <ul>
             <li><a href="{{ url_for('home') }}">Inicio</a></li>
             {% if session.get('logged_in') %}
-                <li><a href="{{ url_for('index') }}">Subir PDF</a></li>
-                <li><a href="{{ url_for('test') }}">Test</a></li>
-                <li><a href="{{ url_for('profile') }}">Perfil</a></li>
-                <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
+                <li><a href="{{ url_for('index') }}">📄 Subir PDF</a></li>
+                <li><a href="{{ url_for('test') }}">📝 Test</a></li>
+                <li><a href="{{ url_for('profile') }}">👤 Perfil</a></li>
+                <li><a href="{{ url_for('logout') }}">🚪 Cerrar sesión</a></li>
             {% else %}
-                <li><a href="{{ url_for('login') }}">Iniciar sesión</a></li>
-                <li><a href="{{ url_for('register') }}">Registrarse</a></li>
+                <li><a href="{{ url_for('login') }}">🔑 Iniciar sesión</a></li>
+                <li><a href="{{ url_for('register') }}">🖊️ Registrarse</a></li>
             {% endif %}
         </ul>
     </nav>
 
     <div class="home-container">
         <h1>Bienvenido a <span style="color: #eabd08;">TestApp</span></h1>
-        <p>Crea tests de forma automática y práctica.</p>
+        <p>La forma más fácil de crear tests, estudiar y mejorar tus conocimientos de manera automática.</p>
 
         <section class="features">
-            <h2>¿Qué puedes hacer con TestApp?</h2>
+            <h2>¿Por qué TestApp es la herramienta perfecta para ti?</h2>
             <ul>
-                <li><strong>Subir PDFs:</strong> Selecciona un documento y deja que la app genere preguntas tipo test automáticamente.</li>
-                <li><strong>Practicar Test:</strong> Responde las preguntas generadas para reforzar tu conocimiento.</li>
-                <li><strong>Seguimiento de progreso:</strong> Consulta tu historial de tests y mejoras.</li>
-                <li><strong>Perfil personalizado:</strong> Administra tus datos y preferencias de uso.</li>
+                <li><strong>Generación automática de preguntas:</strong> 📑 ¡Sube cualquier PDF y deja que TestApp cree preguntas tipo test por ti! ¡Así de sencillo!</li>
+                <li><strong>Mejora continua:</strong> 📈 Realiza los tests generados y sigue tu progreso a lo largo del tiempo. ¡Estudia más y mejora tu rendimiento!</li>
+                <li><strong>Historial de pruebas:</strong> 📚 Consulta el historial de tus tests para analizar tus fortalezas y áreas de mejora.</li>
+                <li><strong>Personalización total:</strong> ⚙️ Controla tu perfil, tus preferencias y adapta la app a tu estilo de aprendizaje.</li>
             </ul>
         </section>
 
         <section class="cta">
             {% if not session.get('logged_in') %}
-                <p>¿Listo para empezar?</p>
-                <a href="{{ url_for('register') }}"><button>Crear cuenta</button></a>
-                <p>¿Ya tienes cuenta?</p>
-                <a href="{{ url_for('login') }}"><button>Iniciar sesión</button></a>
+                <p>¿Listo para mejorar tus habilidades y convertirte en un experto? 🚀</p>
+                <a href="{{ url_for('register') }}"><button>Únete ahora</button></a>
+                <p>¿Ya tienes cuenta? 🔑</p>
+                <a href="{{ url_for('login') }}"><button>Inicia sesión</button></a>
             {% else %}
-                <p>¡Bienvenido de nuevo!</p>
-                <a href="{{ url_for('index') }}"><button>Subir un PDF</button></a>
+                <p>¡Bienvenido de nuevo! ¿Qué deseas hacer hoy? 💡</p>
+                <a href="{{ url_for('index') }}"><button>Sube un PDF y empieza a crear tu test</button></a>
             {% endif %}
+        </section>
+
+        <section class="testimonials">
+            <h2>Lo que dicen nuestros usuarios</h2>
+            <div class="testimonial">
+                <p>"TestApp ha sido la herramienta definitiva para repasar antes de mis exámenes. ¡Me encanta lo fácil que es crear tests!"</p>
+                <strong>- Laura M., Estudiante de Ingeniería</strong>
+            </div>
+            <div class="testimonial">
+                <p>"Nunca imaginé que subir un PDF me ayudaría tanto. ¡Mi preparación ahora es mucho más eficiente!"</p>
+                <strong>- Carlos R., Profesional en Marketing</strong>
+            </div>
+        </section>
+
+        <section class="about">
+            <h2>¿Por qué elegir TestApp?</h2>
+            <p>En TestApp, creemos que estudiar debe ser sencillo y accesible para todos. Nuestra plataforma fue diseñada pensando en ti, para que puedas concentrarte en lo más importante: aprender. No importa tu nivel, siempre encontrarás la forma perfecta de mejorar.</p>
+            <p><strong>Únete hoy y da el siguiente paso en tu aprendizaje. ¡Es gratis y fácil de empezar! 🎓</strong></p>
         </section>
     </div>
 

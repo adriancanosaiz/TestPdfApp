@@ -1,238 +1,286 @@
-# Importación de módulos necesarios
-import tkinter as tk  # Interfaz gráfica
-from tkinter import filedialog, messagebox  # Para abrir archivos y mostrar alertas
-import fitz  # Librería PyMuPDF para leer PDFs
-import json  # Para manejar respuestas JSON
-import google.generativeai as genai  # Librería de Gemini
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+import PyPDF2
+import requests
+import json
+from datetime import datetime
 import os
-import random
-import hashlib
+from dotenv import load_dotenv
+from flask_mysqldb import MySQL
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, DateField
+from wtforms.validators import DataRequired, Email, Length
+from urllib.parse import urlparse
 
-# Configuración de la API de Gemini
-# ⚠️ Reemplaza esta clave por tu clave propia desde Google AI Studio
-os.environ["GOOGLE_API_KEY"] = "TU_API_KEY_AQUI"
-genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
-# Selección del modelo de Gemini
-model_name = "models/gemini-1.5-flash-latest"
-model = genai.GenerativeModel(model_name)
+# Cargar variables de entorno
+load_dotenv()
 
-# Clase principal de la aplicación
-class TestApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Generador de Test desde PDF con Gemini")
-        self.root.geometry("700x600")
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'mysecretkey'  # Cambia esto en producción
 
-        # Entrada para el número de preguntas
-        self.num_label = tk.Label(root, text="Número de preguntas:")
-        self.num_label.pack()
-        self.num_entry = tk.Entry(root)
-        self.num_entry.insert(0, "10")
-        self.num_entry.pack(pady=5)
 
-        # Botón para subir el PDF
-        self.upload_button = tk.Button(root, text="Subir PDF", command=self.upload_pdf)
-        self.upload_button.pack(pady=10)
+# Cargar la URL de conexión desde las variables de entorno
+mysql_url = os.getenv('MYSQL_URL')
 
-        self.text_label = tk.Label(root, text="")
-        self.text_label.pack()
+# Analizar la URL
+url = urlparse(mysql_url)
 
-        self.question_frame = tk.Frame(root)
-        self.question_frame.pack(pady=20)
+# Configuración de MySQL usando los valores de la URL
+app.config['MYSQL_HOST'] = url.hostname
+app.config['MYSQL_USER'] = url.username
+app.config['MYSQL_PASSWORD'] = url.password
+app.config['MYSQL_DB'] = url.path[1:]  # Eliminar el primer '/' en la ruta
+app.config['MYSQL_PORT'] = url.port
 
-        # Inicialización de variables de control
-        self.current_question = 0
-        self.score = 0
-        self.questions = []
-        self.resumen = []
+# Inicializar MySQL
+mysql = MySQL(app)
 
-    def upload_pdf(self):
-        try:
-            num_preguntas = int(self.num_entry.get())
-            if num_preguntas < 1:
-                raise ValueError("El número debe ser positivo.")
-        except:
-            messagebox.showerror("Error", "Introduce un número válido de preguntas.")
-            return
+# Formularios
+class RegisterForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8, message="La contraseña debe tener al menos 8 caracteres")])
+    centro = StringField('Centro de estudios', validators=[DataRequired()])
+    fecha_nacimiento = DateField('Fecha de nacimiento', format='%Y-%m-%d', validators=[DataRequired()])
 
-        file_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
-        if file_path:
-            self.text_label.config(text="Extrayendo texto del PDF...")
-            self.root.update()
-            pdf_text = self.extract_text_from_pdf(file_path)
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
 
-            self.text_label.config(text="Generando preguntas con Gemini...")
-            self.root.update()
-            self.questions = self.generate_questions_from_text(pdf_text, num_preguntas)
+# Funciones auxiliares
+def extraer_texto_pdf(pdf_file):
+    try:
+        reader = PyPDF2.PdfReader(pdf_file)
+        texto = ""
+        for page in reader.pages:
+            texto += page.extract_text()
+        return texto
+    except Exception as e:
+        print(f"Error al leer el PDF: {e}")
+        return ""
 
-            if self.questions:
-                self.current_question = 0
-                self.score = 0
-                self.resumen = []
-                self.show_question()
-            else:
-                messagebox.showerror("Error", "No se generaron preguntas.")
+def generar_preguntas(texto):
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("La clave de API de Gemini no se ha cargado correctamente.")
 
-    def extract_text_from_pdf(self, file_path):
-        # Extrae texto de todo el PDF
-        text = ""
-        with fitz.open(file_path) as doc:
-            for page in doc:
-                text += page.get_text()
-        return text
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key={api_key}"
 
-    def dividir_en_bloques(self, texto, max_chars=3000):
-        # Divide el texto en bloques de tamaño máximo
-        return [texto[i:i + max_chars] for i in range(0, len(texto), max_chars)]
+    prompt = f"""Crea 10 preguntas tipo test basadas en el siguiente texto:
+{texto}
 
-    def generate_questions_from_text(self, text, total_preguntas):
-        bloques = self.dividir_en_bloques(text)
+Para cada pregunta, proporciona:
+- "pregunta" (el enunciado),
+- "opciones" (una lista de 3 o más opciones),
+- "respuesta_correcta" (la respuesta correcta).
 
-        # Generar una semilla diferente cada vez (aunque sea el mismo contenido)
-        random.seed(hashlib.sha256((text + str(random.random())).encode('utf-8')).hexdigest())
-
-        preguntas_por_bloque = max(1, total_preguntas // len(bloques))
-        questions = []
-
-        frases_random = [
-            "Por favor, crea un test educativo.",
-            "Imagina que estás generando un examen.",
-            "Diseña preguntas para un cuestionario de repaso.",
-            "Genera preguntas únicas para evaluar el contenido.",
-            "Haz un test interesante y desafiante."
-        ]
-
-        estilos = [
-            "Hazlo con estilo formal.",
-            "Incluye preguntas variadas.",
-            "Evita preguntas repetitivas.",
-            "No uses siempre la misma estructura.",
-            "Sé creativo en el enfoque."
-        ]
-
-        for i, chunk in enumerate(bloques):
-            cantidad = min(preguntas_por_bloque, total_preguntas - len(questions))
-            if cantidad <= 0:
-                break
-
-            frase_random = random.choice(frases_random)
-            estilo = random.choice(estilos)
-
-            prompt = f"""
-{frase_random} {estilo} a partir del siguiente texto. 
-Cada pregunta debe tener solo una respuesta correcta y 3 incorrectas.
-
-Devuelve solo una lista JSON con este formato exacto:
-[
-  {{
-    "pregunta": "...",
-    "opciones": ["...", "...", "...", "..."],
-    "correcta": "..."
-  }}
-]
-
-No escribas ningún comentario, encabezado o explicación antes o después del JSON.
-
-Texto:
-{chunk}
+La respuesta debe ser estrictamente un JSON válido.
+No incluyas comentarios, explicaciones, ni bloques de código como ```json o similares.
+Solo responde con el JSON directamente, limpio y listo para parsear.
 """
 
-            try:
-                response = model.generate_content(prompt)
-                generated_text = response.text.strip()
-                cleaned_text = self.clean_response(generated_text)
+    data = {"contents": [{"parts": [{"text": prompt}]}]}
+    headers = {"Content-Type": "application/json"}
 
-                if cleaned_text.startswith("[") and cleaned_text.endswith("]"):
-                    try:
-                        bloque_questions = json.loads(cleaned_text)
-                        random.shuffle(bloque_questions)
-                        questions.extend(bloque_questions[:cantidad])
-                    except json.JSONDecodeError:
-                        messagebox.showerror("Error", f"El bloque {i+1} no devolvió un JSON válido.")
-                        continue
-                else:
-                    messagebox.showerror("Error", f"El bloque {i+1} no devolvió un JSON válido.")
-                    continue
-            except Exception as e:
-                print(f"Error en el bloque {i+1}:", e)
-                continue
+    try:
+        response = requests.post(url, headers=headers, data=json.dumps(data))
+        response.raise_for_status()
+        content = response.json()
 
-        random.shuffle(questions)
-        return questions
+        texto_generado = content['candidates'][0]['content']['parts'][0]['text']
+        print("Respuesta cruda de Gemini:", texto_generado)
 
-    def clean_response(self, text):
-        # Elimina basura antes o después del JSON
-        try:
-            start = text.find('[')
-            end = text.rfind(']') + 1
-            return text[start:end]
-        except:
-            return text
+        # Limpieza extra si empieza por ```
+        if texto_generado.startswith("```"):
+            texto_generado = texto_generado.strip().lstrip("```json").lstrip("```").rstrip("```").strip()
 
-    def show_question(self):
-        for widget in self.question_frame.winfo_children():
-            widget.destroy()
+        preguntas = json.loads(texto_generado)
 
-        if self.current_question < len(self.questions):
-            q = self.questions[self.current_question]
-            question_label = tk.Label(self.question_frame, text=q['pregunta'], wraplength=600, justify="left", font=("Arial", 12, "bold"))
-            question_label.pack()
+        # Guardar preguntas en un archivo
+        with open('test.json', 'w', encoding='utf-8') as f:
+            json.dump(preguntas, f, indent=4, ensure_ascii=False)
+        return preguntas
+    except Exception as e:
+        print(f"Error al generar las preguntas: {e}")
+        return []
 
-            for opcion in q['opciones']:
-                b = tk.Button(self.question_frame, text=opcion, command=lambda opt=opcion: self.check_answer(opt))
-                b.pack(fill="x", padx=50, pady=3)
+# Rutas
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        email = form.email.data
+        password = form.password.data
+        centro = form.centro.data
+        fecha_nacimiento = form.fecha_nacimiento.data
+
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM users WHERE email = %s', (email,))
+        if cur.fetchone():
+            flash('Este correo ya está en uso.', 'danger')
+            return redirect(url_for('register'))
+
+        cur.execute('INSERT INTO users (username, email, password, centro, fecha_nacimiento) VALUES (%s, %s, %s, %s, %s)',
+                    (username, email, hashed_password, centro, fecha_nacimiento))
+        mysql.connection.commit()
+        cur.close()
+
+        flash('User registered successfully!', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('register.html', form=form)
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM users WHERE email = %s', (email,))
+        user = cur.fetchone()
+        cur.close()
+
+        if user and check_password_hash(user[3], password):
+            flash('Login successful!', 'success')
+            session['logged_in'] = True
+            session['username'] = user[1]  # Guardar el nombre en la sesión
+            session['email'] = user[2]  # Guardar el email en la sesión
+            session['user_id'] = user[0]  # Guardar el user_id en la sesión
+            return redirect(url_for('index'))
         else:
-            self.show_result()
+            flash('Invalid email or password', 'danger')
 
-    def check_answer(self, selected):
-        q = self.questions[self.current_question]
-        correcta = q['correcta']
-        fue_correcta = selected == correcta
-        if fue_correcta:
-            self.score += 1
-            messagebox.showinfo("Respuesta", "✅ ¡Correcto!")
-        else:
-            messagebox.showinfo("Respuesta", f"❌ Incorrecto. La correcta era: {correcta}")
+    return render_template('login.html', form=form)
 
-        self.resumen.append({
-            "pregunta": q['pregunta'],
-            "respuesta_usuario": selected,
-            "respuesta_correcta": correcta,
-            "es_correcta": fue_correcta
+@app.route("/logout")
+def logout():
+    session.clear()
+    flash('Logged out successfully.', 'info')
+    return redirect(url_for('home'))
+
+@app.route("/home", methods=["GET"])
+def home():
+    if session.get('logged_in'):
+        return redirect(url_for('index'))
+    return render_template("home.html")
+
+@app.route('/index', methods=['GET', 'POST'])
+def index():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        if 'pdf_file' not in request.files:
+            return 'No file part'
+
+        pdf_file = request.files['pdf_file']
+        if pdf_file.filename == '':
+            return 'No selected file'
+
+        if pdf_file:
+            pdf_path = os.path.join('uploads', pdf_file.filename)
+            pdf_file.save(pdf_path)
+            texto = extraer_texto_pdf(pdf_path)
+
+            # Guardar en la base de datos pdf_uploads
+            user_id = session['user_id']
+            nombre_archivo = pdf_file.filename
+            cur = mysql.connection.cursor()
+            cur.execute('INSERT INTO pdf_uploads (user_id, nombre_archivo, contenido_texto) VALUES (%s, %s, %s)',
+                        (user_id, nombre_archivo, texto))
+            mysql.connection.commit()
+            cur.close()
+
+            preguntas = generar_preguntas(texto)
+            return render_template('test.html', preguntas=preguntas)
+
+    return render_template('index.html')
+
+# Añadir la ruta del perfil
+@app.route("/profile")
+def profile():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))
+    
+    username = session['username']
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM users WHERE username = %s', (username,))
+    user = cur.fetchone()
+    cur.close()
+
+    return render_template('profile.html', user=user)
+
+@app.route("/test", methods=["GET"])
+def test():
+    preguntas = []
+    if os.path.exists('test.json'):
+        with open('test.json', 'r', encoding='utf-8') as f:
+            preguntas = json.load(f)
+    return render_template("test.html", preguntas=preguntas)
+
+@app.route("/test/resultado", methods=["POST"])
+def test_resultado():
+    correctas = 0
+    total_preguntas = 0
+    resultado_respuestas = []
+
+    i = 1
+    while True:
+        pregunta_texto = request.form.get(f'pregunta_texto_{i}')
+        respuesta_correcta = request.form.get(f'respuesta_correcta_{i}')
+        seleccionada = request.form.get(f'pregunta_{i}')
+        if not pregunta_texto:
+            break
+
+        es_correcta = (seleccionada == respuesta_correcta)
+        if es_correcta:
+            correctas += 1
+
+        resultado_respuestas.append({
+            'pregunta': pregunta_texto,
+            'correcta': respuesta_correcta,
+            'seleccionada': seleccionada,
+            'es_correcta': es_correcta
         })
 
-        self.current_question += 1
-        self.show_question()
+        total_preguntas += 1
+        i += 1
 
-    def show_result(self):
-        total = len(self.questions)
-        nota = int((self.score / total) * 100)
-        resumen_text = f"Tu nota final es: {nota}/100\nRespuestas correctas: {self.score} de {total}\n\nResumen:\n\n"
+    fecha = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    nota = (correctas / total_preguntas) * 100 if total_preguntas else 0
+    resultado = {
+        'fecha': fecha,
+        'total_preguntas': total_preguntas,
+        'aciertos': correctas,
+        'nota': round(nota, 2)
+    }
 
-        for i, r in enumerate(self.resumen):
-            resumen_text += f"{i+1}. {r['pregunta']}\n"
-            resumen_text += f"   Tu respuesta: {r['respuesta_usuario']}\n"
-            resumen_text += f"   Respuesta correcta: {r['respuesta_correcta']}\n"
-            resumen_text += f"   {'✅ Correcta' if r['es_correcta'] else '❌ Incorrecta'}\n\n"
+    # Guardar en la base de datos
+    user_id = session.get('user_id')
+    if user_id:
+        cur = mysql.connection.cursor()
+        
+        # Insertar el test general en test_results y obtener el test_result_id
+        cur.execute('INSERT INTO test_results (user_id, fecha, total_preguntas, aciertos, nota) VALUES (%s, %s, %s, %s, %s)',
+                    (user_id, fecha, total_preguntas, correctas, round(nota, 2)))
+        mysql.connection.commit()
+        
+        # Obtener el test_result_id generado
+        test_result_id = cur.lastrowid
 
-        self.mostrar_resumen_en_ventana(resumen_text)
+        # Insertar las respuestas individuales en test_answers
+        for res in resultado_respuestas:
+            cur.execute('INSERT INTO test_answers (test_result_id, pregunta, respuesta_seleccionada, respuesta_correcta, es_correcta) VALUES (%s, %s, %s, %s, %s)',
+                        (test_result_id, res['pregunta'], res['seleccionada'], res['correcta'], res['es_correcta']))
+        mysql.connection.commit()
 
-    def mostrar_resumen_en_ventana(self, resumen):
-        ventana = tk.Toplevel(self.root)
-        ventana.title("Resumen del Test")
-        ventana.geometry("700x600")
+    return render_template("test_resultado.html", resultado=resultado, respuestas=resultado_respuestas)
 
-        text_widget = tk.Text(ventana, wrap="word")
-        text_widget.insert("1.0", resumen)
-        text_widget.config(state="disabled")
-        text_widget.pack(expand=True, fill="both")
-
-        cerrar = tk.Button(ventana, text="Cerrar", command=ventana.destroy)
-        cerrar.pack(pady=10)
-
-# Inicia la aplicación
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = TestApp(root)
-    root.mainloop()
+    app.run(debug=True)

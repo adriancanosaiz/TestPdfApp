@@ -8,8 +8,10 @@ from dotenv import load_dotenv
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
-from wtforms.validators import DataRequired, Email
+from wtforms import StringField, PasswordField, DateField
+from wtforms.validators import DataRequired, Email, Length
+from urllib.parse import urlparse
+
 
 # Cargar variables de entorno
 load_dotenv()
@@ -17,11 +19,19 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecretkey'  # Cambia esto en producción
 
-# Configuración de MySQL
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '300704.a'  # Ajusta tu contraseña
-app.config['MYSQL_DB'] = 'flask_app'
+
+# Cargar la URL de conexión desde las variables de entorno
+mysql_url = os.getenv('MYSQL_URL')
+
+# Analizar la URL
+url = urlparse(mysql_url)
+
+# Configuración de MySQL usando los valores de la URL
+app.config['MYSQL_HOST'] = url.hostname
+app.config['MYSQL_USER'] = url.username
+app.config['MYSQL_PASSWORD'] = url.password
+app.config['MYSQL_DB'] = url.path[1:]  # Eliminar el primer '/' en la ruta
+app.config['MYSQL_PORT'] = url.port
 
 # Inicializar MySQL
 mysql = MySQL(app)
@@ -30,10 +40,12 @@ mysql = MySQL(app)
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8, message="La contraseña debe tener al menos 8 caracteres")])
+    centro = StringField('Centro de estudios', validators=[DataRequired()])
+    fecha_nacimiento = DateField('Fecha de nacimiento', format='%Y-%m-%d', validators=[DataRequired()])
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
 
 # Funciones auxiliares
@@ -101,11 +113,19 @@ def register():
         username = form.username.data
         email = form.email.data
         password = form.password.data
+        centro = form.centro.data
+        fecha_nacimiento = form.fecha_nacimiento.data
 
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
 
         cur = mysql.connection.cursor()
-        cur.execute('INSERT INTO users (username, email, password) VALUES (%s, %s, %s)', (username, email, hashed_password))
+        cur.execute('SELECT * FROM users WHERE email = %s', (email,))
+        if cur.fetchone():
+            flash('Este correo ya está en uso.', 'danger')
+            return redirect(url_for('register'))
+
+        cur.execute('INSERT INTO users (username, email, password, centro, fecha_nacimiento) VALUES (%s, %s, %s, %s, %s)',
+                    (username, email, hashed_password, centro, fecha_nacimiento))
         mysql.connection.commit()
         cur.close()
 
@@ -118,22 +138,23 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        username = form.username.data
+        email = form.email.data
         password = form.password.data
 
         cur = mysql.connection.cursor()
-        cur.execute('SELECT * FROM users WHERE username = %s', (username,))
+        cur.execute('SELECT * FROM users WHERE email = %s', (email,))
         user = cur.fetchone()
         cur.close()
 
-        if user and check_password_hash(user[3], password):  # user[3] es el campo password
+        if user and check_password_hash(user[3], password):
             flash('Login successful!', 'success')
             session['logged_in'] = True
-            session['username'] = username  # Guardar el nombre en la sesión
+            session['username'] = user[1]  # Guardar el nombre en la sesión
             session['email'] = user[2]  # Guardar el email en la sesión
+            session['user_id'] = user[0]  # Guardar el user_id en la sesión
             return redirect(url_for('index'))
         else:
-            flash('Invalid username or password', 'danger')
+            flash('Invalid email or password', 'danger')
 
     return render_template('login.html', form=form)
 
@@ -149,21 +170,37 @@ def home():
         return redirect(url_for('index'))
     return render_template("home.html")
 
-@app.route("/index", methods=["GET", "POST"])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
-    if not session.get('logged_in'):
-        return redirect(url_for('home'))
-    if request.method == "POST":
-        pdf_file = request.files["pdf"]
-        texto = extraer_texto_pdf(pdf_file)
-        if not texto:
-            flash("No se pudo extraer texto del PDF.", 'danger')
-            return redirect(url_for('index'))
-        preguntas = generar_preguntas(texto)
-        if preguntas:
-            return redirect(url_for('test'))
-        flash("No se generaron preguntas correctamente.", 'danger')
-    return render_template("index.html")
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        if 'pdf' not in request.files:
+            return 'No file part'
+
+        pdf_file = request.files['pdf']
+        if pdf_file.filename == '':
+            return 'No selected file'
+
+        if pdf_file:
+            pdf_path = os.path.join('uploads', pdf_file.filename)
+            pdf_file.save(pdf_path)
+            texto = extraer_texto_pdf(pdf_path)
+
+            # Guardar en la base de datos pdf_uploads
+            user_id = session['user_id']
+            nombre_archivo = pdf_file.filename
+            cur = mysql.connection.cursor()
+            cur.execute('INSERT INTO pdf_uploads (user_id, nombre_archivo, contenido_texto) VALUES (%s, %s, %s)',
+                        (user_id, nombre_archivo, texto))
+            mysql.connection.commit()
+            cur.close()
+
+            preguntas = generar_preguntas(texto)
+            return render_template('test.html', preguntas=preguntas)
+
+    return render_template('index.html')
 
 # Añadir la ruta del perfil
 @app.route("/profile")
@@ -224,7 +261,92 @@ def test_resultado():
         'nota': round(nota, 2)
     }
 
+    # Guardar en la base de datos
+    user_id = session.get('user_id')
+    if user_id:
+        cur = mysql.connection.cursor()
+        # Primero guardar el test general
+        cur.execute('INSERT INTO test_results (user_id, fecha, total_preguntas, aciertos, nota) VALUES (%s, %s, %s, %s, %s)',
+                    (user_id, fecha, total_preguntas, correctas, round(nota, 2)))
+        test_result_id = cur.lastrowid  # ID del test recién creado
+
+        # Ahora guardar cada respuesta individual
+        for res in resultado_respuestas:
+            cur.execute('INSERT INTO test_answers (test_result_id, pregunta, respuesta_correcta, respuesta_seleccionada, es_correcta) VALUES (%s, %s, %s, %s, %s)',
+                        (test_result_id, res['pregunta'], res['correcta'], res['seleccionada'], res['es_correcta']))
+
+        mysql.connection.commit()
+        cur.close()
+
     return render_template("test_resultado.html", resultado=resultado, respuestas=resultado_respuestas)
+
+@app.route("/test/<int:test_result_id>")
+def ver_detalle_test(test_result_id):
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))
+
+    cur = mysql.connection.cursor()
+    # Cargar los datos del test (opcional, si quieres mostrar la nota o fecha)
+    cur.execute('SELECT * FROM test_results WHERE id = %s', (test_result_id,))
+    test_info = cur.fetchone()
+
+    # Cargar las respuestas del test
+    cur.execute('SELECT pregunta, respuesta_correcta, respuesta_seleccionada, es_correcta FROM test_answers WHERE test_result_id = %s', (test_result_id,))
+    respuestas = cur.fetchall()
+
+    cur.close()
+
+    return render_template('detalle_test.html', test_info=test_info, respuestas=respuestas)
+
+@app.route('/historial')
+def historial():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    
+    # Obtener los resultados de los tests de la base de datos
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT id, fecha, total_preguntas, aciertos, nota FROM test_results WHERE user_id = %s', (user_id,))
+    historial = cur.fetchall()
+    cur.close()
+
+    # Obtener los PDFs subidos
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT id, user_id, nombre_archivo FROM pdf_uploads WHERE user_id = %s', (user_id,))
+    historial_pdfs = cur.fetchall()
+    cur.close()
+
+    return render_template('historial.html', historial=historial, historial_pdfs=historial_pdfs)
+
+@app.route("/generar_test_desde_pdf/<int:pdf_id>", methods=["POST"])
+def generar_test_desde_pdf(pdf_id):
+    # Verificar que el usuario está autenticado
+    if 'user_id' not in session:
+        flash('Debes iniciar sesión para generar un test.', 'danger')
+        return redirect(url_for('login'))
+
+    # Obtener el contenido del PDF desde la base de datos
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT contenido_texto FROM pdf_uploads WHERE id = %s', (pdf_id,))
+    pdf_data = cur.fetchone()
+    cur.close()
+
+    if pdf_data is None:
+        flash('El PDF seleccionado no existe o ha sido eliminado.', 'danger')
+        return redirect(url_for('historial'))
+
+    texto_pdf = pdf_data[0]
+
+    # Generar las preguntas a partir del texto extraído del PDF
+    preguntas = generar_preguntas(texto_pdf)
+
+    if not preguntas:
+        flash('No se pudieron generar preguntas para este PDF.', 'danger')
+        return redirect(url_for('historial'))
+
+    # Renderizar la página con las preguntas generadas
+    return render_template('test.html', preguntas=preguntas)
 
 if __name__ == "__main__":
     app.run(debug=True)

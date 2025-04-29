@@ -16,27 +16,34 @@
     </nav>
 
     <div class="profile-container">
-        <h1>Bienvenido, {{ user[1] }}</h1> <!-- Supone que el nombre de usuario está en la columna 1 -->
-        <p>Email: {{ user[2] }}</p>  <!-- Supone que el email está en la columna 2 -->
+        <h1>Bienvenido, {{ user[1] }}</h1>
+        <p><strong>Email actual:</strong> {{ user[2] }}</p>
 
         <h2>Editar Perfil</h2>
         <form method="POST" action="{{ url_for('profile') }}">
             <div>
                 <label for="username">Nuevo Nombre de Usuario</label>
-                <input type="text" id="username" name="username" value="{{ session['username'] }}" required>
+                <input type="text" id="username" name="username" value="{{ user[1] }}" required>
             </div>
             <div>
                 <label for="email">Nuevo Email</label>
-                <input type="email" id="email" name="email" value="{{ session['email'] }}" required>
+                <input type="email" id="email" name="email" value="{{ user[2] }}" required>
             </div>
             <div>
                 <label for="password">Nueva Contraseña</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <button type="submit">Guardar cambios</button>
-        </form>
+            <div class="button-group">
+                <button type="submit">Guardar cambios</button>
+                <button type="button" class="logout" id="logoutBtn">Cerrar sesión</button>
 
-        <a href="{{ url_for('logout') }}" class="btn-primary">Cerrar sesión</a>
+                <script>
+                    document.getElementById('logoutBtn').addEventListener('click', function() {
+                        window.location.href = "{{ url_for('logout') }}";  // Redirige al logout
+                    });
+                </script>            
+            </div>
+        </form>
     </div>
 </body>
 </html>
