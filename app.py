@@ -191,9 +191,11 @@ def index():
             # Guardar en la base de datos pdf_uploads
             user_id = session['user_id']
             nombre_archivo = pdf_file.filename
+            fecha_subida = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Fecha de subida
+
             cur = mysql.connection.cursor()
-            cur.execute('INSERT INTO pdf_uploads (user_id, nombre_archivo, contenido_texto) VALUES (%s, %s, %s)',
-                        (user_id, nombre_archivo, texto))
+            cur.execute('INSERT INTO pdf_uploads (user_id, nombre_archivo, contenido_texto, fecha_subida) VALUES (%s, %s, %s, %s)',
+                        (user_id, nombre_archivo, texto, fecha_subida))
             mysql.connection.commit()
             cur.close()
 
