@@ -424,56 +424,7 @@ table tbody td {
 }
 
 .menu-icon {
+    display: block; /* Mostrado solo en pantallas pequeñas */
     font-size: 30px;
-    color: #423606; /* Color del ícono */
     cursor: pointer;
-    display: none; /* Ocultar por defecto en pantallas grandes */
-}
-
-/* Menú Toggle en pantallas pequeñas */
-@media (max-width: 768px) {
-    .menu-icon {
-        display: block; /* Muestra el ícono del menú en pantallas pequeñas */
-    }
-
-    /* Al marcar el checkbox, muestra el menú */
-    #menu-toggle:checked + .menu-icon + ul {
-        display: block; /* Muestra el menú al marcar el checkbox */
-    }
-
-    /* Estilos del menú desplegable */
-    nav ul {
-        display: none; /* Oculta el menú por defecto */
-        list-style: none;
-        flex-direction: column; /* Menú vertical en móviles */
-        width: 100%; /* Ocupa todo el ancho */
-        background-color: #eabd08; /* Color del fondo del menú */
-        position: absolute; /* Menú flotante */
-        top: 70px; /* Alineado justo debajo del navbar */
-        left: 0;
-        padding: 0;
-    }
-
-    /* Cuando el menú está visible */
-    #menu-toggle:checked + .menu-icon + ul {
-        display: flex;
-    }
-
-    nav ul li {
-        width: 100%; /* Los ítems ocupan todo el ancho */
-        text-align: center; /* Alineación centrada */
-    }
-
-    nav ul li a {
-        padding: 15px;
-        font-size: 1.2rem;
-        display: block;
-        color: #423606;
-        text-decoration: none;
-        background-color: #fee78a;
-    }
-
-    nav ul li a:hover {
-        background-color: #caa204;
-    }
 }

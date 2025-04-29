@@ -4,6 +4,54 @@
     <meta charset="UTF-8">
     <title>Subir PDF</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Estilos para el spinner */
+        #loadingSpinner {
+            display: none;
+            border: 4px solid #f3f3f3; 
+            border-top: 4px solid #3498db; 
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Animación del spinner */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Estilos del menú */
+        nav ul li a:hover {
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+        }
+
+        /* Resaltar el elemento activo */
+        nav ul li a.active {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        /* Estilo para las notificaciones */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
 </head>
 <body>
 
@@ -11,8 +59,6 @@
         <input type="checkbox" id="menu-toggle" class="menu-toggle">
         <label for="menu-toggle" class="menu-icon">&#9776;</label>
         <ul>
-            <input type="checkbox" id="menu-toggle" class="menu-toggle">
-            <label for="menu-toggle" class="menu-icon">&#9776;</label>
             <li><a href="{{ url_for('home') }}">Inicio</a></li>
             {% if session.get('logged_in') %}
             <li><a href="{{ url_for('index') }}">Subir PDF</a></li>
@@ -28,10 +74,96 @@
 
     <div class="container">
         <h1>Sube tu PDF</h1>
-        <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
-            <input type="file" name="pdf" accept="application/pdf" required>
-            <button type="submit">Generar Test</button>
+        <form id="pdfForm" action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
+            <input type="file" id="pdfFile" name="pdf" accept="application/pdf" required>
+            <div id="fileError" style="color: red; margin-top: 5px;"></div>
+            <div id="fileName"></div>
+            <button type="submit" id="submitButton">Generar Test</button>
         </form>
+
+        <!-- Spinner de carga -->
+        <div id="loadingSpinner"></div>
+        
+        <!-- Toast de notificación -->
+        <div id="successToast" class="toast">¡PDF procesado correctamente!</div>
+        <div id="errorToast" class="toast">Hubo un error al procesar el archivo.</div>
     </div>
+
+    <script>
+        // Validación de archivo PDF antes de enviar
+        document.getElementById("pdfForm").addEventListener("submit", function (e) {
+            const fileInput = document.getElementById("pdfFile");
+            const errorDiv = document.getElementById("fileError");
+            const file = fileInput.files[0];
+            const loadingSpinner = document.getElementById("loadingSpinner");
+            const submitButton = document.getElementById("submitButton");
+
+            // Limpiar mensaje previo
+            errorDiv.textContent = "";
+
+            // Validación: ¿Se ha seleccionado un archivo?
+            if (!file) {
+                errorDiv.textContent = "Por favor, selecciona un archivo PDF.";
+                e.preventDefault();
+                return;
+            }
+
+            // Validación: ¿Es PDF?
+            if (file.type !== "application/pdf") {
+                errorDiv.textContent = "El archivo debe ser un PDF.";
+                e.preventDefault();
+                return;
+            }
+
+            // Validación de tamaño máximo (5 MB)
+            const maxSizeMB = 5;
+            if (file.size > maxSizeMB * 1024 * 1024) {
+                errorDiv.textContent = `El archivo no debe superar los ${maxSizeMB}MB.`;
+                e.preventDefault();
+                return;
+            }
+
+            // Mostrar el spinner mientras se procesa el archivo
+            loadingSpinner.style.display = "block";
+            loadingSpinner.classList.add("show");
+
+            // Cambiar el texto del botón durante el procesamiento
+            submitButton.textContent = "Procesando...";
+            submitButton.disabled = true;
+        });
+
+        // Mostrar el nombre del archivo seleccionado
+        document.getElementById("pdfFile").addEventListener("change", function () {
+            const fileName = document.getElementById("fileName");
+            const file = this.files[0];
+            if (file) {
+                fileName.textContent = `Archivo seleccionado: ${file.name}`;
+            } else {
+                fileName.textContent = "";
+            }
+        });
+
+        // Mostrar mensaje de éxito o error con Toast
+        function showToast(id) {
+            const toast = document.getElementById(id);
+            toast.style.display = "block";
+            toast.style.opacity = "1";
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                setTimeout(() => {
+                    toast.style.display = "none";
+                }, 500);
+            }, 3000);
+        }
+
+        // Simular el éxito o error del proceso
+        // Llamar a esta función después de la carga del archivo
+        // Ejemplo: Si el archivo se procesa correctamente
+        showToast("successToast");
+
+        // Si ocurre un error en la carga
+        // showToast("errorToast");
+    </script>
+
 </body>
 </html>

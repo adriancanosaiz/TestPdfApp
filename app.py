@@ -116,20 +116,23 @@ def register():
         centro = form.centro.data
         fecha_nacimiento = form.fecha_nacimiento.data
 
-        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-
+        # Validación de correo duplicado
         cur = mysql.connection.cursor()
         cur.execute('SELECT * FROM users WHERE email = %s', (email,))
         if cur.fetchone():
             flash('Este correo ya está en uso.', 'danger')
             return redirect(url_for('register'))
 
+        # Cifrar la contraseña
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+
+        # Insertar usuario en la base de datos
         cur.execute('INSERT INTO users (username, email, password, centro, fecha_nacimiento) VALUES (%s, %s, %s, %s, %s)',
                     (username, email, hashed_password, centro, fecha_nacimiento))
         mysql.connection.commit()
         cur.close()
 
-        flash('User registered successfully!', 'success')
+        flash('Usuario registrado exitosamente!', 'success')
         return redirect(url_for('login'))
 
     return render_template('register.html', form=form)
@@ -141,20 +144,22 @@ def login():
         email = form.email.data
         password = form.password.data
 
+        # Verificar usuario en la base de datos
         cur = mysql.connection.cursor()
         cur.execute('SELECT * FROM users WHERE email = %s', (email,))
         user = cur.fetchone()
         cur.close()
 
-        if user and check_password_hash(user[3], password):
-            flash('Login successful!', 'success')
+        # Validar credenciales
+        if user and check_password_hash(user[3], password):  # user[3] es la contraseña cifrada en la base de datos
+            flash('¡Inicio de sesión exitoso!', 'success')
             session['logged_in'] = True
             session['username'] = user[1]  # Guardar el nombre en la sesión
             session['email'] = user[2]  # Guardar el email en la sesión
             session['user_id'] = user[0]  # Guardar el user_id en la sesión
             return redirect(url_for('index'))
         else:
-            flash('Invalid email or password', 'danger')
+            flash('Correo electrónico o contraseña incorrectos', 'danger')
 
     return render_template('login.html', form=form)
 

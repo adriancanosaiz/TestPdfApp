@@ -10,7 +10,7 @@
 
     <nav>
         <input type="checkbox" id="menu-toggle" class="menu-toggle">
-    <label for="menu-toggle" class="menu-icon">&#9776;</label>
+        <label for="menu-toggle" class="menu-icon">&#9776;</label>
         <ul>
             <li><a href="{{ url_for('home') }}">Inicio</a></li>
             <li><a href="{{ url_for('index') }}">Subir PDF</a></li>
@@ -23,25 +23,36 @@
 
     <div class="content">
         <h1>Test</h1>
-        <form action="{{ url_for('test_resultado') }}" method="POST">
-            {% for pregunta in preguntas %}
-                <div class="pregunta">
-                    <h3>{{ loop.index }}. {{ pregunta.pregunta }}</h3>
-                    {% set idx = loop.index %}
-                    {% for opcion in pregunta.opciones %}
-                        <label>
-                            <input type="radio" name="pregunta_{{ idx }}" value="{{ opcion }}" required>
-                            {{ opcion }}
-                        </label><br>
-                    {% endfor %}
-                    <!-- Hidden inputs para enviar también el texto de la pregunta y la respuesta correcta -->
-                    <input type="hidden" name="pregunta_texto_{{ idx }}" value="{{ pregunta.pregunta }}">
-                    <input type="hidden" name="respuesta_correcta_{{ idx }}" value="{{ pregunta.respuesta_correcta }}">
-                </div>
-            {% endfor %}
+        <div id="contador-respuestas">
+            Preguntas respondidas: <span id="respondidas">0</span> / <span id="total">{{ preguntas|length }}</span>
+        </div>
+        <form action="{{ url_for('test_resultado') }}" method="POST" id="test-form">
+            <div id="preguntas-container">
+                {% for pregunta in preguntas %}
+                    <div class="pregunta" id="pregunta_{{ loop.index }}">
+                        <h3>{{ loop.index }}. {{ pregunta.pregunta }}</h3>
+                        {% set idx = loop.index %}
+                        {% for opcion in pregunta.opciones %}
+                            <label>
+                                <input type="radio" name="pregunta_{{ idx }}" value="{{ opcion }}" required>
+                                {{ opcion }}
+                            </label><br>
+                        {% endfor %}
+                        <!-- Hidden inputs para enviar también el texto de la pregunta y la respuesta correcta -->
+                        <input type="hidden" name="pregunta_texto_{{ idx }}" value="{{ pregunta.pregunta }}">
+                        <input type="hidden" name="respuesta_correcta_{{ idx }}" value="{{ pregunta.respuesta_correcta }}">
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="pagination-controls">
+                <button type="button" id="prev" onclick="changeQuestion(-1)">Anterior</button>
+                <button type="button" id="next" onclick="changeQuestion(1)">Siguiente</button>
+            </div>
             <button type="submit">Enviar respuestas</button>
         </form>
     </div>
+
+    <script src="{{ url_for('static', filename='test.js') }}"></script>
 
 </body>
 </html>
