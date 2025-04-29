@@ -8,7 +8,11 @@
 <body>
 
     <nav>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="menu-icon">&#9776;</label>
         <ul>
+            <input type="checkbox" id="menu-toggle" class="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">&#9776;</label>
             <li><a href="{{ url_for('home') }}">Inicio</a></li>
             {% if session.get('logged_in') %}
             <li><a href="{{ url_for('index') }}">Subir PDF</a></li>
