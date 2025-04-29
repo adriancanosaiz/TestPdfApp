@@ -3,54 +3,45 @@
         "pregunta": "¿Cuál es la función principal del tracto gastrointestinal?",
         "opciones": [
             "Almacenar alimentos para su uso posterior",
-            "Transformar los alimentos en nutrientes absorbibles",
-            "Eliminar los desechos del cuerpo",
-            "Producir hormonas para la digestión"
+            "Transformar alimentos en nutrientes absorbibles",
+            "Eliminar los productos de desecho del cuerpo",
+            "Producir hormonas para la regulación del apetito"
         ],
-        "respuesta_correcta": "Transformar los alimentos en nutrientes absorbibles"
+        "respuesta_correcta": "Transformar alimentos en nutrientes absorbibles"
     },
     {
-        "pregunta": "¿Qué órgano conecta la faringe con el estómago?",
+        "pregunta": "¿Cuáles son los órganos digestivos accesorios que tienen contacto directo con el alimento?",
         "opciones": [
-            "Tráquea",
-            "Laringe",
-            "Esófago",
-            "Duodeno"
-        ],
-        "respuesta_correcta": "Esófago"
-    },
-    {
-        "pregunta": "¿Cuáles de los siguientes son órganos digestivos accesorios de contacto indirecto?",
-        "opciones": [
+            "Hígado y páncreas",
             "Dientes y lengua",
-            "Glándulas salivales y páncreas",
-            "Estómago e intestino delgado",
-            "Esófago y faringe"
+            "Glándulas salivales y vesícula biliar",
+            "Estómago e intestino delgado"
         ],
-        "respuesta_correcta": "Glándulas salivales y páncreas"
+        "respuesta_correcta": "Dientes y lengua"
     },
     {
-        "pregunta": "¿Cuál de las siguientes NO es una función del sistema digestivo?",
+        "pregunta": "¿Qué función del sistema digestivo implica la degradación mecánica y química de los alimentos?",
         "opciones": [
             "Ingestión",
-            "Filtración",
             "Secreción",
+            "Digestión",
             "Absorción"
         ],
-        "respuesta_correcta": "Filtración"
+        "respuesta_correcta": "Digestión"
     },
     {
-        "pregunta": "¿Qué tipo de epitelio se encuentra en el estómago y los intestinos?",
+        "pregunta": "¿Cuál de las siguientes NO es una capa del tracto GI?",
         "opciones": [
-            "Plano estratificado",
-            "Cilíndrico simple",
-            "Cúbico simple",
-            "Pseudoestratificado columnar"
+            "Mucosa",
+            "Submucosa",
+            "Muscular",
+            "Cartilaginosa",
+            "Serosa"
         ],
-        "respuesta_correcta": "Cilíndrico simple"
+        "respuesta_correcta": "Cartilaginosa"
     },
     {
-        "pregunta": "¿Qué plexo nervioso del sistema nervioso entérico controla la secreción en el tracto GI?",
+        "pregunta": "¿Qué plexo del Sistema Nervioso Entérico controla la secreción del tracto GI?",
         "opciones": [
             "Plexo mientérico (Auerbach)",
             "Plexo submucoso (Meissner)",
@@ -60,10 +51,10 @@
         "respuesta_correcta": "Plexo submucoso (Meissner)"
     },
     {
-        "pregunta": "¿Qué división del sistema nervioso autónomo tiene una función inhibidora en la digestión?",
+        "pregunta": "¿Qué parte del sistema nervioso autónomo tiene una función inhibidora en la digestión?",
         "opciones": [
-            "Parasimpático",
             "Simpático",
+            "Parasimpático",
             "Entérico",
             "Somático"
         ],
@@ -80,7 +71,7 @@
         "respuesta_correcta": "Secretar HCl y factor intrínseco"
     },
     {
-        "pregunta": "¿Dónde se produce la mayor parte de la digestión y absorción de nutrientes?",
+        "pregunta": "¿Dónde se produce la mayor parte de la absorción de nutrientes?",
         "opciones": [
             "Estómago",
             "Intestino delgado",
@@ -92,11 +83,21 @@
     {
         "pregunta": "¿Cuál es la función principal del intestino grueso?",
         "opciones": [
-            "Digerir proteínas",
-            "Absorber la mayoría de los nutrientes",
-            "Absorber agua y formar heces",
-            "Producir enzimas digestivas"
+            "Absorción de nutrientes",
+            "Digestión de proteínas",
+            "Absorción de agua y formación de heces",
+            "Producción de enzimas digestivas"
         ],
-        "respuesta_correcta": "Absorber agua y formar heces"
+        "respuesta_correcta": "Absorción de agua y formación de heces"
+    },
+    {
+        "pregunta": "¿Qué hormona, liberada por el estómago, estimula el hambre?",
+        "opciones": [
+            "Leptina",
+            "CCK",
+            "Grelina",
+            "Insulina"
+        ],
+        "respuesta_correcta": "Grelina"
     }
 ]

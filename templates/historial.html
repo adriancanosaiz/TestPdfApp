@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Tests</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h1>Historial de Tests Realizados</h1>
+
+    {% if historial %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Total de Preguntas</th>
+                <th>Aciertos</th>
+                <th>Nota (%)</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resultado in historial %}
+            <tr>
+                <td>{{ resultado[1] }}</td> <!-- Fecha -->
+                <td>{{ resultado[2] }}</td> <!-- Total de Preguntas -->
+                <td>{{ resultado[3] }}</td> <!-- Aciertos -->
+                <td>{{ resultado[4] }}</td> <!-- Nota -->
+                <td>
+                    <a href="{{ url_for('ver_detalle_test', test_result_id=resultado[0]) }}" class="btn btn-info btn-sm">Ver detalles</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No has realizado ningún test aún.</p>
+{% endif %}
+
+    <hr class="my-4">
+
+    <h2>Generar Test desde PDFs Subidos</h2>
+
+    {% if historial_pdfs %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Archivo</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pdf in historial_pdfs %}
+                <tr>
+                    <td>{{ pdf[2] }}</td>
+                    <td>
+                        <form action="{{ url_for('generar_test_desde_pdf', pdf_id=pdf[0]) }}" method="POST">
+                            <button type="submit" class="btn btn-success btn-sm">Generar Test</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No has subido ningún PDF todavía.</p>
+    {% endif %}
+
+    <a href="{{ url_for('profile') }}" class="btn btn-primary mt-4">Volver al Perfil</a>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -14,32 +14,40 @@
             <li><a href="{{ url_for('index') }}">Subir PDF</a></li>
             <li><a href="{{ url_for('test') }}">Test</a></li>
             <li><a href="{{ url_for('profile') }}">Perfil</a></li>
+            <li><a href="{{ url_for('historial') }}">Ver historial de tests</a></li>
             <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
         </ul>
     </nav>
 
-    <div class="content">
+    <div class="container" style="margin-top: 100px;">
         <h1>Resultado de tu prueba</h1>
-        <p>Fecha: {{ resultado.fecha }}</p>
-        <p>Total de preguntas: {{ resultado.total_preguntas }}</p>
-        <p>Aciertos: {{ resultado.aciertos }}</p>
-        <p>Nota: {{ resultado.nota }}%</p>
 
-        <h2>Respuestas:</h2>
-        <ul>
+        <div class="resultado">
+            <p><strong>Fecha:</strong> {{ resultado.fecha }}</p>
+            <p><strong>Total de preguntas:</strong> {{ resultado.total_preguntas }}</p>
+            <p><strong>Aciertos:</strong> {{ resultado.aciertos }}</p>
+            <p><strong>Nota:</strong> {{ resultado.nota }}%</p>
+        </div>
+
+        <h2>Respuestas</h2>
+        <ul style="list-style-type: none; padding: 0;">
             {% for res in respuestas %}
-            <li>
-                <strong>{{ res.pregunta }}</strong><br>
-                Respuesta seleccionada: {{ res.seleccionada }}<br>
-                Respuesta correcta: {{ res.correcta }}<br>
+            <li class="pregunta">
+                <h3>{{ res.pregunta }}</h3>
+                <p><strong>Respuesta seleccionada:</strong> {{ res.seleccionada }}</p>
+                <p><strong>Respuesta correcta:</strong> {{ res.correcta }}</p>
                 {% if res.es_correcta %}
-                <span style="color: green;">Correcto</span>
+                    <span class="green">Correcto</span>
                 {% else %}
-                <span style="color: red;">Incorrecto</span>
+                    <span class="red">Incorrecto</span>
                 {% endif %}
             </li>
             {% endfor %}
         </ul>
+
+        <a href="{{ url_for('home') }}">
+            <button>Volver al inicio</button>
+        </a>
     </div>
 
 </body>
