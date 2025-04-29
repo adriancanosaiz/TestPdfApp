@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"></head>
 <body>
     <nav>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="menu-icon">&#9776;</label>
         <ul>
             <li><a href="{{ url_for('home') }}">Inicio</a></li>
             <li><a href="{{ url_for('index') }}">Subir PDF</a></li>
