@@ -4,6 +4,7 @@ import requests
 import json
 from datetime import datetime
 import os
+from PyPDF2 import PdfReader
 from dotenv import load_dotenv
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
