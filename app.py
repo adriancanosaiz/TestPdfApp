@@ -310,7 +310,7 @@ def test_resultado():
         mysql.connection.commit()
         cur.close()
 
-    return render_template("resultado.html", resultado=resultado, respuestas=resultado_respuestas)
+    return render_template("test_resultado.html", resultado=resultado, respuestas=resultado_respuestas)
 
 @app.route("/test/<int:test_result_id>")
 def ver_detalle_test(test_result_id):

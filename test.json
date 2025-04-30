@@ -1,102 +1,102 @@
 [
     {
-        "pregunta": "¿Cuál es la función principal del tracto gastrointestinal?",
+        "pregunta": "¿Cuál es la máscara de subred para la red 172.16.0.0 /16?",
         "opciones": [
-            "Almacenar alimentos para su uso posterior",
-            "Transformar alimentos en nutrientes absorbibles",
-            "Eliminar los productos de desecho del cuerpo",
-            "Producir hormonas para la regulación del apetito"
+            "255.255.0.0",
+            "255.255.255.0",
+            "255.0.0.0",
+            "255.255.240.0"
         ],
-        "respuesta_correcta": "Transformar alimentos en nutrientes absorbibles"
+        "respuesta_correcta": "255.255.0.0"
     },
     {
-        "pregunta": "¿Cuáles de los siguientes son órganos digestivos accesorios?",
+        "pregunta": "¿Cuál es la dirección IP del PC2?",
         "opciones": [
-            "Estómago, intestino delgado, intestino grueso",
-            "Dientes, lengua, glándulas salivales, hígado, vesícula biliar, páncreas",
-            "Esófago, faringe, boca",
-            "Cardias, fundus, cuerpo gástrico, píloro"
+            "172.16.0.1",
+            "172.16.0.2",
+            "172.16.0.3",
+            "172.16.0.4"
         ],
-        "respuesta_correcta": "Dientes, lengua, glándulas salivales, hígado, vesícula biliar, páncreas"
+        "respuesta_correcta": "172.16.0.3"
     },
     {
-        "pregunta": "¿Qué función NO realiza el sistema digestivo?",
+        "pregunta": "¿Cuántos PCs se conectan al switch?",
         "opciones": [
-            "Absorción",
-            "Filtración",
-            "Ingestión",
-            "Secreción"
+            "2",
+            "3",
+            "4",
+            "5"
         ],
-        "respuesta_correcta": "Filtración"
+        "respuesta_correcta": "4"
     },
     {
-        "pregunta": "¿Cuál es el nombre del proceso que implica la degradación mecánica y química de los alimentos?",
+        "pregunta": "¿Cuál es el hostname que se debe configurar en el switch?",
         "opciones": [
-            "Motilidad",
-            "Digestión",
-            "Secreción",
-            "Ingestión"
+            "Switch1",
+            "AULADAM",
+            "Clase",
+            "RedLocal"
         ],
-        "respuesta_correcta": "Digestión"
+        "respuesta_correcta": "AULADAM"
     },
     {
-        "pregunta": "¿Qué tipo de epitelio se encuentra en el estómago y los intestinos?",
+        "pregunta": "¿Cuál es la contraseña de acceso a la consola del switch?",
         "opciones": [
-            "Plano estratificado",
-            "Cilíndrico simple",
-            "Cúbico simple",
-            "Plano simple"
+            "upgrade",
+            "upgrade1",
+            "upgrade2",
+            "password"
         ],
-        "respuesta_correcta": "Cilíndrico simple"
+        "respuesta_correcta": "upgrade1"
     },
     {
-        "pregunta": "¿Cuál es la función del plexo mientérico (Auerbach)?",
+        "pregunta": "¿Qué tipo de archivo se debe adjuntar con las respuestas?",
         "opciones": [
-            "Controlar la secreción de las células epiteliales",
-            "Controlar la motilidad del músculo liso",
-            "Captar estímulos químicos y mecánicos de la luz del tracto GI",
-            "Regular la actividad de las glándulas salivales"
+            "TXT",
+            "PDF",
+            "JPG",
+            "PNG"
         ],
-        "respuesta_correcta": "Controlar la motilidad del músculo liso"
+        "respuesta_correcta": "PDF"
     },
     {
-        "pregunta": "¿Qué parte del sistema nervioso autónomo tiene una función inhibidora en la digestión?",
+        "pregunta": "¿Cuál es el mensaje de bienvenida que se debe configurar en el switch?",
         "opciones": [
-            "Parasimpático",
-            "Simpático",
-            "Entérico",
-            "Somático"
+            "Bienvenido",
+            "Acceso permitido",
+            "Equipo privado acceso no autorizado",
+            "Hola"
         ],
-        "respuesta_correcta": "Simpático"
+        "respuesta_correcta": "Equipo privado acceso no autorizado"
     },
     {
-        "pregunta": "¿Cuál es la función de las células parietales en el estómago?",
+        "pregunta": "¿Qué se debe hacer con las contraseñas del switch?",
         "opciones": [
-            "Secretar moco",
-            "Secretar HCl y factor intrínseco",
-            "Secretar pepsinógeno",
-            "Secretar gastrina"
+            "Dejarlas en blanco",
+            "Usar contraseñas sencillas",
+            "Encriptarlas",
+            "No configurar contraseñas"
         ],
-        "respuesta_correcta": "Secretar HCl y factor intrínseco"
+        "respuesta_correcta": "Encriptarlas"
     },
     {
-        "pregunta": "¿Dónde se produce la mayor parte de la digestión y absorción de nutrientes?",
+        "pregunta": "¿Qué aprendemos al analizar la tabla de direcciones MAC del switch después de enviar tráfico entre los PCs?",
         "opciones": [
-            "Estómago",
-            "Intestino delgado",
-            "Intestino grueso",
-            "Hígado"
+            "El switch no aprende las direcciones MAC",
+            "El switch aprende las direcciones MAC de los dispositivos conectados y las asocia a sus puertos",
+            "El switch solo aprende las direcciones MAC del PC0",
+            "La tabla MAC no cambia"
         ],
-        "respuesta_correcta": "Intestino delgado"
+        "respuesta_correcta": "El switch aprende las direcciones MAC de los dispositivos conectados y las asocia a sus puertos"
     },
     {
-        "pregunta": "¿Cuál es la función principal del intestino grueso?",
+        "pregunta": "¿Cuál es la dirección MAC del PC1?",
         "opciones": [
-            "Digerir proteínas",
-            "Absorber la mayoría de los nutrientes",
-            "Formar y expulsar las heces",
-            "Secretar enzimas digestivas"
+            "00D0.FF0A.C67B",
+            "0060.705B.1B5C",
+            "00D0.FF6D.1455",
+            "00D0.971C.531B"
         ],
-        "respuesta_correcta": "Formar y expulsar las heces"
+        "respuesta_correcta": "0060.705B.1B5C"
     }
 ]
