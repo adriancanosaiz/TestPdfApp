@@ -182,26 +182,42 @@ def index():
 
     if request.method == 'POST':
         if 'pdf' not in request.files:
-            return 'No file part'
+            flash('No se ha seleccionado ningún archivo.', 'danger')
+            return redirect(request.url)
 
         pdf_file = request.files['pdf']
         if pdf_file.filename == '':
-            return 'No selected file'
+            flash('Nombre de archivo no válido.', 'danger')
+            return redirect(request.url)
+
+        # Verificar si el archivo ya fue subido por el usuario
+        user_id = session['user_id']
+        nombre_archivo = pdf_file.filename
+
+        # Consultar en la base de datos si ya existe un PDF con el mismo nombre para este usuario
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM pdf_uploads WHERE user_id = %s AND nombre_archivo = %s', (user_id, nombre_archivo))
+        existing_pdf = cur.fetchone()
+        cur.close()
+
+        if existing_pdf:
+            flash('Ya has subido este archivo anteriormente.', 'danger')
+            return redirect(request.url)
 
         if pdf_file:
-            # Asegúrate de que el directorio 'uploads' exista
-            upload_folder = 'uploads'
-            if not os.path.exists(upload_folder):
-                os.makedirs(upload_folder)  # Crea el directorio si no existe
+            # Crear carpeta específica para el usuario si no existe
+            user_folder = os.path.join('uploads', str(user_id))
+            os.makedirs(user_folder, exist_ok=True)
 
-            pdf_path = os.path.join(upload_folder, pdf_file.filename)
+            # Guardar el archivo PDF en la carpeta del usuario
+            pdf_path = os.path.join(user_folder, pdf_file.filename)
             pdf_file.save(pdf_path)
+
+            # Extraer texto del PDF
             texto = extraer_texto_pdf(pdf_path)
 
             # Guardar en la base de datos pdf_uploads
-            user_id = session['user_id']
-            nombre_archivo = pdf_file.filename
-            fecha_subida = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Fecha de subida
+            fecha_subida = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
             cur = mysql.connection.cursor()
             cur.execute('INSERT INTO pdf_uploads (user_id, nombre_archivo, contenido_texto, fecha_subida) VALUES (%s, %s, %s, %s)',
@@ -209,6 +225,7 @@ def index():
             mysql.connection.commit()
             cur.close()
 
+            # Generar preguntas a partir del texto extraído
             preguntas = generar_preguntas(texto)
             return render_template('test.html', preguntas=preguntas)
 
@@ -230,6 +247,8 @@ def profile():
 
 @app.route("/test", methods=["GET"])
 def test():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))
     preguntas = []
     if os.path.exists('test.json'):
         with open('test.json', 'r', encoding='utf-8') as f:
@@ -238,6 +257,8 @@ def test():
 
 @app.route("/test/resultado", methods=["POST"])
 def test_resultado():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))
     correctas = 0
     total_preguntas = 0
     resultado_respuestas = []
@@ -273,7 +294,7 @@ def test_resultado():
         'nota': round(nota, 2)
     }
 
-    # Guardar en la base de datos
+        # Guardar en la base de datos
     user_id = session.get('user_id')
     if user_id:
         cur = mysql.connection.cursor()
@@ -286,11 +307,10 @@ def test_resultado():
         for res in resultado_respuestas:
             cur.execute('INSERT INTO test_answers (test_result_id, pregunta, respuesta_correcta, respuesta_seleccionada, es_correcta) VALUES (%s, %s, %s, %s, %s)',
                         (test_result_id, res['pregunta'], res['correcta'], res['seleccionada'], res['es_correcta']))
-
         mysql.connection.commit()
         cur.close()
 
-    return render_template("test_resultado.html", resultado=resultado, respuestas=resultado_respuestas)
+    return render_template("resultado.html", resultado=resultado, respuestas=resultado_respuestas)
 
 @app.route("/test/<int:test_result_id>")
 def ver_detalle_test(test_result_id):
@@ -360,6 +380,37 @@ def generar_test_desde_pdf(pdf_id):
 
     # Renderizar la página con las preguntas generadas
     return render_template('test.html', preguntas=preguntas)
+
+@app.route('/eliminar_pdf/<int:pdf_id>', methods=['POST'])
+def eliminar_pdf(pdf_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    
+    # Consultar el archivo PDF para obtener el nombre del archivo y la ruta
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM pdf_uploads WHERE user_id = %s AND id = %s', (user_id, pdf_id))
+    pdf = cur.fetchone()
+    cur.close()
+
+    if not pdf:
+        flash('El archivo no existe o no tienes permisos para eliminarlo.', 'danger')
+        return redirect(url_for('historial'))
+
+    # Eliminar el archivo físico del sistema
+    pdf_path = os.path.join('uploads', str(user_id), pdf[2])
+    if os.path.exists(pdf_path):
+        os.remove(pdf_path)
+
+    # Eliminar el registro del archivo en la base de datos
+    cur = mysql.connection.cursor()
+    cur.execute('DELETE FROM pdf_uploads WHERE id = %s', (pdf_id,))
+    mysql.connection.commit()
+    cur.close()
+
+    flash('El archivo ha sido eliminado exitosamente.', 'success')
+    return redirect(url_for('historial'))
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -54,30 +54,33 @@
     {% endif %}
 
     <h3>PDFs Subidos</h3>
-    {% if historial_pdfs %}
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Nombre del Archivo</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for pdf in historial_pdfs %}
-            <tr>
-                <td>{{ pdf[2] }}</td> <!-- Nombre del archivo -->
-                <td>
-                    <form action="{{ url_for('generar_test_desde_pdf', pdf_id=pdf[0]) }}" method="POST">
-                        <button type="submit" class="btn btn-primary">Generar Test</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <p>No has subido ningún PDF aún.</p>
-    {% endif %}
+{% if historial_pdfs %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre del Archivo</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pdf in historial_pdfs %}
+        <tr>
+            <td>{{ pdf[2] }}</td> <!-- Nombre del archivo -->
+            <td>
+                <form action="{{ url_for('eliminar_pdf', pdf_id=pdf[0]) }}" method="POST">
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                </form>
+                <form action="{{ url_for('generar_test_desde_pdf', pdf_id=pdf[0]) }}" method="POST">
+                    <button type="submit" class="btn btn-primary btn-sm">Generar Test</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>No has subido ningún PDF aún.</p>
+{% endif %}
 
 </div>
 
