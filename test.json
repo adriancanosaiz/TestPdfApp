@@ -1,102 +1,102 @@
 [
     {
-        "pregunta": "¿Cuál es la función principal de la cláusula JOIN en SQL?",
+        "pregunta": "¿Cuál es la función principal del tracto gastrointestinal?",
         "opciones": [
-            "Ordenar datos de una tabla.",
-            "Filtrar datos de una tabla.",
-            "Combinar datos de múltiples tablas.",
-            "Eliminar datos de múltiples tablas."
+            "Almacenar alimentos para su uso posterior",
+            "Transformar alimentos en nutrientes absorbibles",
+            "Eliminar los productos de desecho del cuerpo",
+            "Producir hormonas para la regulación del apetito"
         ],
-        "respuesta_correcta": "Combinar datos de múltiples tablas."
+        "respuesta_correcta": "Transformar alimentos en nutrientes absorbibles"
     },
     {
-        "pregunta": "¿Qué cláusulas se utilizan para especificar la columna clave de relación en un JOIN?",
+        "pregunta": "¿Cuáles de los siguientes son órganos digestivos accesorios?",
         "opciones": [
-            "WHERE y HAVING",
-            "ON y USING",
-            "GROUP BY y ORDER BY",
-            "SELECT y FROM"
+            "Estómago, intestino delgado, intestino grueso",
+            "Dientes, lengua, glándulas salivales, hígado, vesícula biliar, páncreas",
+            "Esófago, faringe, boca",
+            "Cardias, fundus, cuerpo gástrico, píloro"
         ],
-        "respuesta_correcta": "ON y USING"
+        "respuesta_correcta": "Dientes, lengua, glándulas salivales, hígado, vesícula biliar, páncreas"
     },
     {
-        "pregunta": "¿Qué tipo de JOIN devuelve solo las filas que tienen coincidencias en ambas tablas?",
+        "pregunta": "¿Qué función NO realiza el sistema digestivo?",
         "opciones": [
-            "LEFT JOIN",
-            "RIGHT JOIN",
-            "INNER JOIN",
-            "FULL OUTER JOIN"
+            "Absorción",
+            "Filtración",
+            "Ingestión",
+            "Secreción"
         ],
-        "respuesta_correcta": "INNER JOIN"
+        "respuesta_correcta": "Filtración"
     },
     {
-        "pregunta": "¿Cómo funciona un NATURAL JOIN?",
+        "pregunta": "¿Cuál es el nombre del proceso que implica la degradación mecánica y química de los alimentos?",
         "opciones": [
-            "Une las tablas usando una condición especificada por el usuario.",
-            "Une automáticamente las tablas usando columnas con el mismo nombre y tipo.",
-            "Devuelve todas las filas de la tabla izquierda, coincidan o no.",
-            "Devuelve todas las filas de la tabla derecha, coincidan o no."
+            "Motilidad",
+            "Digestión",
+            "Secreción",
+            "Ingestión"
         ],
-        "respuesta_correcta": "Une automáticamente las tablas usando columnas con el mismo nombre y tipo."
+        "respuesta_correcta": "Digestión"
     },
     {
-        "pregunta": "¿Qué tipo de JOIN devuelve todas las filas de la tabla izquierda y las coincidencias en la tabla derecha?",
+        "pregunta": "¿Qué tipo de epitelio se encuentra en el estómago y los intestinos?",
         "opciones": [
-            "INNER JOIN",
-            "RIGHT JOIN",
-            "LEFT JOIN",
-            "FULL OUTER JOIN"
+            "Plano estratificado",
+            "Cilíndrico simple",
+            "Cúbico simple",
+            "Plano simple"
         ],
-        "respuesta_correcta": "LEFT JOIN"
+        "respuesta_correcta": "Cilíndrico simple"
     },
     {
-        "pregunta": "¿Qué tipo de JOIN devuelve todas las filas de la tabla derecha y las coincidencias en la tabla izquierda?",
+        "pregunta": "¿Cuál es la función del plexo mientérico (Auerbach)?",
         "opciones": [
-            "INNER JOIN",
-            "LEFT JOIN",
-            "RIGHT JOIN",
-            "FULL OUTER JOIN"
+            "Controlar la secreción de las células epiteliales",
+            "Controlar la motilidad del músculo liso",
+            "Captar estímulos químicos y mecánicos de la luz del tracto GI",
+            "Regular la actividad de las glándulas salivales"
         ],
-        "respuesta_correcta": "RIGHT JOIN"
+        "respuesta_correcta": "Controlar la motilidad del músculo liso"
     },
     {
-        "pregunta": "Si no hay coincidencia en un LEFT JOIN, ¿qué valor se devuelve en las columnas de la tabla derecha?",
+        "pregunta": "¿Qué parte del sistema nervioso autónomo tiene una función inhibidora en la digestión?",
         "opciones": [
-            "0",
-            "Un espacio en blanco",
-            "NULL",
-            "Un error"
+            "Parasimpático",
+            "Simpático",
+            "Entérico",
+            "Somático"
         ],
-        "respuesta_correcta": "NULL"
+        "respuesta_correcta": "Simpático"
     },
     {
-        "pregunta": "Si no hay coincidencia en un RIGHT JOIN, ¿qué valor se devuelve en las columnas de la tabla izquierda?",
+        "pregunta": "¿Cuál es la función de las células parietales en el estómago?",
         "opciones": [
-            "0",
-            "Un espacio en blanco",
-            "NULL",
-            "Un error"
+            "Secretar moco",
+            "Secretar HCl y factor intrínseco",
+            "Secretar pepsinógeno",
+            "Secretar gastrina"
         ],
-        "respuesta_correcta": "NULL"
+        "respuesta_correcta": "Secretar HCl y factor intrínseco"
     },
     {
-        "pregunta": "¿Cuál es una precaución al usar NATURAL JOIN?",
+        "pregunta": "¿Dónde se produce la mayor parte de la digestión y absorción de nutrientes?",
         "opciones": [
-            "Es muy lento.",
-            "Puede generar uniones inesperadas si hay más columnas con nombres idénticos.",
-            "Solo funciona con dos tablas.",
-            "Requiere una cláusula ON explícita."
+            "Estómago",
+            "Intestino delgado",
+            "Intestino grueso",
+            "Hígado"
         ],
-        "respuesta_correcta": "Puede generar uniones inesperadas si hay más columnas con nombres idénticos."
+        "respuesta_correcta": "Intestino delgado"
     },
     {
-        "pregunta": "¿Qué es fundamental para consolidar el aprendizaje de los JOINs?",
+        "pregunta": "¿Cuál es la función principal del intestino grueso?",
         "opciones": [
-            "Leer la documentación.",
-            "Memorizar la sintaxis.",
-            "Practicar en bases de datos reales.",
-            "Ver tutoriales en video."
+            "Digerir proteínas",
+            "Absorber la mayoría de los nutrientes",
+            "Formar y expulsar las heces",
+            "Secretar enzimas digestivas"
         ],
-        "respuesta_correcta": "Practicar en bases de datos reales."
+        "respuesta_correcta": "Formar y expulsar las heces"
     }
 ]
