@@ -1,102 +1,102 @@
 [
     {
-        "pregunta": "¿Cuál es la máscara de subred para la red 172.16.0.0 /16?",
+        "pregunta": "¿Cuál es la función principal del tracto gastrointestinal?",
         "opciones": [
-            "255.255.0.0",
-            "255.255.255.0",
-            "255.0.0.0",
-            "255.255.240.0"
+            "Almacenar alimentos para su uso posterior",
+            "Transformar los alimentos en nutrientes absorbibles",
+            "Eliminar los productos de desecho del cuerpo",
+            "Producir hormonas para la regulación del apetito"
         ],
-        "respuesta_correcta": "255.255.0.0"
+        "respuesta_correcta": "Transformar los alimentos en nutrientes absorbibles"
     },
     {
-        "pregunta": "¿Cuál es la dirección IP del PC2?",
+        "pregunta": "¿Qué órgano conecta la faringe con el estómago?",
         "opciones": [
-            "172.16.0.1",
-            "172.16.0.2",
-            "172.16.0.3",
-            "172.16.0.4"
+            "Tráquea",
+            "Esófago",
+            "Laringe",
+            "Duodeno"
         ],
-        "respuesta_correcta": "172.16.0.3"
+        "respuesta_correcta": "Esófago"
     },
     {
-        "pregunta": "¿Cuántos PCs se conectan al switch?",
+        "pregunta": "¿Cuáles de los siguientes son órganos digestivos accesorios?",
         "opciones": [
-            "2",
-            "3",
-            "4",
-            "5"
+            "Estómago e intestino delgado",
+            "Hígado y páncreas",
+            "Esófago y faringe",
+            "Duodeno e íleon"
         ],
-        "respuesta_correcta": "4"
+        "respuesta_correcta": "Hígado y páncreas"
     },
     {
-        "pregunta": "¿Cuál es el hostname que se debe configurar en el switch?",
+        "pregunta": "¿Qué función cumple la motilidad en el sistema digestivo?",
         "opciones": [
-            "Switch1",
-            "AULADAM",
-            "Clase",
-            "RedLocal"
+            "Degradación química de los alimentos",
+            "Absorción de nutrientes",
+            "Movimiento y mezcla de los alimentos",
+            "Secreción de enzimas digestivas"
         ],
-        "respuesta_correcta": "AULADAM"
+        "respuesta_correcta": "Movimiento y mezcla de los alimentos"
     },
     {
-        "pregunta": "¿Cuál es la contraseña de acceso a la consola del switch?",
+        "pregunta": "¿Cuál es la capa más interna del tracto gastrointestinal?",
         "opciones": [
-            "upgrade",
-            "upgrade1",
-            "upgrade2",
-            "password"
+            "Submucosa",
+            "Mucosa",
+            "Muscular",
+            "Serosa"
         ],
-        "respuesta_correcta": "upgrade1"
+        "respuesta_correcta": "Mucosa"
     },
     {
-        "pregunta": "¿Qué tipo de archivo se debe adjuntar con las respuestas?",
+        "pregunta": "¿Qué tipo de músculo se encuentra en la mayor parte del tracto gastrointestinal?",
         "opciones": [
-            "TXT",
-            "PDF",
-            "JPG",
-            "PNG"
+            "Músculo esquelético",
+            "Músculo cardíaco",
+            "Músculo liso",
+            "Músculo estriado"
         ],
-        "respuesta_correcta": "PDF"
+        "respuesta_correcta": "Músculo liso"
     },
     {
-        "pregunta": "¿Cuál es el mensaje de bienvenida que se debe configurar en el switch?",
+        "pregunta": "¿Qué plexo nervioso controla principalmente la secreción en el tracto gastrointestinal?",
         "opciones": [
-            "Bienvenido",
-            "Acceso permitido",
-            "Equipo privado acceso no autorizado",
-            "Hola"
+            "Plexo mientérico (Auerbach)",
+            "Plexo submucoso (Meissner)",
+            "Plexo celíaco",
+            "Plexo hipogástrico"
         ],
-        "respuesta_correcta": "Equipo privado acceso no autorizado"
+        "respuesta_correcta": "Plexo submucoso (Meissner)"
     },
     {
-        "pregunta": "¿Qué se debe hacer con las contraseñas del switch?",
+        "pregunta": "¿Cuál de las siguientes NO es una función del estómago?",
         "opciones": [
-            "Dejarlas en blanco",
-            "Usar contraseñas sencillas",
-            "Encriptarlas",
-            "No configurar contraseñas"
+            "Liberar jugo gástrico",
+            "Absorber la mayoría de los nutrientes",
+            "Mezclar el bolo alimenticio",
+            "Almacenar alimento"
         ],
-        "respuesta_correcta": "Encriptarlas"
+        "respuesta_correcta": "Absorber la mayoría de los nutrientes"
     },
     {
-        "pregunta": "¿Qué aprendemos al analizar la tabla de direcciones MAC del switch después de enviar tráfico entre los PCs?",
+        "pregunta": "¿Dónde se produce la mayor parte de la digestión y absorción de nutrientes?",
         "opciones": [
-            "El switch no aprende las direcciones MAC",
-            "El switch aprende las direcciones MAC de los dispositivos conectados y las asocia a sus puertos",
-            "El switch solo aprende las direcciones MAC del PC0",
-            "La tabla MAC no cambia"
+            "Estómago",
+            "Intestino delgado",
+            "Intestino grueso",
+            "Hígado"
         ],
-        "respuesta_correcta": "El switch aprende las direcciones MAC de los dispositivos conectados y las asocia a sus puertos"
+        "respuesta_correcta": "Intestino delgado"
     },
     {
-        "pregunta": "¿Cuál es la dirección MAC del PC1?",
+        "pregunta": "¿Cuál es la función principal del intestino grueso?",
         "opciones": [
-            "00D0.FF0A.C67B",
-            "0060.705B.1B5C",
-            "00D0.FF6D.1455",
-            "00D0.971C.531B"
+            "Digerir proteínas y carbohidratos",
+            "Absorber la mayoría de los nutrientes",
+            "Formar y expulsar las heces",
+            "Producir enzimas digestivas"
         ],
-        "respuesta_correcta": "0060.705B.1B5C"
+        "respuesta_correcta": "Formar y expulsar las heces"
     }
 ]

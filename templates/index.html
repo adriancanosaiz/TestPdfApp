@@ -1,169 +1,241 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Subir PDF</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <style>
-        /* Estilos para el spinner */
-        #loadingSpinner {
-            display: none;
-            border: 4px solid #f3f3f3; 
-            border-top: 4px solid #3498db; 
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 2s linear infinite;
-            margin-top: 10px;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        /* Animación del spinner */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Estilos del menú */
-        nav ul li a:hover {
-            background-color: #3498db;
-            color: white;
-            border-radius: 5px;
-        }
-
-        /* Resaltar el elemento activo */
-        nav ul li a.active {
-            background-color: #2980b9;
-            color: white;
-        }
-
-        /* Estilo para las notificaciones */
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #3498db;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Subir PDF</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #F1FAEE;
+      color: #2A4D63;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('https://via.placeholder.com/1600x900/1D3557/ffffff'); /* Imagen de fondo */
+      background-size: cover;
+      background-position: center;
+    }
+    .navbar {
+      background-color: #1D3557;
+    }
+    .navbar-brand, .navbar-nav .nav-link {
+      color: #F1FAEE !important;
+      font-weight: bold;
+    }
+    .navbar-nav .nav-link:hover {
+      background-color: #457B9D;
+      border-radius: 5px;
+    }
+    .btn-custom {
+      background-color: #A8DADC;
+      color: #2A4D63;
+      border: none;
+      border-radius: 30px;
+      transition: all 0.3s ease-in-out;
+    }
+    .btn-custom:hover {
+      background-color: #457B9D;
+      transform: translateY(-2px);
+    }
+    #loadingSpinner {
+      display: none;
+      width: 2rem;
+      height: 2rem;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 1rem auto 0;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .toast-custom {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1055;
+    }
+    .card {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .form-control:focus {
+      border-color: #457B9D;
+      box-shadow: 0 0 0 0.2rem rgba(70, 123, 157, 0.25);
+    }
+    .card-header {
+      background-color: #457B9D;
+      color: #F1FAEE;
+      border-radius: 5px 5px 0 0;
+      font-size: 1.5rem;
+    }
+    .card-body {
+      background-color: #F1FAEE;
+    }
+    .info-box {
+      background-color: #ffffff;
+      padding: 2rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .info-box h3 {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      color: #457B9D;
+    }
+    .info-box p {
+      font-size: 1.1rem;
+      color: #2A4D63;
+    }
+    .floating-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #457B9D;
+      color: #fff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      font-size: 1.5rem;
+      transition: background-color 0.3s ease;
+    }
+    .floating-btn:hover {
+      background-color: #1D3557;
+    }
+  </style>
 </head>
 <body>
 
-    <nav>
-        <input type="checkbox" id="menu-toggle" class="menu-toggle">
-        <label for="menu-toggle" class="menu-icon">&#9776;</label>
-        <ul>
-            <li><a href="{{ url_for('home') }}">Inicio</a></li>
-            {% if session.get('logged_in') %}
-            <li><a href="{{ url_for('index') }}">Subir PDF</a></li>
-            <li><a href="{{ url_for('test') }}">Test</a></li>
-            <li><a href="{{ url_for('historial') }}">Historial</a></li>
-            <li><a href="{{ url_for('profile') }}">Perfil</a></li>
-            <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
-            {% else %}
-                <li><a href="#" id="btn-join">Únete</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-
-    <div class="container">
-        <h1>Sube tu PDF</h1>
-        <form id="pdfForm" action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
-            <input type="file" id="pdfFile" name="pdf" accept="application/pdf" required>
-            <div id="fileError" style="color: red; margin-top: 5px;"></div>
-            <div id="fileName"></div>
-            <button type="submit" id="submitButton">Generar Test</button>
-        </form>
-
-        <!-- Spinner de carga -->
-        <div id="loadingSpinner"></div>
-        
-        <!-- Toast de notificación -->
-        <div id="successToast" class="toast">¡PDF procesado correctamente!</div>
-        <div id="errorToast" class="toast">Hubo un error al procesar el archivo.</div>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top shadow">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">TestApp</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}"><i class="fas fa-home"></i> Inicio</a></li>
+        {% if session.get('logged_in') %}
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('index') }}"><i class="fas fa-upload"></i> Subir PDF</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('test') }}"><i class="fas fa-list"></i> Test</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('historial') }}"><i class="fas fa-history"></i> Historial</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Perfil</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+        {% else %}
+        <li class="nav-item"><a class="nav-link" href="#" id="btn-join"><i class="fas fa-user-plus"></i> Únete</a></li>
+        {% endif %}
+      </ul>
     </div>
+  </div>
+</nav>
 
-    <script>
-        // Validación de archivo PDF antes de enviar
-        document.getElementById("pdfForm").addEventListener("submit", function (e) {
-            const fileInput = document.getElementById("pdfFile");
-            const errorDiv = document.getElementById("fileError");
-            const file = fileInput.files[0];
-            const loadingSpinner = document.getElementById("loadingSpinner");
-            const submitButton = document.getElementById("submitButton");
+<!-- Caja Informativa -->
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="info-box">
+        <h3>¿Por qué subir un PDF?</h3>
+        <p>Sube tu archivo PDF aquí para generar un test interactivo y aprovechar nuestras herramientas de análisis. ¡Es rápido y sencillo!</p>
+      </div>
 
-            // Limpiar mensaje previo
-            errorDiv.textContent = "";
+      <div class="card">
+        <div class="card-header text-center">Sube tu PDF</div>
+        <div class="card-body">
+          <form id="pdfForm" action="{{ url_for('index') }}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="pdfFile" class="form-label">Selecciona un archivo PDF:</label>
+              <input type="file" class="form-control" id="pdfFile" name="pdf" accept="application/pdf" required>
+              <div id="fileError" class="text-danger mt-2"></div>
+              <div id="fileName" class="form-text mt-1"></div>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-custom" id="submitButton"><i class="fas fa-upload"></i> Generar Test</button>
+            </div>
+          </form>
+          <div id="loadingSpinner"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-            // Validación: ¿Se ha seleccionado un archivo?
-            if (!file) {
-                errorDiv.textContent = "Por favor, selecciona un archivo PDF.";
-                e.preventDefault();
-                return;
-            }
+<!-- Botón Flotante -->
+<a href="#pdfForm" class="floating-btn"><i class="fas fa-arrow-down"></i></a>
 
-            // Validación: ¿Es PDF?
-            if (file.type !== "application/pdf") {
-                errorDiv.textContent = "El archivo debe ser un PDF.";
-                e.preventDefault();
-                return;
-            }
+<!-- Toasts -->
+<div class="toast-container position-fixed top-0 end-0 p-3 toast-custom">
+  <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">¡PDF procesado correctamente!</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+  <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Hubo un error al procesar el archivo.</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
 
-            // Validación de tamaño máximo (5 MB)
-            const maxSizeMB = 5;
-            if (file.size > maxSizeMB * 1024 * 1024) {
-                errorDiv.textContent = `El archivo no debe superar los ${maxSizeMB}MB.`;
-                e.preventDefault();
-                return;
-            }
+<!-- Scripts -->
+<script>
+  const form = document.getElementById("pdfForm");
+  const fileInput = document.getElementById("pdfFile");
+  const fileError = document.getElementById("fileError");
+  const fileNameDisplay = document.getElementById("fileName");
+  const loadingSpinner = document.getElementById("loadingSpinner");
+  const submitButton = document.getElementById("submitButton");
 
-            // Mostrar el spinner mientras se procesa el archivo
-            loadingSpinner.style.display = "block";
-            loadingSpinner.classList.add("show");
+  form.addEventListener("submit", function(e) {
+    const file = fileInput.files[0];
+    fileError.textContent = "";
 
-            // Cambiar el texto del botón durante el procesamiento
-            submitButton.textContent = "Procesando...";
-            submitButton.disabled = true;
-        });
+    if (!file) {
+      fileError.textContent = "Por favor, selecciona un archivo PDF.";
+      e.preventDefault();
+      return;
+    }
 
-        // Mostrar el nombre del archivo seleccionado
-        document.getElementById("pdfFile").addEventListener("change", function () {
-            const fileName = document.getElementById("fileName");
-            const file = this.files[0];
-            if (file) {
-                fileName.textContent = `Archivo seleccionado: ${file.name}`;
-            } else {
-                fileName.textContent = "";
-            }
-        });
+    if (file.type !== "application/pdf") {
+      fileError.textContent = "El archivo debe ser un PDF.";
+      e.preventDefault();
+      return;
+    }
 
-        // Mostrar mensaje de éxito o error con Toast
-        function showToast(id) {
-            const toast = document.getElementById(id);
-            toast.style.display = "block";
-            toast.style.opacity = "1";
-            setTimeout(() => {
-                toast.style.opacity = "0";
-                setTimeout(() => {
-                    toast.style.display = "none";
-                }, 500);
-            }, 3000);
-        }
+    const maxSizeMB = 5;
+    if (file.size > maxSizeMB * 1024 * 1024) {
+      fileError.textContent = `El archivo no debe superar los ${maxSizeMB}MB.`;
+      e.preventDefault();
+      return;
+    }
 
-        // Simular el éxito o error del proceso
-        // Llamar a esta función después de la carga del archivo
-        // Ejemplo: Si el archivo se procesa correctamente
-        showToast("successToast");
+    loadingSpinner.style.display = "block";
+    submitButton.textContent = "Procesando...";
+    submitButton.disabled = true;
+  });
 
-        // Si ocurre un error en la carga
-        // showToast("errorToast");
-    </script>
+  fileInput.addEventListener("change", function () {
+    const file = this.files[0];
+    fileNameDisplay.textContent = file ? `Archivo seleccionado: ${file.name}` : "";
+  });
 
+  function showToast(id) {
+    const toast = new bootstrap.Toast(document.getElementById(id));
+    toast.show();
+  }
+
+  // showToast("successToast");
+  // showToast("errorToast");
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
