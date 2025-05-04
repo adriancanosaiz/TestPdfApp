@@ -1,74 +1,209 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - TestApp</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inicio - TestApp</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Colores de la paleta */
+    :root {
+      --azul-principal: #1D3557;   /* Azul oscuro */
+      --azul-secundario: #457B9D;  /* Azul intermedio */
+      --azul-claro: #A8DADC;       /* Azul claro */
+      --fondo-suave: #F1FAEE;      /* Azul muy suave (fondo) */
+      --verde-exito: #A8DADC;      /* Verde azulado */
+      --texto-principal: #2A4D63;  /* Azul muy oscuro */
+      --error-color: #E63946;      /* Rojo suave */
+    }
+
+    /* Estilo general */
+    body {
+      background-color: var(--fondo-suave);
+      color: var(--texto-principal);
+    }
+
+    .navbar {
+      background-color: var(--azul-principal);
+    }
+
+    .navbar-nav .nav-link {
+      color: #fff !important;
+      font-weight: bold;
+    }
+
+    .navbar-nav .nav-link:hover {
+      background-color: var(--azul-claro);
+      border-radius: 5px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #F1FAEE 0%, var(--azul-claro) 100%);
+      padding: 6rem 1rem 4rem;
+      text-align: center;
+      border-bottom: 3px solid var(--azul-secundario);
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+
+    .hero .fa-rocket {
+      font-size: 3rem;
+      color: var(--azul-secundario);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      color: var(--azul-secundario);
+    }
+
+    .btn-custom {
+      background-color: var(--azul-secundario);
+      color: #fff;
+      font-weight: bold;
+      border: none;
+    }
+
+    .btn-custom:hover {
+      background-color: var(--azul-principal);
+    }
+
+    .btn-outline-warning {
+    border-color: var(--azul-claro); /* Color más visible para el borde */
+    color: var(--azul-claro);         /* Color del texto */
+  }
+
+  .btn-outline-warning:hover {
+    background-color: var(--azul-claro); /* Fondo suave para hover */
+    color: #fff;                        /* Texto blanco para un buen contraste */
+    border-color: var(--azul-principal); /* Cambio de borde para hover */
+  }
+
+    /* Sección de testimonios */
+    .testimonial-box {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Llamada a la acción */
+    .cta-section {
+      background-color: var(--azul-principal);
+      color: #fff;
+      padding: 3rem 1rem;
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
-    <nav>
-        <input type="checkbox" id="menu-toggle" />
-        <label for="menu-toggle" class="menu-icon">&#9776;</label>
-        <ul>
-            <li><a href="{{ url_for('home') }}">Inicio</a></li>
-            {% if session.get('logged_in') %}
-                <li><a href="{{ url_for('index') }}">📄 Subir PDF</a></li>
-                <li><a href="{{ url_for('test') }}">📝 Test</a></li>
-                <li><a href="{{ url_for('profile') }}">👤 Perfil</a></li>
-                <li><a href="{{ url_for('logout') }}">🚪 Cerrar sesión</a></li>
-            {% else %}
-                <li><a href="{{ url_for('login') }}">🔑 Iniciar sesión</a></li>
-                <li><a href="{{ url_for('register') }}">🖊️ Registrarse</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-
-    <div class="home-container">
-        <h1>Bienvenido a <span style="color: #eabd08;">TestApp</span></h1>
-        <p>La forma más fácil de crear tests, estudiar y mejorar tus conocimientos de manera automática.</p>
-
-        <section class="features">
-            <h2>¿Por qué TestApp es la herramienta perfecta para ti?</h2>
-            <ul>
-                <li><strong>Generación automática de preguntas:</strong> 📑 ¡Sube cualquier PDF y deja que TestApp cree preguntas tipo test por ti! ¡Así de sencillo!</li>
-                <li><strong>Mejora continua:</strong> 📈 Realiza los tests generados y sigue tu progreso a lo largo del tiempo. ¡Estudia más y mejora tu rendimiento!</li>
-                <li><strong>Historial de pruebas:</strong> 📚 Consulta el historial de tus tests para analizar tus fortalezas y áreas de mejora.</li>
-                <li><strong>Personalización total:</strong> ⚙️ Controla tu perfil, tus preferencias y adapta la app a tu estilo de aprendizaje.</li>
-            </ul>
-        </section>
-
-        <section class="cta">
-            {% if not session.get('logged_in') %}
-                <p>¿Listo para mejorar tus habilidades y convertirte en un experto? 🚀</p>
-                <a href="{{ url_for('register') }}"><button>Únete ahora</button></a>
-                <p>¿Ya tienes cuenta? 🔑</p>
-                <a href="{{ url_for('login') }}"><button>Inicia sesión</button></a>
-            {% else %}
-                <p>¡Bienvenido de nuevo! ¿Qué deseas hacer hoy? 💡</p>
-                <a href="{{ url_for('index') }}"><button>Sube un PDF y empieza a crear tu test</button></a>
-            {% endif %}
-        </section>
-
-        <section class="testimonials">
-            <h2>Lo que dicen nuestros usuarios</h2>
-            <div class="testimonial">
-                <p>"TestApp ha sido la herramienta definitiva para repasar antes de mis exámenes. ¡Me encanta lo fácil que es crear tests!"</p>
-                <strong>- Laura M., Estudiante de Ingeniería</strong>
-            </div>
-            <div class="testimonial">
-                <p>"Nunca imaginé que subir un PDF me ayudaría tanto. ¡Mi preparación ahora es mucho más eficiente!"</p>
-                <strong>- Carlos R., Profesional en Marketing</strong>
-            </div>
-        </section>
-
-        <section class="about">
-            <h2>¿Por qué elegir TestApp?</h2>
-            <p>En TestApp, creemos que estudiar debe ser sencillo y accesible para todos. Nuestra plataforma fue diseñada pensando en ti, para que puedas concentrarte en lo más importante: aprender. No importa tu nivel, siempre encontrarás la forma perfecta de mejorar.</p>
-            <p><strong>Únete hoy y da el siguiente paso en tu aprendizaje. ¡Es gratis y fácil de empezar! 🎓</strong></p>
-        </section>
+<nav class="navbar navbar-expand-lg sticky-top shadow">
+  <div class="container">
+    <a class="navbar-brand fw-bold text-white" href="{{ url_for('home') }}">TestApp</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        {% if session.get('logged_in') %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}"><i class="fas fa-upload"></i> Subir PDF</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('test') }}"><i class="fas fa-file-alt"></i> Test</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Perfil</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+        {% else %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}"><i class="fas fa-user-plus"></i> Registrarse</a></li>
+        {% endif %}
+      </ul>
     </div>
+  </div>
+</nav>
 
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <i class="fas fa-rocket mb-3"></i>
+    <h1>Convierte tus PDFs en tests automáticamente</h1>
+    <p class="lead mt-3">Con <strong>TestApp</strong>, estudiar nunca fue tan fácil. Sube un documento y genera cuestionarios interactivos en segundos.</p>
+    {% if not session.get('logged_in') %}
+    <a href="{{ url_for('register') }}" class="btn btn-custom btn-lg mt-3 me-2">Empieza gratis</a>
+    <a href="{{ url_for('login') }}" class="btn btn-outline-warning btn-lg mt-3">Ya tengo cuenta</a>
+    {% else %}
+    <a href="{{ url_for('index') }}" class="btn btn-custom btn-lg mt-3">Sube tu PDF y comienza</a>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Features -->
+<section class="container py-5">
+  <h2 class="text-center mb-4">¿Por qué usar TestApp?</h2>
+  <div class="row text-center">
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div><i class="fas fa-file-pdf feature-icon mb-2"></i></div>
+      <h5>Sube tu PDF</h5>
+      <p>Solo necesitas un archivo con el contenido que quieres estudiar.</p>
+    </div>
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div><i class="fas fa-magic feature-icon mb-2"></i></div>
+      <h5>Generación automática</h5>
+      <p>Transformamos tu texto en preguntas tipo test sin esfuerzo.</p>
+    </div>
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div><i class="fas fa-chart-line feature-icon mb-2"></i></div>
+      <h5>Sigue tu progreso</h5>
+      <p>Haz seguimiento de tu avance y mejora cada día.</p>
+    </div>
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div><i class="fas fa-user-cog feature-icon mb-2"></i></div>
+      <h5>Personaliza tu experiencia</h5>
+      <p>Adapta los tests a tu ritmo y estilo de aprendizaje.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-4">Lo que dicen nuestros usuarios</h2>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <div class="testimonial-box">
+          <p><i class="fas fa-quote-left"></i> “TestApp me salvó antes de los exámenes. ¡Crear cuestionarios nunca fue tan fácil!”</p>
+          <strong>- Laura M., Estudiante de Ingeniería</strong>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <div class="testimonial-box">
+          <p><i class="fas fa-quote-left"></i> “Prepararme para certificaciones es mucho más efectivo con TestApp. Súper recomendable.”</p>
+          <strong>- Carlos R., Profesional en Marketing</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section">
+  <div class="container text-center">
+    <h2 class="mb-3">Listo para empezar tu camino al éxito académico</h2>
+    <p class="lead">Únete a cientos de estudiantes y profesionales que ya están mejorando con TestApp. ¡Es gratis!</p>
+    {% if not session.get('logged_in') %}
+    <a href="{{ url_for('register') }}" class="btn btn-lg btn-custom me-2">Crear cuenta</a>
+    <a href="{{ url_for('login') }}" class="btn btn-lg btn-outline-warning">Iniciar sesión</a>
+    {% else %}
+    <a href="{{ url_for('index') }}" class="btn btn-lg btn-custom">Subir un PDF</a>
+    {% endif %}
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

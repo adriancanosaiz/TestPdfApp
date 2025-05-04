@@ -1,58 +1,122 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle del Test</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalle del Test</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      background-color: #F1FAEE;
+      color: #2A4D63;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('https://via.placeholder.com/1600x900/1D3557/ffffff');
+      background-size: cover;
+      background-position: center;
+    }
+    .navbar {
+      background-color: #1D3557;
+    }
+    .navbar-brand, .navbar-nav .nav-link {
+      color: #F1FAEE !important;
+      font-weight: bold;
+    }
+    .navbar-nav .nav-link:hover {
+      background-color: #457B9D;
+      border-radius: 5px;
+    }
+    .btn-custom {
+      background-color: #A8DADC;
+      color: #2A4D63;
+      border: none;
+      border-radius: 30px;
+      transition: all 0.3s ease-in-out;
+    }
+    .btn-custom:hover {
+      background-color: #457B9D;
+      transform: translateY(-2px);
+    }
+    .btn-danger {
+      background-color: #E63946;
+      color: white;
+      border-radius: 30px;
+    }
+    .btn-danger:hover {
+      background-color: #c62828;
+    }
+    .card {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    .card-header {
+      background-color: #457B9D;
+      color: #F1FAEE;
+      font-size: 1.5rem;
+      border-radius: 10px 10px 0 0;
+      text-align: center;
+    }
+    .card-body {
+      background-color: #F1FAEE;
+    }
+    .form-control:focus {
+      border-color: #457B9D;
+      box-shadow: 0 0 0 0.2rem rgba(70, 123, 157, 0.25);
+    }
+    .list-group-item {
+      background-color: #F1FAEE;
+      border: 1px solid #A8DADC;
+    }
+    .list-group-item:hover {
+      background-color: #A8DADC;
+    }
+    .badge-success {
+      background-color: #A8DADC;
+    }
+    .badge-danger {
+      background-color: #E63946;
+    }
+  </style>
 </head>
 <body>
 
-    <nav>
-        <input type="checkbox" id="menu-toggle" class="menu-toggle">
-        <label for="menu-toggle" class="menu-icon">&#9776;</label>
-        <ul>
-            <li><a href="{{ url_for('home') }}">Inicio</a></li>
-            <li><a href="{{ url_for('index') }}">Subir PDF</a></li>
-            <li><a href="{{ url_for('test') }}">Test</a></li>
-            <li><a href="{{ url_for('historial') }}">Historial</a></li>
-            <li><a href="{{ url_for('profile') }}">Perfil</a></li>
-            <li><a href="{{ url_for('logout') }}">Cerrar sesión</a></li>
-        </ul>
-    </nav>
+<!-- Navbar -->
+{% include 'navbar.html' %}
 
-    <div class="container">
-        <h1>Detalle del Test</h1>
+<!-- Contenido principal -->
+<div class="container py-5">
+  <h1 class="mb-4">Detalle del Test</h1>
 
-        <div class="test-info">
-            <p><strong>Fecha:</strong> {{ test_info[2] }}</p>
-            <p><strong>Total Preguntas:</strong> {{ test_info[3] }}</p>
-            <p><strong>Aciertos:</strong> {{ test_info[4] }}</p>
-            <p><strong>Nota:</strong> {{ test_info[5] }}%</p>
-        </div>
-
-        <hr>
-
-        <h2>Preguntas y Respuestas:</h2>
-        <ul class="list-group">
-            {% for respuesta in respuestas %}
-            <li class="list-group-item">
-                <strong>Pregunta:</strong> {{ respuesta[0] }}<br>
-                <strong>Respuesta seleccionada:</strong> {{ respuesta[2] }}<br>
-                <strong>Respuesta correcta:</strong> {{ respuesta[1] }}<br>
-                {% if respuesta[3] %}
-                    <span class="green">✅ Correcto</span>
-                {% else %}
-                    <span class="red">❌ Incorrecto</span>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-
-        <a href="{{ url_for('historial') }}">
-            <button>Volver al Historial</button>
-        </a>
+  <div class="card mb-4">
+    <div class="card-header">Información del Test</div>
+    <div class="card-body">
+      <p><strong>Fecha:</strong> {{ test_info[2] }}</p>
+      <p><strong>Total de preguntas:</strong> {{ test_info[3] }}</p>
+      <p><strong>Aciertos:</strong> {{ test_info[4] }}</p>
+      <p><strong>Nota:</strong> {{ test_info[5] }}%</p>
     </div>
+  </div>
+
+  <h2 class="mb-3">Preguntas y Respuestas:</h2>
+
+  <div class="list-group mb-4">
+    {% for respuesta in respuestas %}
+    <div class="list-group-item">
+      <p><strong>Pregunta:</strong> {{ respuesta[0] }}</p>
+      <p><strong>Respuesta seleccionada:</strong> {{ respuesta[2] }}</p>
+      <p><strong>Respuesta correcta:</strong> {{ respuesta[1] }}</p>
+      {% if respuesta[3] %}
+        <span class="badge bg-success">✅ Correcto</span>
+      {% else %}
+        <span class="badge bg-danger">❌ Incorrecto</span>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <a href="{{ url_for('historial') }}" class="btn btn-custom">Volver al Historial</a>
+</div>
 
 </body>
 </html>
