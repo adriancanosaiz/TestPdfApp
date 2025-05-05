@@ -107,8 +107,10 @@
       <p><strong>Respuesta seleccionada:</strong> {{ respuesta[2] }}</p>
       <p><strong>Respuesta correcta:</strong> {{ respuesta[1] }}</p>
       {% if respuesta[3] %}
+        <p><strong>Explicación:</strong> {{ respuesta[4] }}</p>
         <span class="badge bg-success">✅ Correcto</span>
       {% else %}
+        <p><strong>Explicación:</strong> {{ respuesta[4] }}</p>
         <span class="badge bg-danger">❌ Incorrecto</span>
       {% endif %}
     </div>

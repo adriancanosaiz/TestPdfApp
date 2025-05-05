@@ -73,7 +73,8 @@ def generar_preguntas(texto):
 Para cada pregunta, proporciona:
 - "pregunta" (el enunciado),
 - "opciones" (una lista de 3 o más opciones),
-- "respuesta_correcta" (la respuesta correcta).
+- "respuesta_correcta" (la respuesta correcta),
+- "explicacion" (una breve explicación de la respuesta correcta).
 
 La respuesta debe ser estrictamente un JSON válido.
 No incluyas comentarios, explicaciones, ni bloques de código como ```json o similares.
@@ -268,6 +269,7 @@ def test_resultado():
         pregunta_texto = request.form.get(f'pregunta_texto_{i}')
         respuesta_correcta = request.form.get(f'respuesta_correcta_{i}')
         seleccionada = request.form.get(f'pregunta_{i}')
+        explicacion = request.form.get(f'explicacion_{i}')  # Explicación de la respuesta correcta
         if not pregunta_texto:
             break
 
@@ -279,6 +281,7 @@ def test_resultado():
             'pregunta': pregunta_texto,
             'correcta': respuesta_correcta,
             'seleccionada': seleccionada,
+            'explicacion': explicacion,  # Almacenar la explicación
             'es_correcta': es_correcta
         })
 
@@ -294,7 +297,7 @@ def test_resultado():
         'nota': round(nota, 2)
     }
 
-        # Guardar en la base de datos
+    # Guardar en la base de datos
     user_id = session.get('user_id')
     if user_id:
         cur = mysql.connection.cursor()
@@ -303,10 +306,10 @@ def test_resultado():
                     (user_id, fecha, total_preguntas, correctas, round(nota, 2)))
         test_result_id = cur.lastrowid  # ID del test recién creado
 
-        # Ahora guardar cada respuesta individual
+        # Ahora guardar cada respuesta individual, incluyendo la explicación
         for res in resultado_respuestas:
-            cur.execute('INSERT INTO test_answers (test_result_id, pregunta, respuesta_correcta, respuesta_seleccionada, es_correcta) VALUES (%s, %s, %s, %s, %s)',
-                        (test_result_id, res['pregunta'], res['correcta'], res['seleccionada'], res['es_correcta']))
+            cur.execute('INSERT INTO test_answers (test_result_id, pregunta, respuesta_correcta, respuesta_seleccionada, es_correcta, explicacion) VALUES (%s, %s, %s, %s, %s, %s)',
+                        (test_result_id, res['pregunta'], res['correcta'], res['seleccionada'], res['es_correcta'], res['explicacion']))
         mysql.connection.commit()
         cur.close()
 
@@ -323,7 +326,7 @@ def ver_detalle_test(test_result_id):
     test_info = cur.fetchone()
 
     # Cargar las respuestas del test
-    cur.execute('SELECT pregunta, respuesta_correcta, respuesta_seleccionada, es_correcta FROM test_answers WHERE test_result_id = %s', (test_result_id,))
+    cur.execute('SELECT pregunta, respuesta_correcta, respuesta_seleccionada, es_correcta, explicacion FROM test_answers WHERE test_result_id = %s', (test_result_id,))    
     respuestas = cur.fetchall()
 
     cur.close()

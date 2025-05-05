@@ -2,101 +2,111 @@
     {
         "pregunta": "¿Cuál es la función principal del tracto gastrointestinal?",
         "opciones": [
-            "Almacenar alimentos para su uso posterior",
-            "Transformar los alimentos en nutrientes absorbibles",
-            "Eliminar los productos de desecho del cuerpo",
-            "Producir hormonas para la regulación del apetito"
+            "Almacenar energía.",
+            "Transformar alimentos en nutrientes absorbibles.",
+            "Eliminar desechos del cuerpo.",
+            "Producir hormonas."
         ],
-        "respuesta_correcta": "Transformar los alimentos en nutrientes absorbibles"
+        "respuesta_correcta": "Transformar alimentos en nutrientes absorbibles.",
+        "explicacion": "El tracto gastrointestinal descompone los alimentos en nutrientes simples que pueden ser absorbidos por el cuerpo y utilizados para obtener energía."
     },
     {
-        "pregunta": "¿Qué órgano conecta la faringe con el estómago?",
+        "pregunta": "¿Qué órganos digestivos accesorios están en contacto directo con los alimentos?",
         "opciones": [
-            "Tráquea",
-            "Esófago",
-            "Laringe",
-            "Duodeno"
+            "Hígado y páncreas.",
+            "Dientes y lengua.",
+            "Glándulas salivales y vesícula biliar.",
+            "Estómago e intestino delgado."
         ],
-        "respuesta_correcta": "Esófago"
+        "respuesta_correcta": "Dientes y lengua.",
+        "explicacion": "Los dientes participan en la degradación mecánica y la lengua en la manipulación y mezcla de los alimentos con la saliva."
     },
     {
-        "pregunta": "¿Cuáles de los siguientes son órganos digestivos accesorios?",
+        "pregunta": "¿Cuál de las siguientes NO es una función del sistema digestivo?",
         "opciones": [
-            "Estómago e intestino delgado",
-            "Hígado y páncreas",
-            "Esófago y faringe",
-            "Duodeno e íleon"
+            "Ingestión.",
+            "Respiración.",
+            "Secreción.",
+            "Absorción."
         ],
-        "respuesta_correcta": "Hígado y páncreas"
+        "respuesta_correcta": "Respiración.",
+        "explicacion": "La respiración es función del sistema respiratorio, no del digestivo."
     },
     {
-        "pregunta": "¿Qué función cumple la motilidad en el sistema digestivo?",
+        "pregunta": "¿Qué tipo de músculo se encuentra en la capa muscular de la mucosa?",
         "opciones": [
-            "Degradación química de los alimentos",
-            "Absorción de nutrientes",
-            "Movimiento y mezcla de los alimentos",
-            "Secreción de enzimas digestivas"
+            "Músculo esquelético.",
+            "Músculo cardíaco.",
+            "Músculo liso.",
+            "Músculo estriado."
         ],
-        "respuesta_correcta": "Movimiento y mezcla de los alimentos"
+        "respuesta_correcta": "Músculo liso.",
+        "explicacion": "El músculo liso permite la formación de pliegues en la mucosa, aumentando la superficie de absorción."
     },
     {
-        "pregunta": "¿Cuál es la capa más interna del tracto gastrointestinal?",
+        "pregunta": "¿Cuál es la función del plexo mientérico (Auerbach)?",
         "opciones": [
-            "Submucosa",
-            "Mucosa",
-            "Muscular",
-            "Serosa"
+            "Controlar la secreción.",
+            "Controlar la motilidad.",
+            "Digerir proteínas.",
+            "Absorber nutrientes."
         ],
-        "respuesta_correcta": "Mucosa"
+        "respuesta_correcta": "Controlar la motilidad.",
+        "explicacion": "El plexo mientérico inerva el músculo liso de la capa muscular, regulando la motilidad del tracto GI."
     },
     {
-        "pregunta": "¿Qué tipo de músculo se encuentra en la mayor parte del tracto gastrointestinal?",
+        "pregunta": "¿Qué parte del sistema nervioso autónomo tiene un efecto inhibidor sobre la digestión?",
         "opciones": [
-            "Músculo esquelético",
-            "Músculo cardíaco",
-            "Músculo liso",
-            "Músculo estriado"
+            "Parasimpático.",
+            "Simpático.",
+            "Entérico.",
+            "Somático."
         ],
-        "respuesta_correcta": "Músculo liso"
+        "respuesta_correcta": "Simpático.",
+        "explicacion": "El sistema nervioso simpático reduce la motilidad y la secreción en el tracto GI."
     },
     {
-        "pregunta": "¿Qué plexo nervioso controla principalmente la secreción en el tracto gastrointestinal?",
+        "pregunta": "¿Cuál es la función de las células parietales en el estómago?",
         "opciones": [
-            "Plexo mientérico (Auerbach)",
-            "Plexo submucoso (Meissner)",
-            "Plexo celíaco",
-            "Plexo hipogástrico"
+            "Secretar moco.",
+            "Secretar HCl y factor intrínseco.",
+            "Secretar pepsinógeno.",
+            "Secretar gastrina."
         ],
-        "respuesta_correcta": "Plexo submucoso (Meissner)"
+        "respuesta_correcta": "Secretar HCl y factor intrínseco.",
+        "explicacion": "El HCl ayuda a destruir bacterias y desnaturalizar proteínas, mientras que el factor intrínseco es esencial para la absorción de vitamina B12."
     },
     {
-        "pregunta": "¿Cuál de las siguientes NO es una función del estómago?",
+        "pregunta": "¿Dónde se produce la mayor parte de la digestión y absorción?",
         "opciones": [
-            "Liberar jugo gástrico",
-            "Absorber la mayoría de los nutrientes",
-            "Mezclar el bolo alimenticio",
-            "Almacenar alimento"
+            "Estómago.",
+            "Intestino delgado.",
+            "Intestino grueso.",
+            "Hígado."
         ],
-        "respuesta_correcta": "Absorber la mayoría de los nutrientes"
-    },
-    {
-        "pregunta": "¿Dónde se produce la mayor parte de la digestión y absorción de nutrientes?",
-        "opciones": [
-            "Estómago",
-            "Intestino delgado",
-            "Intestino grueso",
-            "Hígado"
-        ],
-        "respuesta_correcta": "Intestino delgado"
+        "respuesta_correcta": "Intestino delgado.",
+        "explicacion": "El intestino delgado es el principal lugar de digestión y absorción de nutrientes."
     },
     {
         "pregunta": "¿Cuál es la función principal del intestino grueso?",
         "opciones": [
-            "Digerir proteínas y carbohidratos",
-            "Absorber la mayoría de los nutrientes",
-            "Formar y expulsar las heces",
-            "Producir enzimas digestivas"
+            "Digerir proteínas.",
+            "Absorber la mayoría de los nutrientes.",
+            "Formar y expulsar las heces.",
+            "Producir enzimas digestivas."
         ],
-        "respuesta_correcta": "Formar y expulsar las heces"
+        "respuesta_correcta": "Formar y expulsar las heces.",
+        "explicacion": "El intestino grueso absorbe agua y electrolitos, formando las heces para su eliminación."
+    },
+    {
+        "pregunta": "¿Qué hormona se libera en el estómago y estimula el apetito?",
+        "opciones": [
+            "Leptina.",
+            "CCK.",
+            "Grelina.",
+            "Insulina."
+        ],
+        "respuesta_correcta": "Grelina.",
+        "explicacion": "La grelina es una hormona orexigénica producida en el estómago que aumenta la sensación de hambre."
     }
 ]
