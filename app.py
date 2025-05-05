@@ -248,15 +248,45 @@ def index():
 
     return render_template('index.html')
 
-# Añadir la ruta del perfil
-@app.route("/profile")
+@app.route("/profile", methods=["GET", "POST"])
 def profile():
     if not session.get('logged_in'):
         return redirect(url_for('home'))
-    
+
     username = session['username']
     cur = mysql.connection.cursor()
+
+    # Obtener los datos actuales del usuario por username
     cur.execute('SELECT * FROM users WHERE username = %s', (username,))
+    user = cur.fetchone()
+    user_id = user[0]  # ID del usuario actual
+
+    if request.method == "POST":
+        new_username = request.form['username']
+        new_email = request.form['email']
+        new_password = generate_password_hash(request.form['password'])
+
+        # Verificar si el nuevo email ya está en uso por OTRO usuario
+        cur.execute('SELECT * FROM users WHERE email = %s AND id != %s', (new_email, user_id))
+        existing_user = cur.fetchone()
+
+        if existing_user:
+            flash("El correo electrónico ya está en uso por otro usuario.", "danger")
+        else:
+            # Actualizar los datos del usuario
+            cur.execute('''
+                UPDATE users 
+                SET username = %s, email = %s, password = %s 
+                WHERE id = %s
+            ''', (new_username, new_email, new_password, user_id))
+            mysql.connection.commit()
+
+            # Actualizar sesión
+            session['username'] = new_username
+            flash("Perfil actualizado correctamente.", "success")
+            return redirect(url_for('profile'))
+
+    cur.execute('SELECT * FROM users WHERE id = %s', (user_id,))
     user = cur.fetchone()
     cur.close()
 

@@ -15,16 +15,16 @@
       background-color: #F1FAEE;
       color: #2A4D63;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding-top: 80px; /* Añadido para que el contenido no se oculte debajo del navbar fijo */
+      padding-top: 80px;
     }
-    
+
     .navbar {
       background-color: #1D3557;
       position: fixed;
       width: 100%;
       top: 0;
       left: 0;
-      z-index: 1000; /* Asegura que el navbar esté encima del contenido */
+      z-index: 1000;
     }
     .navbar-brand, .navbar-nav .nav-link {
       color: #F1FAEE !important;
@@ -35,14 +35,13 @@
       border-radius: 5px;
     }
 
-    /* Estilos para la tarjeta de contenido */
     .card-container {
-      max-width: 900px; /* Aumentado para que la tarjeta sea más ancha */
-      margin: 0 auto; /* Centra la tarjeta */
+      max-width: 900px;
+      margin: 0 auto;
       background-color: #ffffff;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      padding: 40px; /* Aumentado para hacer la tarjeta más espaciosa */
+      padding: 40px;
     }
 
     h1, h2 {
@@ -91,9 +90,8 @@
       gap: 1rem;
     }
 
-    /* Estilos para los inputs */
     .form-control:focus {
-      box-shadow: 0 0 8px rgba(72, 183, 232, 0.5); /* Azul claro */
+      box-shadow: 0 0 8px rgba(72, 183, 232, 0.5);
     }
   </style>
 </head>
@@ -101,6 +99,29 @@
 
 <!-- Navbar -->
 {% include 'navbar.html' %}
+
+<!-- Flash messages con iconos -->
+<div class="container mt-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
+            <i class="
+              {% if category == 'success' %}fas fa-check-circle text-success
+              {% elif category == 'danger' %}fas fa-times-circle text-danger
+              {% elif category == 'warning' %}fas fa-exclamation-triangle text-warning
+              {% elif category == 'info' %}fas fa-info-circle text-info
+              {% else %}fas fa-bell text-primary
+              {% endif %}
+              fs-5
+            "></i>
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
 
 <!-- Perfil -->
 <div class="container d-flex justify-content-center">
@@ -125,7 +146,7 @@
         <label for="password" class="form-label"><i class="fas fa-lock me-2"></i>Nueva Contraseña</label>
         <input type="password" class="form-control" id="password" name="password" required>
       </div>
-      
+
       <div class="d-flex gap-2">
         <button type="submit" class="btn btn-success"><i class="fas fa-save me-2"></i>Guardar cambios</button>
         <button type="button" class="btn btn-danger" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</button>
@@ -134,9 +155,22 @@
   </div>
 </div>
 
+<!-- Scripts -->
 <script>
   document.getElementById('logoutBtn').addEventListener('click', function () {
     window.location.href = "{{ url_for('logout') }}";
+  });
+
+  // Ocultar automáticamente los mensajes flash después de 5 segundos
+  document.addEventListener('DOMContentLoaded', function () {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+      setTimeout(() => {
+        alert.classList.remove('show');
+        alert.classList.add('fade');
+        setTimeout(() => alert.remove(), 500);
+      }, 5000);
+    });
   });
 </script>
 
