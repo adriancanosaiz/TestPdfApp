@@ -105,6 +105,22 @@ Solo responde con el JSON directamente, limpio y listo para parsear.
     except Exception as e:
         print(f"Error al generar las preguntas: {e}")
         return []
+    
+def obtener_historial_tests(user_id):
+    # Consultar los resultados de los tests realizados por el usuario
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM test_results WHERE user_id = %s', (user_id,))
+    historial_tests = cur.fetchall()
+    cur.close()
+    return historial_tests
+
+def obtener_historial_pdfs(user_id):
+    # Consultar los PDFs subidos por el usuario
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM pdf_uploads WHERE user_id = %s', (user_id,))
+    historial_pdfs = cur.fetchall()
+    cur.close()
+    return historial_pdfs
 
 # Rutas
 @app.route("/register", methods=['GET', 'POST'])
@@ -414,6 +430,32 @@ def eliminar_pdf(pdf_id):
 
     flash('El archivo ha sido eliminado exitosamente.', 'success')
     return redirect(url_for('historial'))
+
+from flask import Flask, render_template
+
+@app.route('/ver_pdfs_subidos')
+def ver_pdfs_subidos():
+    user_id = session.get('user_id')  # Usamos el user_id almacenado en la sesión
+    if not user_id:
+        flash('Debes iniciar sesión para ver tus PDFs subidos.', 'danger')
+        return redirect(url_for('login'))
+
+    # Recuperar historial de PDFs subidos
+    historial_pdfs = obtener_historial_pdfs(user_id)
+    return render_template('ver_pdfs_subidos.html', historial_pdfs=historial_pdfs)
+
+@app.route('/ver_tests_realizados')
+def ver_tests_realizados():
+    # Asegúrate de que el usuario esté autenticado
+    user_id = session.get('user_id')  # O usa current_user.id si usas Flask-Login
+    
+    if not user_id:
+        return redirect(url_for('login'))  # Si no está autenticado, redirigir al login
+
+    # Obtener el historial de tests
+    historial_tests = obtener_historial_tests(user_id)  # Llamada a la función que obtendrá los tests realizados
+
+    return render_template('ver_tests_realizados.html', historial_tests=historial_tests)
 
 if __name__ == "__main__":
     app.run(debug=True)

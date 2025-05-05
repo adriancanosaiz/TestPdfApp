@@ -14,90 +14,102 @@
       background-color: #F1FAEE; /* Fondo suave */
       font-family: 'Arial', sans-serif;
       color: #2A4D63; /* Texto oscuro */
+      padding-top: 80px; /* Ajuste para evitar que el contenido quede oculto detrás del navbar fijo */
     }
+
     .navbar {
       background-color: #1D3557;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1030; /* Asegura que el navbar quede sobre el contenido */
     }
+
     .navbar-brand, .navbar-nav .nav-link {
       color: #F1FAEE !important;
       font-weight: bold;
     }
+
     .navbar-nav .nav-link:hover {
       background-color: #457B9D;
       border-radius: 5px;
     }
 
-    h1, h2, h3 {
+    h1 {
       color: #1D3557; /* Títulos en azul oscuro */
       font-weight: 700;
+      text-align: center; /* Centrado de los títulos */
     }
-    .table {
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-      overflow: hidden;
-    }
-    .table thead {
-      background-color: #457B9D; /* Azul intermedio */
-      color: #F1FAEE;
-      font-weight: 600;
-    }
-    .table tbody tr {
-      background-color: #F1FAEE; /* Fondo suave */
-      transition: background-color 0.3s ease; /* Transición suave */
-      text-align: center; /* Centrado del texto */
-    }
-    .table tbody tr:hover {
-      background-color: #A8DADC; /* Azul claro al hacer hover */
-    }
-    .table-bordered td, .table-bordered th {
-      border: 1px solid #dee2e6;
-    }
+
     .btn {
       border-radius: 30px; /* Botones más redondeados */
-      padding: 10px 20px;
-      transition: all 0.3s ease;
+      font-size: 18px; /* Tamaño de fuente aumentado */
+      padding: 15px 30px;
       font-weight: 600;
+      text-align: center;
+      width: 300px; /* Ancho fijo para que los botones tengan el mismo tamaño */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 10px; /* Espaciado entre los botones */
     }
+
     .btn-info {
       background-color: #A8DADC; /* Azul claro */
       color: white;
     }
+
     .btn-info:hover {
       background-color: #457B9D; /* Azul intermedio al hacer hover */
     }
+
     .btn-primary {
       background-color: #457B9D; /* Azul intermedio */
       color: white;
     }
+
     .btn-primary:hover {
       background-color: #1D3557; /* Azul oscuro al hacer hover */
     }
+
     .btn-danger {
       background-color: #E63946; /* Rojo suave */
       color: white;
     }
+
     .btn-danger:hover {
       background-color: #D32F2F; /* Rojo más fuerte al hacer hover */
     }
+
     .alert {
       border-radius: 10px;
       font-weight: 600;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
     }
+
     .table-responsive {
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil en la tabla */
       border-radius: 10px;
       margin-top: 20px;
     }
+
     .table th, .table td {
       vertical-align: middle;
     }
+
     .form-group button {
       margin-top: 10px;
     }
-    .d-flex .gap-2 {
-      margin-top: 10px;
+
+    /* Centra los botones y los mueve más arriba */
+    .d-flex {
+      justify-content: center; /* Centrado horizontal */
+      align-items: center; /* Centrado vertical */
+      gap: 2rem; /* Espaciado entre los botones */
+      margin-top: 50px; /* Mueve los botones más arriba */
     }
+
   </style>
 </head>
 <body>
@@ -109,77 +121,15 @@
 <div class="container">
   <h1 class="mb-4">Historial de Tests Realizados</h1>
 
-  {% if historial_tests %}
-    <h3 class="mb-3">Tests realizados</h3>
-    <div class="table-responsive">
-      <table class="table table-bordered align-middle">
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Total de Preguntas</th>
-            <th>Aciertos</th>
-            <th>Nota</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for test in historial_tests %}
-          <tr>
-            <td>{{ test[2] }}</td>
-            <td>{{ test[3] }}</td>
-            <td>{{ test[4] }}</td>
-            <td>{{ test[5] }}%</td>
-            <td>
-              <a href="{{ url_for('ver_detalle_test', test_result_id=test[0]) }}" class="btn btn-info btn-sm">
-                <i class="fas fa-eye"></i> Ver Detalle
-              </a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  {% else %}
-    <div class="alert alert-warning">No has realizado ningún test aún.</div>
-  {% endif %}
-
-  <h3 class="mt-5 mb-3">PDFs Subidos</h3>
-
-  {% if historial_pdfs %}
-    <div class="table-responsive">
-      <table class="table table-bordered align-middle">
-        <thead>
-          <tr>
-            <th>Nombre del Archivo</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for pdf in historial_pdfs %}
-          <tr>
-            <td>{{ pdf[2] }}</td>
-            <td>
-              <div class="d-flex gap-2">
-                <form action="{{ url_for('eliminar_pdf', pdf_id=pdf[0]) }}" method="POST">
-                  <button type="submit" class="btn btn-danger btn-sm">
-                    <i class="fas fa-trash-alt"></i> Eliminar
-                  </button>
-                </form>
-                <form action="{{ url_for('generar_test_desde_pdf', pdf_id=pdf[0]) }}" method="POST">
-                  <button type="submit" class="btn btn-primary btn-sm">
-                    <i class="fas fa-play"></i> Generar Test
-                  </button>
-                </form>
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  {% else %}
-    <div class="alert alert-info">No has subido ningún PDF aún.</div>
-  {% endif %}
+  <!-- Contenedor de botones centrado -->
+  <div class="d-flex">
+    <a href="{{ url_for('ver_pdfs_subidos') }}" class="btn btn-info">
+      <i class="fas fa-folder-open me-2"></i> Ver PDFs Subidos
+    </a>
+    <a href="{{ url_for('ver_tests_realizados') }}" class="btn btn-info">
+      <i class="fas fa-folder me-2"></i> Ver Tests Realizados
+    </a>
+  </div>
 </div>
 
 </body>

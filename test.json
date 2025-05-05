@@ -1,112 +1,112 @@
 [
     {
-        "pregunta": "¿Cuál es la función principal del tracto gastrointestinal?",
+        "pregunta": "¿Qué es un JOIN en SQL?",
         "opciones": [
-            "Almacenar energía.",
-            "Transformar alimentos en nutrientes absorbibles.",
-            "Eliminar desechos del cuerpo.",
-            "Producir hormonas."
+            "Una función para ordenar datos.",
+            "Una cláusula para filtrar datos.",
+            "Una operación para combinar filas de dos o más tablas.",
+            "Una instrucción para crear nuevas tablas."
         ],
-        "respuesta_correcta": "Transformar alimentos en nutrientes absorbibles.",
-        "explicacion": "El tracto gastrointestinal descompone los alimentos en nutrientes simples que pueden ser absorbidos por el cuerpo y utilizados para obtener energía."
+        "respuesta_correcta": "Una operación para combinar filas de dos o más tablas.",
+        "explicacion": "Un JOIN permite combinar información de diferentes tablas basándose en una condición común."
     },
     {
-        "pregunta": "¿Qué órganos digestivos accesorios están en contacto directo con los alimentos?",
+        "pregunta": "¿Cuál es la función principal de la cláusula ON o USING en un JOIN?",
         "opciones": [
-            "Hígado y páncreas.",
-            "Dientes y lengua.",
-            "Glándulas salivales y vesícula biliar.",
-            "Estómago e intestino delgado."
+            "Especificar la columna clave de relación entre las tablas.",
+            "Definir el tipo de JOIN a utilizar.",
+            "Filtrar las filas resultantes del JOIN.",
+            "Ordenar las filas resultantes del JOIN."
         ],
-        "respuesta_correcta": "Dientes y lengua.",
-        "explicacion": "Los dientes participan en la degradación mecánica y la lengua en la manipulación y mezcla de los alimentos con la saliva."
+        "respuesta_correcta": "Especificar la columna clave de relación entre las tablas.",
+        "explicacion": "ON o USING indican la columna que se usará para conectar las tablas."
     },
     {
-        "pregunta": "¿Cuál de las siguientes NO es una función del sistema digestivo?",
+        "pregunta": "¿Qué tipo de JOIN devuelve solo las filas que tienen coincidencias en ambas tablas?",
         "opciones": [
-            "Ingestión.",
-            "Respiración.",
-            "Secreción.",
-            "Absorción."
+            "LEFT JOIN",
+            "RIGHT JOIN",
+            "INNER JOIN",
+            "FULL OUTER JOIN"
         ],
-        "respuesta_correcta": "Respiración.",
-        "explicacion": "La respiración es función del sistema respiratorio, no del digestivo."
+        "respuesta_correcta": "INNER JOIN",
+        "explicacion": "INNER JOIN es el tipo de JOIN más común y solo muestra las filas que coinciden en ambas tablas."
     },
     {
-        "pregunta": "¿Qué tipo de músculo se encuentra en la capa muscular de la mucosa?",
+        "pregunta": "¿Qué tipo de JOIN devuelve todas las filas de la tabla izquierda y las coincidencias de la tabla derecha?",
         "opciones": [
-            "Músculo esquelético.",
-            "Músculo cardíaco.",
-            "Músculo liso.",
-            "Músculo estriado."
+            "RIGHT JOIN",
+            "INNER JOIN",
+            "LEFT JOIN",
+            "FULL OUTER JOIN"
         ],
-        "respuesta_correcta": "Músculo liso.",
-        "explicacion": "El músculo liso permite la formación de pliegues en la mucosa, aumentando la superficie de absorción."
+        "respuesta_correcta": "LEFT JOIN",
+        "explicacion": "LEFT JOIN incluye todas las filas de la tabla izquierda, incluso si no hay coincidencia en la tabla derecha, en cuyo caso devuelve NULL."
     },
     {
-        "pregunta": "¿Cuál es la función del plexo mientérico (Auerbach)?",
+        "pregunta": "¿Qué tipo de JOIN utiliza columnas con el mismo nombre y tipo para unir tablas automáticamente?",
         "opciones": [
-            "Controlar la secreción.",
-            "Controlar la motilidad.",
-            "Digerir proteínas.",
-            "Absorber nutrientes."
+            "INNER JOIN",
+            "NATURAL JOIN",
+            "LEFT JOIN",
+            "RIGHT JOIN"
         ],
-        "respuesta_correcta": "Controlar la motilidad.",
-        "explicacion": "El plexo mientérico inerva el músculo liso de la capa muscular, regulando la motilidad del tracto GI."
+        "respuesta_correcta": "NATURAL JOIN",
+        "explicacion": "NATURAL JOIN no requiere la cláusula ON y une las tablas basándose en las columnas con nombres y tipos coincidentes."
     },
     {
-        "pregunta": "¿Qué parte del sistema nervioso autónomo tiene un efecto inhibidor sobre la digestión?",
+        "pregunta": "¿Qué precaución se debe tener al usar NATURAL JOIN?",
         "opciones": [
-            "Parasimpático.",
-            "Simpático.",
-            "Entérico.",
-            "Somático."
+            "Puede ser lento en tablas grandes.",
+            "Puede generar uniones inesperadas si hay más columnas con nombres idénticos.",
+            "No funciona con todas las bases de datos.",
+            "Requiere una cláusula ON explícita."
         ],
-        "respuesta_correcta": "Simpático.",
-        "explicacion": "El sistema nervioso simpático reduce la motilidad y la secreción en el tracto GI."
+        "respuesta_correcta": "Puede generar uniones inesperadas si hay más columnas con nombres idénticos.",
+        "explicacion": "Si hay varias columnas con el mismo nombre, NATURAL JOIN podría usarlas para la unión, dando resultados incorrectos."
     },
     {
-        "pregunta": "¿Cuál es la función de las células parietales en el estómago?",
+        "pregunta": "¿Qué devuelve un RIGHT JOIN si no hay coincidencia en la tabla izquierda?",
         "opciones": [
-            "Secretar moco.",
-            "Secretar HCl y factor intrínseco.",
-            "Secretar pepsinógeno.",
-            "Secretar gastrina."
+            "Un error.",
+            "NULL en las columnas de la tabla izquierda.",
+            "NULL en las columnas de la tabla derecha.",
+            "Un conjunto vacío."
         ],
-        "respuesta_correcta": "Secretar HCl y factor intrínseco.",
-        "explicacion": "El HCl ayuda a destruir bacterias y desnaturalizar proteínas, mientras que el factor intrínseco es esencial para la absorción de vitamina B12."
+        "respuesta_correcta": "NULL en las columnas de la tabla izquierda.",
+        "explicacion": "RIGHT JOIN incluye todas las filas de la tabla derecha. Si no hay coincidencia en la izquierda, se rellena con NULL."
     },
     {
-        "pregunta": "¿Dónde se produce la mayor parte de la digestión y absorción?",
+        "pregunta": "Según el ejemplo, ¿qué producto compró María?",
         "opciones": [
-            "Estómago.",
-            "Intestino delgado.",
-            "Intestino grueso.",
-            "Hígado."
+            "Laptop",
+            "Móvil",
+            "Tablet",
+            "No compró nada"
         ],
-        "respuesta_correcta": "Intestino delgado.",
-        "explicacion": "El intestino delgado es el principal lugar de digestión y absorción de nutrientes."
+        "respuesta_correcta": "Móvil",
+        "explicacion": "La tabla de ejemplo muestra que María (ID_Cliente 2) tiene un pedido (ID_Pedido 102) de un Móvil."
     },
     {
-        "pregunta": "¿Cuál es la función principal del intestino grueso?",
+        "pregunta": "¿Cuál es el ID_Cliente de Pedro?",
         "opciones": [
-            "Digerir proteínas.",
-            "Absorber la mayoría de los nutrientes.",
-            "Formar y expulsar las heces.",
-            "Producir enzimas digestivas."
+            "1",
+            "2",
+            "3",
+            "4"
         ],
-        "respuesta_correcta": "Formar y expulsar las heces.",
-        "explicacion": "El intestino grueso absorbe agua y electrolitos, formando las heces para su eliminación."
+        "respuesta_correcta": "3",
+        "explicacion": "La tabla de ejemplo muestra que Pedro tiene el ID_Cliente 3."
     },
     {
-        "pregunta": "¿Qué hormona se libera en el estómago y estimula el apetito?",
+        "pregunta": "¿Qué tipo de JOIN se considera el más común y seguro?",
         "opciones": [
-            "Leptina.",
-            "CCK.",
-            "Grelina.",
-            "Insulina."
+            "LEFT JOIN",
+            "RIGHT JOIN",
+            "INNER JOIN",
+            "NATURAL JOIN"
         ],
-        "respuesta_correcta": "Grelina.",
-        "explicacion": "La grelina es una hormona orexigénica producida en el estómago que aumenta la sensación de hambre."
+        "respuesta_correcta": "INNER JOIN",
+        "explicacion": "El texto menciona que INNER JOIN es el tipo más común y seguro."
     }
 ]
