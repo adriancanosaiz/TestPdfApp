@@ -4,6 +4,9 @@ import requests
 import json
 from datetime import datetime
 import os
+import time
+import requests
+import json
 from dotenv import load_dotenv
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -86,27 +89,44 @@ Solo responde con el JSON directamente, limpio y listo para parsear.
     data = {"contents": [{"parts": [{"text": prompt}]}]}
     headers = {"Content-Type": "application/json"}
 
-    try:
-        response = requests.post(url, headers=headers, data=json.dumps(data))
-        response.raise_for_status()
-        content = response.json()
+    intentos = 0
+    max_intentos = 3  # Puedes ajustar el número de intentos antes de abandonar
 
-        texto_generado = content['candidates'][0]['content']['parts'][0]['text']
-        print("Respuesta cruda de Gemini:", texto_generado)
+    while intentos < max_intentos:
+        try:
+            response = requests.post(url, headers=headers, data=json.dumps(data))
+            response.raise_for_status()
 
-        # Limpieza extra si empieza por ```
-        if texto_generado.startswith("```"):
-            texto_generado = texto_generado.strip().lstrip("```json").lstrip("```").rstrip("```").strip()
+            # Si la solicitud fue exitosa, procesamos la respuesta
+            content = response.json()
+            texto_generado = content['candidates'][0]['content']['parts'][0]['text']
+            
+            if texto_generado.startswith("```"):
+                texto_generado = texto_generado.strip().lstrip("```json").lstrip("```").rstrip("```").strip()
 
-        preguntas = json.loads(texto_generado)
+            preguntas = json.loads(texto_generado)
 
-        # Guardar preguntas en un archivo
-        with open('test.json', 'w', encoding='utf-8') as f:
-            json.dump(preguntas, f, indent=4, ensure_ascii=False)
-        return preguntas
-    except Exception as e:
-        print(f"Error al generar las preguntas: {e}")
-        return []
+            with open('test.json', 'w', encoding='utf-8') as f:
+                json.dump(preguntas, f, indent=4, ensure_ascii=False)
+
+            return preguntas
+
+        except requests.exceptions.HTTPError as e:
+            if response.status_code == 429:
+                # Si es un error 429, esperamos antes de intentar nuevamente
+                print("Demasiadas solicitudes. Esperando antes de reintentar...")
+                time.sleep(60)  # Espera de 60 segundos antes de reintentar
+                intentos += 1
+            else:
+                print(f"Error al generar las preguntas: {e}")
+                return []
+
+        except Exception as e:
+            print(f"Error al generar las preguntas: {e}")
+            return []
+
+    print("Se ha superado el número máximo de intentos debido a errores de API.")
+    return []
     
 def obtener_historial_tests(user_id):
     # Consultar los resultados de los tests realizados por el usuario

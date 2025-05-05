@@ -1,167 +1,112 @@
 [
     {
-        "pregunta": "¿Cuál de los siguientes comandos de Git se utiliza para inicializar un nuevo repositorio local?",
+        "pregunta": "¿Qué es Apache Maven?",
         "opciones": [
-            "git init",
-            "git clone",
-            "git status",
-            "git add"
+            "Un IDE para desarrollo Java",
+            "Una herramienta de gestión de proyectos",
+            "Un lenguaje de programación",
+            "Un servidor de aplicaciones"
         ],
-        "respuesta_correcta": "git init",
-        "explicacion": "El comando `git init` crea un nuevo repositorio Git en el directorio actual."
+        "respuesta_correcta": "Una herramienta de gestión de proyectos",
+        "explicacion": "Maven es una herramienta para la gestión de dependencias, compilación, documentación y otras tareas en el desarrollo de software."
     },
     {
-        "pregunta": "¿Qué comando se usa para descargar un repositorio existente?",
+        "pregunta": "¿En qué lenguaje está escrito principalmente Maven?",
         "opciones": [
-            "git pull",
-            "git clone",
-            "git fetch",
-            "git push"
+            "C#",
+            "Java",
+            "Python",
+            "Ruby"
         ],
-        "respuesta_correcta": "git clone",
-        "explicacion": "`git clone` copia un repositorio Git existente a tu máquina local."
+        "respuesta_correcta": "Java",
+        "explicacion": "Aunque se puede usar con otros lenguajes, Maven está escrito en Java y es muy utilizado en proyectos Java."
     },
     {
-        "pregunta": "Para ver los archivos modificados pero no preparados para el commit, ¿qué comando usarías?",
+        "pregunta": "¿Qué es el POM?",
         "opciones": [
-            "git diff",
-            "git status",
-            "git commit",
-            "git log"
+            "Project Object Model",
+            "Project Orientation Model",
+            "Program Object Model",
+            "Portable Object Model"
         ],
-        "respuesta_correcta": "git status",
-        "explicacion": "`git status` muestra el estado del directorio de trabajo y del área de staging.  Indica qué archivos han sido modificados, añadidos o eliminados."
+        "respuesta_correcta": "Project Object Model",
+        "explicacion": "POM son las siglas de Project Object Model, el archivo central de configuración de un proyecto Maven."
     },
     {
-        "pregunta": "¿Cuál es el comando para preparar un archivo para el próximo commit?",
+        "pregunta": "¿Cuál es el nombre del archivo POM?",
         "opciones": [
-            "git commit",
-            "git add",
-            "git push",
-            "git reset"
+            "pom.json",
+            "pom.xml",
+            "maven.xml",
+            "project.xml"
         ],
-        "respuesta_correcta": "git add",
-        "explicacion": "`git add` añade los cambios de un archivo al área de staging, preparándolos para ser incluidos en el siguiente commit."
+        "respuesta_correcta": "pom.xml",
+        "explicacion": "El archivo POM se llama pom.xml y está en formato XML."
     },
     {
-        "pregunta": "¿Cómo se visualiza el historial completo de cambios en un repositorio Git?",
+        "pregunta": "¿Qué es el Súper POM?",
         "opciones": [
-            "git status",
-            "git diff",
-            "git log",
-            "git show"
+            "Un archivo pom.xml personalizado",
+            "El POM por defecto de Maven",
+            "Un plugin de Maven",
+            "Un repositorio de Maven"
         ],
-        "respuesta_correcta": "git log",
-        "explicacion": "`git log` muestra el historial de commits, incluyendo el autor, la fecha y el mensaje de cada commit."
+        "respuesta_correcta": "El POM por defecto de Maven",
+        "explicacion": "El Súper POM proporciona la configuración base que heredan todos los proyectos Maven."
     },
     {
-        "pregunta": "¿Qué comando lista todas las ramas locales?",
+        "pregunta": "¿Dónde se define la versión de Maven en el pom.xml?",
         "opciones": [
-            "git branch",
-            "git checkout",
-            "git merge",
-            "git remote"
+            "<mavenVersion>",
+            "<modelVersion>",
+            "<projectVersion>",
+            "<version>"
         ],
-        "respuesta_correcta": "git branch",
-        "explicacion": "`git branch` lista todas las ramas locales en el repositorio."
+        "respuesta_correcta": "<modelVersion>",
+        "explicacion": "La etiqueta <modelVersion> especifica la versión del modelo de objetos de proyecto que usa el POM."
     },
     {
-        "pregunta": "Para cambiar a una rama específica, se utiliza el comando:",
+        "pregunta": "¿Cuál es el repositorio público de Maven?",
         "opciones": [
-            "git switch",
-            "git checkout",
-            "git branch",
-            "git merge"
+            "Maven Local",
+            "Maven Central",
+            "Maven Remote",
+            "Maven Private"
         ],
-        "respuesta_correcta": "git checkout",
-        "explicacion": "`git checkout <nombre_de_rama>` cambia a la rama especificada."
+        "respuesta_correcta": "Maven Central",
+        "explicacion": "Maven Central es el repositorio público desde donde se descargan las dependencias."
     },
     {
-        "pregunta": "¿Cuál es el comando para fusionar una rama a la rama actual?",
+        "pregunta": "¿Qué etiqueta se utiliza para definir dependencias en el pom.xml?",
         "opciones": [
-            "git merge",
-            "git join",
-            "git combine",
-            "git attach"
+            "<libraries>",
+            "<dependencies>",
+            "<plugins>",
+            "<modules>"
         ],
-        "respuesta_correcta": "git merge",
-        "explicacion": "`git merge <nombre_de_rama>` fusiona la rama especificada a la rama actual."
+        "respuesta_correcta": "<dependencies>",
+        "explicacion": "La etiqueta <dependencies> engloba todas las dependencias del proyecto."
     },
     {
-        "pregunta": "¿Qué comando crea una etiqueta para un commit específico?",
+        "pregunta": "¿Qué herramienta se menciona como alternativa a Maven?",
         "opciones": [
-            "git tag",
-            "git label",
-            "git mark",
-            "git note"
+            "Ant",
+            "Gradle",
+            "Jenkins",
+            "Git"
         ],
-        "respuesta_correcta": "git tag",
-        "explicacion": "`git tag <nombre_de_etiqueta>` crea una etiqueta para el commit actual."
+        "respuesta_correcta": "Gradle",
+        "explicacion": "El texto menciona a Gradle como una alternativa moderna a Maven, que no usa XML."
     },
     {
-        "pregunta": "¿Qué comando sube los cambios locales al repositorio remoto?",
+        "pregunta": "¿Para qué se utiliza la etiqueta <scope> en una dependencia?",
         "opciones": [
-            "git push",
-            "git upload",
-            "git send",
-            "git export"
+            "Para definir la versión de la dependencia",
+            "Para especificar el alcance de uso de la dependencia",
+            "Para indicar el repositorio de la dependencia",
+            "Para definir el tipo de licencia de la dependencia"
         ],
-        "respuesta_correcta": "git push",
-        "explicacion": "`git push <repositorio_remoto> <rama>` sube los commits locales al repositorio remoto especificado."
-    },
-    {
-        "pregunta": "¿Para qué sirve el archivo .gitignore?",
-        "opciones": [
-            "Para almacenar las credenciales de Git.",
-            "Para especificar qué archivos o directorios deben ser ignorados por Git.",
-            "Para configurar las opciones de línea de comandos de Git.",
-            "Para guardar el historial de commits."
-        ],
-        "respuesta_correcta": "Para especificar qué archivos o directorios deben ser ignorados por Git.",
-        "explicacion": "El archivo `.gitignore` contiene patrones que indican a Git qué archivos o directorios no deben ser rastreados ni versionados."
-    },
-    {
-        "pregunta": "¿Qué es \"origin\" en Git?",
-        "opciones": [
-            "La rama principal del repositorio.",
-            "El nombre por defecto del repositorio remoto.",
-            "El primer commit del repositorio.",
-            "El directorio de trabajo local."
-        ],
-        "respuesta_correcta": "El nombre por defecto del repositorio remoto.",
-        "explicacion": "\"origin\" es un alias o nombre abreviado que Git usa por defecto para referirse al repositorio remoto de donde se clonó el proyecto."
-    },
-    {
-        "pregunta": "¿Qué comando se usa para descargar los cambios del repositorio remoto?",
-        "opciones": [
-            "git push",
-            "git fetch",
-            "git pull",
-            "git clone"
-        ],
-        "respuesta_correcta": "git pull",
-        "explicacion": "`git pull` descarga los cambios del repositorio remoto y los fusiona con la rama local actual."
-    },
-    {
-        "pregunta": "¿Qué es un 'fork' en GitHub?",
-        "opciones": [
-            "Una copia de un repositorio en tu cuenta de GitHub.",
-            "Una rama de un repositorio.",
-            "Un commit en un repositorio.",
-            "Una solicitud de fusión."
-        ],
-        "respuesta_correcta": "Una copia de un repositorio en tu cuenta de GitHub.",
-        "explicacion": "Un 'fork' crea una copia personal de un repositorio en tu cuenta de GitHub, permitiéndote trabajar en él sin afectar el repositorio original."
-    },
-    {
-        "pregunta": "¿Qué es un 'pull request' en GitHub?",
-        "opciones": [
-            "Una solicitud para fusionar tus cambios en otro repositorio.",
-            "Una solicitud para descargar los cambios de otro repositorio.",
-            "Una solicitud para crear una nueva rama.",
-            "Una solicitud para eliminar un repositorio."
-        ],
-        "respuesta_correcta": "Una solicitud para fusionar tus cambios en otro repositorio.",
-        "explicacion": "Un 'pull request' es una solicitud para que el propietario de otro repositorio revise e integre tus cambios en su proyecto."
+        "respuesta_correcta": "Para especificar el alcance de uso de la dependencia",
+        "explicacion": "La etiqueta <scope> define si la dependencia es para compilación, para pruebas, o para tiempo de ejecución, etc."
     }
 ]
