@@ -60,15 +60,17 @@ def extraer_texto_pdf(pdf_file):
         print(f"Error al leer el PDF: {e}")
         return ""
 
-def generar_preguntas(texto):
+def generar_preguntas(texto, cantidad=10, dificultad="medio"):
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise ValueError("La clave de API de Gemini no se ha cargado correctamente.")
 
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key={api_key}"
 
-    prompt = f"""Crea 10 preguntas tipo test basadas en el siguiente texto:
+    prompt = f"""Crea {cantidad} preguntas tipo test basadas en el siguiente texto:
 {texto}
+
+Nivel de dificultad: {dificultad}
 
 Para cada pregunta, proporciona:
 - "pregunta" (el enunciado),
@@ -242,8 +244,13 @@ def index():
             mysql.connection.commit()
             cur.close()
 
-            # Generar preguntas a partir del texto extraído
-            preguntas = generar_preguntas(texto)
+            # Obtener valores del formulario
+            cantidad = int(request.form.get("cantidad", 10))
+            dificultad = request.form.get("dificultad", "medio")
+
+            # Generar preguntas
+            preguntas = generar_preguntas(texto, cantidad=cantidad, dificultad=dificultad)
+
             return render_template('test.html', preguntas=preguntas)
 
     return render_template('index.html')

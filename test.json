@@ -1,112 +1,167 @@
 [
     {
-        "pregunta": "¿Qué es un JOIN en SQL?",
+        "pregunta": "¿Cuál de los siguientes comandos de Git se utiliza para inicializar un nuevo repositorio local?",
         "opciones": [
-            "Una función para ordenar datos.",
-            "Una cláusula para filtrar datos.",
-            "Una operación para combinar filas de dos o más tablas.",
-            "Una instrucción para crear nuevas tablas."
+            "git init",
+            "git clone",
+            "git status",
+            "git add"
         ],
-        "respuesta_correcta": "Una operación para combinar filas de dos o más tablas.",
-        "explicacion": "Un JOIN permite combinar información de diferentes tablas basándose en una condición común."
+        "respuesta_correcta": "git init",
+        "explicacion": "El comando `git init` crea un nuevo repositorio Git en el directorio actual."
     },
     {
-        "pregunta": "¿Cuál es la función principal de la cláusula ON o USING en un JOIN?",
+        "pregunta": "¿Qué comando se usa para descargar un repositorio existente?",
         "opciones": [
-            "Especificar la columna clave de relación entre las tablas.",
-            "Definir el tipo de JOIN a utilizar.",
-            "Filtrar las filas resultantes del JOIN.",
-            "Ordenar las filas resultantes del JOIN."
+            "git pull",
+            "git clone",
+            "git fetch",
+            "git push"
         ],
-        "respuesta_correcta": "Especificar la columna clave de relación entre las tablas.",
-        "explicacion": "ON o USING indican la columna que se usará para conectar las tablas."
+        "respuesta_correcta": "git clone",
+        "explicacion": "`git clone` copia un repositorio Git existente a tu máquina local."
     },
     {
-        "pregunta": "¿Qué tipo de JOIN devuelve solo las filas que tienen coincidencias en ambas tablas?",
+        "pregunta": "Para ver los archivos modificados pero no preparados para el commit, ¿qué comando usarías?",
         "opciones": [
-            "LEFT JOIN",
-            "RIGHT JOIN",
-            "INNER JOIN",
-            "FULL OUTER JOIN"
+            "git diff",
+            "git status",
+            "git commit",
+            "git log"
         ],
-        "respuesta_correcta": "INNER JOIN",
-        "explicacion": "INNER JOIN es el tipo de JOIN más común y solo muestra las filas que coinciden en ambas tablas."
+        "respuesta_correcta": "git status",
+        "explicacion": "`git status` muestra el estado del directorio de trabajo y del área de staging.  Indica qué archivos han sido modificados, añadidos o eliminados."
     },
     {
-        "pregunta": "¿Qué tipo de JOIN devuelve todas las filas de la tabla izquierda y las coincidencias de la tabla derecha?",
+        "pregunta": "¿Cuál es el comando para preparar un archivo para el próximo commit?",
         "opciones": [
-            "RIGHT JOIN",
-            "INNER JOIN",
-            "LEFT JOIN",
-            "FULL OUTER JOIN"
+            "git commit",
+            "git add",
+            "git push",
+            "git reset"
         ],
-        "respuesta_correcta": "LEFT JOIN",
-        "explicacion": "LEFT JOIN incluye todas las filas de la tabla izquierda, incluso si no hay coincidencia en la tabla derecha, en cuyo caso devuelve NULL."
+        "respuesta_correcta": "git add",
+        "explicacion": "`git add` añade los cambios de un archivo al área de staging, preparándolos para ser incluidos en el siguiente commit."
     },
     {
-        "pregunta": "¿Qué tipo de JOIN utiliza columnas con el mismo nombre y tipo para unir tablas automáticamente?",
+        "pregunta": "¿Cómo se visualiza el historial completo de cambios en un repositorio Git?",
         "opciones": [
-            "INNER JOIN",
-            "NATURAL JOIN",
-            "LEFT JOIN",
-            "RIGHT JOIN"
+            "git status",
+            "git diff",
+            "git log",
+            "git show"
         ],
-        "respuesta_correcta": "NATURAL JOIN",
-        "explicacion": "NATURAL JOIN no requiere la cláusula ON y une las tablas basándose en las columnas con nombres y tipos coincidentes."
+        "respuesta_correcta": "git log",
+        "explicacion": "`git log` muestra el historial de commits, incluyendo el autor, la fecha y el mensaje de cada commit."
     },
     {
-        "pregunta": "¿Qué precaución se debe tener al usar NATURAL JOIN?",
+        "pregunta": "¿Qué comando lista todas las ramas locales?",
         "opciones": [
-            "Puede ser lento en tablas grandes.",
-            "Puede generar uniones inesperadas si hay más columnas con nombres idénticos.",
-            "No funciona con todas las bases de datos.",
-            "Requiere una cláusula ON explícita."
+            "git branch",
+            "git checkout",
+            "git merge",
+            "git remote"
         ],
-        "respuesta_correcta": "Puede generar uniones inesperadas si hay más columnas con nombres idénticos.",
-        "explicacion": "Si hay varias columnas con el mismo nombre, NATURAL JOIN podría usarlas para la unión, dando resultados incorrectos."
+        "respuesta_correcta": "git branch",
+        "explicacion": "`git branch` lista todas las ramas locales en el repositorio."
     },
     {
-        "pregunta": "¿Qué devuelve un RIGHT JOIN si no hay coincidencia en la tabla izquierda?",
+        "pregunta": "Para cambiar a una rama específica, se utiliza el comando:",
         "opciones": [
-            "Un error.",
-            "NULL en las columnas de la tabla izquierda.",
-            "NULL en las columnas de la tabla derecha.",
-            "Un conjunto vacío."
+            "git switch",
+            "git checkout",
+            "git branch",
+            "git merge"
         ],
-        "respuesta_correcta": "NULL en las columnas de la tabla izquierda.",
-        "explicacion": "RIGHT JOIN incluye todas las filas de la tabla derecha. Si no hay coincidencia en la izquierda, se rellena con NULL."
+        "respuesta_correcta": "git checkout",
+        "explicacion": "`git checkout <nombre_de_rama>` cambia a la rama especificada."
     },
     {
-        "pregunta": "Según el ejemplo, ¿qué producto compró María?",
+        "pregunta": "¿Cuál es el comando para fusionar una rama a la rama actual?",
         "opciones": [
-            "Laptop",
-            "Móvil",
-            "Tablet",
-            "No compró nada"
+            "git merge",
+            "git join",
+            "git combine",
+            "git attach"
         ],
-        "respuesta_correcta": "Móvil",
-        "explicacion": "La tabla de ejemplo muestra que María (ID_Cliente 2) tiene un pedido (ID_Pedido 102) de un Móvil."
+        "respuesta_correcta": "git merge",
+        "explicacion": "`git merge <nombre_de_rama>` fusiona la rama especificada a la rama actual."
     },
     {
-        "pregunta": "¿Cuál es el ID_Cliente de Pedro?",
+        "pregunta": "¿Qué comando crea una etiqueta para un commit específico?",
         "opciones": [
-            "1",
-            "2",
-            "3",
-            "4"
+            "git tag",
+            "git label",
+            "git mark",
+            "git note"
         ],
-        "respuesta_correcta": "3",
-        "explicacion": "La tabla de ejemplo muestra que Pedro tiene el ID_Cliente 3."
+        "respuesta_correcta": "git tag",
+        "explicacion": "`git tag <nombre_de_etiqueta>` crea una etiqueta para el commit actual."
     },
     {
-        "pregunta": "¿Qué tipo de JOIN se considera el más común y seguro?",
+        "pregunta": "¿Qué comando sube los cambios locales al repositorio remoto?",
         "opciones": [
-            "LEFT JOIN",
-            "RIGHT JOIN",
-            "INNER JOIN",
-            "NATURAL JOIN"
+            "git push",
+            "git upload",
+            "git send",
+            "git export"
         ],
-        "respuesta_correcta": "INNER JOIN",
-        "explicacion": "El texto menciona que INNER JOIN es el tipo más común y seguro."
+        "respuesta_correcta": "git push",
+        "explicacion": "`git push <repositorio_remoto> <rama>` sube los commits locales al repositorio remoto especificado."
+    },
+    {
+        "pregunta": "¿Para qué sirve el archivo .gitignore?",
+        "opciones": [
+            "Para almacenar las credenciales de Git.",
+            "Para especificar qué archivos o directorios deben ser ignorados por Git.",
+            "Para configurar las opciones de línea de comandos de Git.",
+            "Para guardar el historial de commits."
+        ],
+        "respuesta_correcta": "Para especificar qué archivos o directorios deben ser ignorados por Git.",
+        "explicacion": "El archivo `.gitignore` contiene patrones que indican a Git qué archivos o directorios no deben ser rastreados ni versionados."
+    },
+    {
+        "pregunta": "¿Qué es \"origin\" en Git?",
+        "opciones": [
+            "La rama principal del repositorio.",
+            "El nombre por defecto del repositorio remoto.",
+            "El primer commit del repositorio.",
+            "El directorio de trabajo local."
+        ],
+        "respuesta_correcta": "El nombre por defecto del repositorio remoto.",
+        "explicacion": "\"origin\" es un alias o nombre abreviado que Git usa por defecto para referirse al repositorio remoto de donde se clonó el proyecto."
+    },
+    {
+        "pregunta": "¿Qué comando se usa para descargar los cambios del repositorio remoto?",
+        "opciones": [
+            "git push",
+            "git fetch",
+            "git pull",
+            "git clone"
+        ],
+        "respuesta_correcta": "git pull",
+        "explicacion": "`git pull` descarga los cambios del repositorio remoto y los fusiona con la rama local actual."
+    },
+    {
+        "pregunta": "¿Qué es un 'fork' en GitHub?",
+        "opciones": [
+            "Una copia de un repositorio en tu cuenta de GitHub.",
+            "Una rama de un repositorio.",
+            "Un commit en un repositorio.",
+            "Una solicitud de fusión."
+        ],
+        "respuesta_correcta": "Una copia de un repositorio en tu cuenta de GitHub.",
+        "explicacion": "Un 'fork' crea una copia personal de un repositorio en tu cuenta de GitHub, permitiéndote trabajar en él sin afectar el repositorio original."
+    },
+    {
+        "pregunta": "¿Qué es un 'pull request' en GitHub?",
+        "opciones": [
+            "Una solicitud para fusionar tus cambios en otro repositorio.",
+            "Una solicitud para descargar los cambios de otro repositorio.",
+            "Una solicitud para crear una nueva rama.",
+            "Una solicitud para eliminar un repositorio."
+        ],
+        "respuesta_correcta": "Una solicitud para fusionar tus cambios en otro repositorio.",
+        "explicacion": "Un 'pull request' es una solicitud para que el propietario de otro repositorio revise e integre tus cambios en su proyecto."
     }
 ]
