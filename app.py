@@ -11,9 +11,13 @@ from dotenv import load_dotenv
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, DateField
-from wtforms.validators import DataRequired, Email, Length
+from wtforms import StringField, PasswordField, DateField, SelectField
+from wtforms.validators import DataRequired, Email, Length, Optional
 from urllib.parse import urlparse
+from celery import Celery
+import requests
+import os
+import json
 
 
 # Cargar variables de entorno
@@ -41,11 +45,37 @@ mysql = MySQL(app)
 
 # Formularios
 class RegisterForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=8, message="La contraseña debe tener al menos 8 caracteres")])
+
+    # Campo para el nombre completo
+    nombre_completo = StringField('Nombre completo', validators=[DataRequired(), Length(min=3, max=150)])
+
+    # Campo para el correo electrónico
+    email = StringField('Correo electrónico', validators=[DataRequired(), Email()])
+
+    # Campo para la contraseña
+    password = PasswordField('Contraseña', validators=[DataRequired(), Length(min=8, message="La contraseña debe tener al menos 8 caracteres")])
+
+    # Campo para el centro de estudios
     centro = StringField('Centro de estudios', validators=[DataRequired()])
+
+    # Campo para la fecha de nacimiento
     fecha_nacimiento = DateField('Fecha de nacimiento', format='%Y-%m-%d', validators=[DataRequired()])
+
+    # Campo para el teléfono (opcional)
+    telefono = StringField('Teléfono', validators=[Optional(), Length(max=20)])
+
+    # Campo para el género (opciones desplegables)
+    genero = SelectField('Género', choices=[('Masculino', 'Masculino'), ('Femenino', 'Femenino'), ('Otro', 'Otro'), ('Prefiero no decirlo', 'Prefiero no decirlo')], default='Prefiero no decirlo')
+
+    # Campo para el país (esto es solo un ejemplo; puedes añadir una lista de países más completa)
+    pais = StringField('País', validators=[DataRequired(), Length(max=100)])
+
+    # Campo para el Estado / Provincia
+
+    estado = StringField('Estado', validators=[DataRequired()])
+
+    # Campo para la ciudad
+    ciudad = StringField('Ciudad', validators=[DataRequired(), Length(max=100)])
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -62,7 +92,7 @@ def extraer_texto_pdf(pdf_file):
     except Exception as e:
         print(f"Error al leer el PDF: {e}")
         return ""
-
+    
 def generar_preguntas(texto, cantidad=10, dificultad="medio"):
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
@@ -149,25 +179,49 @@ def obtener_historial_pdfs(user_id):
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        username = form.username.data
+        nombre_completo = form.nombre_completo.data
         email = form.email.data
         password = form.password.data
         centro = form.centro.data
         fecha_nacimiento = form.fecha_nacimiento.data
+        telefono = form.telefono.data or None
+        genero = form.genero.data
 
-        # Validación de correo duplicado
+        # IDs enviados desde el formulario
+        pais_id = form.pais.data
+        estado_id = form.estado.data
+        ciudad = form.ciudad.data  # ya viene como nombre
+
+        # Obtener nombre del país desde JSON
+        with open('static/data/countries.json', encoding='utf-8') as f:
+            paises = json.load(f)
+        nombre_pais = next((p['name'] for p in paises if str(p['id']) == pais_id), '')
+
+        # Obtener nombre del estado desde JSON
+        with open('static/data/states.json', encoding='utf-8') as f:
+            estados = json.load(f)
+        nombre_estado = next((e['name'] for e in estados if str(e['id']) == estado_id), '')
+
+        # Validar si el correo ya existe
         cur = mysql.connection.cursor()
-        cur.execute('SELECT * FROM users WHERE email = %s', (email,))
+        cur.execute('SELECT id FROM users WHERE email = %s', (email,))
         if cur.fetchone():
             flash('Este correo ya está en uso.', 'danger')
             return redirect(url_for('register'))
 
-        # Cifrar la contraseña
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
 
-        # Insertar usuario en la base de datos
-        cur.execute('INSERT INTO users (username, email, password, centro, fecha_nacimiento) VALUES (%s, %s, %s, %s, %s)',
-                    (username, email, hashed_password, centro, fecha_nacimiento))
+        # Insertar nuevo usuario con NOMBRES (no IDs)
+        cur.execute('''
+            INSERT INTO users (
+                nombre_completo, email, password, centro, fecha_nacimiento,
+                telefono, genero, pais, estado, ciudad
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ''', (
+            nombre_completo, email, hashed_password, centro, fecha_nacimiento,
+            telefono, genero, nombre_pais, nombre_estado, ciudad
+        ))
+
         mysql.connection.commit()
         cur.close()
 
@@ -175,6 +229,39 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('register.html', form=form)
+
+import json
+from flask import jsonify, request
+
+@app.route('/api/estados')
+def obtener_estados():
+    pais_id = request.args.get('pais_id')
+    if not pais_id:
+        return jsonify([])
+
+    try:
+        with open('static/data/states.json', encoding='utf-8') as f:
+            estados = json.load(f)
+        filtrados = [ {'id': e['id'], 'name': e['name']} for e in estados if str(e['country_id']) == pais_id ]
+        return jsonify(sorted(filtrados, key=lambda x: x['name']))
+    except Exception as e:
+        print("Error al leer states.json:", e)
+        return jsonify([])
+
+@app.route('/api/ciudades')
+def obtener_ciudades():
+    estado_id = request.args.get('estado_id')
+    if not estado_id:
+        return jsonify([])
+
+    try:
+        with open('static/data/cities.json', encoding='utf-8') as f:
+            ciudades = json.load(f)
+        filtradas = [ c['name'] for c in ciudades if str(c['state_id']) == estado_id ]
+        return jsonify(sorted(filtradas))
+    except Exception as e:
+        print("Error al leer cities.json:", e)
+        return jsonify([])
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -185,17 +272,17 @@ def login():
 
         # Verificar usuario en la base de datos
         cur = mysql.connection.cursor()
-        cur.execute('SELECT * FROM users WHERE email = %s', (email,))
+        cur.execute('SELECT id, nombre_completo, email, password FROM users WHERE email = %s', (email,))
         user = cur.fetchone()
         cur.close()
 
         # Validar credenciales
-        if user and check_password_hash(user[3], password):  # user[3] es la contraseña cifrada en la base de datos
+        if user and check_password_hash(user[3], password):  # user[3] es la contraseña hasheada
             flash('¡Inicio de sesión exitoso!', 'success')
             session['logged_in'] = True
-            session['username'] = user[1]  # Guardar el nombre en la sesión
-            session['email'] = user[2]  # Guardar el email en la sesión
-            session['user_id'] = user[0]  # Guardar el user_id en la sesión
+            session['username'] = user[1]  # nombre_completo
+            session['email'] = user[2]     # email
+            session['user_id'] = user[0]   # id
             return redirect(url_for('index'))
         else:
             flash('Correo electrónico o contraseña incorrectos', 'danger')
@@ -280,39 +367,53 @@ def profile():
     if not session.get('logged_in'):
         return redirect(url_for('home'))
 
-    username = session['username']
+    user_id = session['user_id']
     cur = mysql.connection.cursor()
 
-    # Obtener los datos actuales del usuario por username
-    cur.execute('SELECT * FROM users WHERE username = %s', (username,))
+    # Obtener los datos actuales del usuario por ID
+    cur.execute('SELECT * FROM users WHERE id = %s', (user_id,))
     user = cur.fetchone()
-    user_id = user[0]  # ID del usuario actual
 
     if request.method == "POST":
-        new_username = request.form['username']
-        new_email = request.form['email']
-        new_password = generate_password_hash(request.form['password'])
+        nombre_completo = request.form['nombre_completo']
+        genero = request.form['genero']
+        telefono = request.form['telefono']
+        fecha_nacimiento = request.form['fecha_nacimiento'] if request.form['fecha_nacimiento'] else None
+        centro = request.form['centro']
+        email = request.form['email']
+        nueva_password = request.form['password']
 
-        # Verificar si el nuevo email ya está en uso por OTRO usuario
-        cur.execute('SELECT * FROM users WHERE email = %s AND id != %s', (new_email, user_id))
+        # Verificar si el nuevo email ya está en uso por otro usuario
+        cur.execute('SELECT * FROM users WHERE email = %s AND id != %s', (email, user_id))
         existing_user = cur.fetchone()
 
         if existing_user:
             flash("El correo electrónico ya está en uso por otro usuario.", "danger")
         else:
-            # Actualizar los datos del usuario
-            cur.execute('''
-                UPDATE users 
-                SET username = %s, email = %s, password = %s 
-                WHERE id = %s
-            ''', (new_username, new_email, new_password, user_id))
+            # Si el campo de contraseña no está vacío, la actualiza
+            if nueva_password.strip():
+                hashed_password = generate_password_hash(nueva_password)
+                cur.execute('''
+                    UPDATE users 
+                    SET nombre_completo = %s, genero = %s, telefono = %s, fecha_nacimiento = %s,
+                        centro = %s, email = %s, password = %s
+                    WHERE id = %s
+                ''', (nombre_completo, genero, telefono, fecha_nacimiento, centro, email, hashed_password, user_id))
+            else:
+                cur.execute('''
+                    UPDATE users 
+                    SET nombre_completo = %s, genero = %s, telefono = %s, fecha_nacimiento = %s,
+                        centro = %s, email = %s
+                    WHERE id = %s
+                ''', (nombre_completo, genero, telefono, fecha_nacimiento, centro, email, user_id))
+
             mysql.connection.commit()
 
-            # Actualizar sesión
-            session['username'] = new_username
+            session['username'] = nombre_completo
             flash("Perfil actualizado correctamente.", "success")
             return redirect(url_for('profile'))
 
+    # Refrescar datos después de posible actualización
     cur.execute('SELECT * FROM users WHERE id = %s', (user_id,))
     user = cur.fetchone()
     cur.close()

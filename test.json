@@ -1,112 +1,112 @@
 [
     {
-        "pregunta": "¿Qué es Apache Maven?",
+        "pregunta": "¿Cuál de los siguientes comandos de Git se utiliza para inicializar un nuevo repositorio local?",
         "opciones": [
-            "Un IDE para desarrollo Java",
-            "Una herramienta de gestión de proyectos",
-            "Un lenguaje de programación",
-            "Un servidor de aplicaciones"
+            "git init",
+            "git clone",
+            "git status",
+            "git add"
         ],
-        "respuesta_correcta": "Una herramienta de gestión de proyectos",
-        "explicacion": "Maven es una herramienta para la gestión de dependencias, compilación, documentación y otras tareas en el desarrollo de software."
+        "respuesta_correcta": "git init",
+        "explicacion": "El comando `git init` crea un nuevo repositorio Git en el directorio actual."
     },
     {
-        "pregunta": "¿En qué lenguaje está escrito principalmente Maven?",
+        "pregunta": "¿Qué comando muestra los archivos modificados que aún no se han preparado para el commit?",
         "opciones": [
-            "C#",
-            "Java",
-            "Python",
-            "Ruby"
+            "git diff",
+            "git status",
+            "git add",
+            "git commit"
         ],
-        "respuesta_correcta": "Java",
-        "explicacion": "Aunque se puede usar con otros lenguajes, Maven está escrito en Java y es muy utilizado en proyectos Java."
+        "respuesta_correcta": "git status",
+        "explicacion": "`git status` muestra el estado del directorio de trabajo y del área de preparación. Indica qué archivos han sido modificados, añadidos o eliminados, y cuáles están preparados para el commit."
     },
     {
-        "pregunta": "¿Qué es el POM?",
+        "pregunta": "Para descargar un repositorio existente, ¿qué comando se usa?",
         "opciones": [
-            "Project Object Model",
-            "Project Orientation Model",
-            "Program Object Model",
-            "Portable Object Model"
+            "git clone",
+            "git pull",
+            "git fetch",
+            "git push"
         ],
-        "respuesta_correcta": "Project Object Model",
-        "explicacion": "POM son las siglas de Project Object Model, el archivo central de configuración de un proyecto Maven."
+        "respuesta_correcta": "git clone",
+        "explicacion": "`git clone` crea una copia local de un repositorio remoto."
     },
     {
-        "pregunta": "¿Cuál es el nombre del archivo POM?",
+        "pregunta": "¿Cuál es el propósito del comando `git add`?",
         "opciones": [
-            "pom.json",
-            "pom.xml",
-            "maven.xml",
-            "project.xml"
+            "Confirmar los cambios",
+            "Preparar los archivos para el commit",
+            "Revertir los cambios",
+            "Ver el historial de commits"
         ],
-        "respuesta_correcta": "pom.xml",
-        "explicacion": "El archivo POM se llama pom.xml y está en formato XML."
+        "respuesta_correcta": "Preparar los archivos para el commit",
+        "explicacion": "`git add` añade los cambios realizados en los archivos al área de preparación (staging area), dejándolos listos para ser incluidos en el siguiente commit."
     },
     {
-        "pregunta": "¿Qué es el Súper POM?",
+        "pregunta": "¿Cómo se crea una nueva rama en Git?",
         "opciones": [
-            "Un archivo pom.xml personalizado",
-            "El POM por defecto de Maven",
-            "Un plugin de Maven",
-            "Un repositorio de Maven"
+            "git branch new_branch",
+            "git checkout -b new_branch",
+            "git merge new_branch",
+            "git tag new_branch"
         ],
-        "respuesta_correcta": "El POM por defecto de Maven",
-        "explicacion": "El Súper POM proporciona la configuración base que heredan todos los proyectos Maven."
+        "respuesta_correcta": "git branch new_branch",
+        "explicacion": "Aunque `git checkout -b new_branch` también crea una rama y cambia a ella, `git branch new_branch` solo crea la rama sin cambiar a ella. Ambas son correctas, pero el texto especifica `git branch new_branch`."
     },
     {
-        "pregunta": "¿Dónde se define la versión de Maven en el pom.xml?",
+        "pregunta": "¿Qué comando se usa para fusionar una rama a la rama actual?",
         "opciones": [
-            "<mavenVersion>",
-            "<modelVersion>",
-            "<projectVersion>",
-            "<version>"
+            "git merge",
+            "git rebase",
+            "git join",
+            "git combine"
         ],
-        "respuesta_correcta": "<modelVersion>",
-        "explicacion": "La etiqueta <modelVersion> especifica la versión del modelo de objetos de proyecto que usa el POM."
+        "respuesta_correcta": "git merge",
+        "explicacion": "`git merge` integra los cambios de una rama específica a la rama actual."
     },
     {
-        "pregunta": "¿Cuál es el repositorio público de Maven?",
+        "pregunta": "¿Para qué sirve `git commit -m \"mensaje\"`?",
         "opciones": [
-            "Maven Local",
-            "Maven Central",
-            "Maven Remote",
-            "Maven Private"
+            "Añadir archivos al área de preparación",
+            "Crear una nueva rama",
+            "Confirmar los cambios con un mensaje",
+            "Eliminar una rama"
         ],
-        "respuesta_correcta": "Maven Central",
-        "explicacion": "Maven Central es el repositorio público desde donde se descargan las dependencias."
+        "respuesta_correcta": "Confirmar los cambios con un mensaje",
+        "explicacion": "Este comando guarda los cambios preparados (staged) en el repositorio local con el mensaje proporcionado."
     },
     {
-        "pregunta": "¿Qué etiqueta se utiliza para definir dependencias en el pom.xml?",
+        "pregunta": "¿Qué hace el comando `git push`?",
         "opciones": [
-            "<libraries>",
-            "<dependencies>",
-            "<plugins>",
-            "<modules>"
+            "Descarga los cambios del repositorio remoto",
+            "Sube los cambios locales al repositorio remoto",
+            "Crea una nueva rama",
+            "Elimina un commit"
         ],
-        "respuesta_correcta": "<dependencies>",
-        "explicacion": "La etiqueta <dependencies> engloba todas las dependencias del proyecto."
+        "respuesta_correcta": "Sube los cambios locales al repositorio remoto",
+        "explicacion": "`git push` envía los commits locales al repositorio remoto especificado."
     },
     {
-        "pregunta": "¿Qué herramienta se menciona como alternativa a Maven?",
+        "pregunta": "¿Cuál es la función de `git pull`?",
         "opciones": [
-            "Ant",
-            "Gradle",
-            "Jenkins",
-            "Git"
+            "Subir los cambios al repositorio remoto",
+            "Descargar y fusionar los cambios del repositorio remoto",
+            "Crear un nuevo repositorio",
+            "Revertir los cambios a un commit anterior"
         ],
-        "respuesta_correcta": "Gradle",
-        "explicacion": "El texto menciona a Gradle como una alternativa moderna a Maven, que no usa XML."
+        "respuesta_correcta": "Descargar y fusionar los cambios del repositorio remoto",
+        "explicacion": "`git pull` combina `git fetch` (descarga cambios) y `git merge` (fusiona cambios)."
     },
     {
-        "pregunta": "¿Para qué se utiliza la etiqueta <scope> en una dependencia?",
+        "pregunta": "¿Para qué se utiliza `git diff --cached`?",
         "opciones": [
-            "Para definir la versión de la dependencia",
-            "Para especificar el alcance de uso de la dependencia",
-            "Para indicar el repositorio de la dependencia",
-            "Para definir el tipo de licencia de la dependencia"
+            "Muestra los cambios entre dos commits",
+            "Muestra las diferencias entre los archivos en el área de preparación y la última confirmación",
+            "Muestra los cambios en los archivos no preparados",
+            "Muestra el historial completo de cambios"
         ],
-        "respuesta_correcta": "Para especificar el alcance de uso de la dependencia",
-        "explicacion": "La etiqueta <scope> define si la dependencia es para compilación, para pruebas, o para tiempo de ejecución, etc."
+        "respuesta_correcta": "Muestra las diferencias entre los archivos en el área de preparación y la última confirmación",
+        "explicacion": "Este comando muestra las diferencias entre los archivos que han sido añadidos al área de preparación (staged) y la última versión confirmada en el repositorio local."
     }
 ]

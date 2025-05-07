@@ -93,6 +93,28 @@
     .form-control:focus {
       box-shadow: 0 0 8px rgba(72, 183, 232, 0.5);
     }
+
+    /* Ocultar elementos al principio */
+    #editSection {
+      display: none;
+    }
+    #profileSection {
+      display: block;
+    }
+
+    /* Alineación del botón de editar */
+    #editBtn {
+      width: 100%;
+      margin-top: 20px;
+      background-color: #A8DADC;
+      color: #2A4D63;
+      border: none;
+    }
+
+    #editBtn:hover {
+      background-color: #457B9D;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -127,50 +149,98 @@
 <div class="container d-flex justify-content-center">
   <div class="card-container">
     <h1 class="mb-4"><i class="fas fa-user-circle me-2"></i>Bienvenido, {{ user[1] }}</h1>
-    <p><strong><i class="fas fa-envelope me-2"></i>Email actual:</strong> {{ user[2] }}</p>
 
-    <hr class="my-4">
+    <!-- Sección de datos del perfil (visualización solo) -->
+    <div id="profileSection">
+      <p><strong><i class="fas fa-envelope me-2"></i>Email actual:</strong> {{ user[6] }}</p>
+      <p><strong><i class="fas fa-user me-2"></i>Nombre completo:</strong> {{ user[1] }}</p>
+      <p><strong><i class="fas fa-venus-mars me-2"></i>Género:</strong> {{ user[2] }}</p>
+      <p><strong><i class="fas fa-phone me-2"></i>Teléfono:</strong> {{ user[3] }}</p>
+      <p><strong><i class="fas fa-calendar-alt me-2"></i>Fecha de nacimiento:</strong> {{ user[4] }}</p>
+      <p><strong><i class="fas fa-school me-2"></i>Centro:</strong> {{ user[5] }}</p>
+    </div>
 
-    <h2 class="mb-3"><i class="fas fa-pen me-2"></i>Editar Perfil</h2>
+    <!-- Sección de edición de perfil -->
+    <div id="editSection">
+      <form method="POST" action="{{ url_for('profile') }}">
+        <!-- Nombre -->
+        <div class="mb-3">
+          <label for="nombre_completo" class="form-label"><i class="fas fa-user me-2"></i>Nombre completo</label>
+          <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" value="{{ user[1] }}" required>
+        </div>
+        
+        <!-- Género -->
+        <div class="mb-3">
+          <label for="genero" class="form-label"><i class="fas fa-venus-mars me-2"></i>Género</label>
+          <select class="form-control" id="genero" name="genero" required>
+            <option value="Masculino" {% if user[3] == "Masculino" %}selected{% endif %}>Masculino</option>
+            <option value="Femenino" {% if user[3] == "Femenino" %}selected{% endif %}>Femenino</option>
+            <option value="Otro" {% if user[3] == "Otro" %}selected{% endif %}>Otro</option>
+          </select>
+        </div>
 
-    <form method="POST" action="{{ url_for('profile') }}">
-      <div class="mb-3">
-        <label for="username" class="form-label"><i class="fas fa-user-tag me-2"></i>Nuevo Nombre de Usuario</label>
-        <input type="text" class="form-control" id="username" name="username" value="{{ user[1] }}" required>
-      </div>
-      <div class="mb-3">
-        <label for="email" class="form-label"><i class="fas fa-at me-2"></i>Nuevo Email</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{ user[2] }}" required>
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label"><i class="fas fa-lock me-2"></i>Nueva Contraseña</label>
-        <input type="password" class="form-control" id="password" name="password" required>
-      </div>
+        <!-- Teléfono -->
+        <div class="mb-3">
+          <label for="telefono" class="form-label"><i class="fas fa-phone me-2"></i>Teléfono</label>
+          <input type="tel" class="form-control" id="telefono" name="telefono" value="{{ user[3] }}">
+        </div>
 
-      <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-success"><i class="fas fa-save me-2"></i>Guardar cambios</button>
-        <button type="button" class="btn btn-danger" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</button>
-      </div>
-    </form>
+        <!-- Fecha de nacimiento -->
+        <div class="mb-3">
+          <label for="fecha_nacimiento" class="form-label"><i class="fas fa-calendar-alt me-2"></i>Fecha de nacimiento</label>
+          <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ user[4]|safe }}">
+        </div>
+
+        <!-- Centro -->
+        <div class="mb-3">
+          <label for="centro" class="form-label"><i class="fas fa-school me-2"></i>Centro</label>
+          <input type="text" class="form-control" id="centro" name="centro" value="{{ user[5] }}">
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label"><i class="fas fa-at me-2"></i>Email</label>
+          <input type="email" class="form-control" id="email" name="email" value="{{ user[6] }}" required>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="mb-3">
+          <label for="password" class="form-label"><i class="fas fa-lock me-2"></i>Nueva contraseña</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Dejar en blanco para mantener la actual">
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-success"><i class="fas fa-save me-2"></i>Guardar cambios</button>
+          <button type="button" class="btn btn-danger" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Botón para alternar entre editar y ver datos -->
+    <button type="button" class="btn" id="editBtn"><i class="fas fa-pencil-alt me-2"></i>Editar perfil</button>
+
   </div>
 </div>
 
-<!-- Scripts -->
+<!-- Script para manejar la edición -->
 <script>
-  document.getElementById('logoutBtn').addEventListener('click', function () {
-    window.location.href = "{{ url_for('logout') }}";
-  });
+  const editBtn = document.getElementById('editBtn');
+  const profileSection = document.getElementById('profileSection');
+  const editSection = document.getElementById('editSection');
 
-  // Ocultar automáticamente los mensajes flash después de 5 segundos
-  document.addEventListener('DOMContentLoaded', function () {
-    const alerts = document.querySelectorAll('.alert');
-    alerts.forEach(alert => {
-      setTimeout(() => {
-        alert.classList.remove('show');
-        alert.classList.add('fade');
-        setTimeout(() => alert.remove(), 500);
-      }, 5000);
-    });
+  // Alternar entre vista de perfil y sección de edición
+  editBtn.addEventListener('click', function() {
+    if (editSection.style.display === 'block') {
+      // Cancelar edición
+      profileSection.style.display = 'block';
+      editSection.style.display = 'none';
+      editBtn.textContent = 'Editar perfil';
+    } else {
+      // Iniciar edición
+      profileSection.style.display = 'none';
+      editSection.style.display = 'block';
+      editBtn.textContent = 'Cancelar edición';
+    }
   });
 </script>
 

@@ -78,35 +78,71 @@
       <form id="registerForm" method="POST" action="{{ url_for('register') }}">
         {{ form.hidden_tag() }}
 
-        <div class="mb-3">
-          <label for="username" class="form-label">Nombre de usuario:</label>
-          {{ form.username(class="form-control", id="username") }}
-          <div class="text-danger" id="usernameError"></div>
-        </div>
-
-        <div class="mb-3">
-          <label for="email" class="form-label">Correo electrónico:</label>
-          {{ form.email(class="form-control", id="email") }}
-          <div class="text-danger" id="emailError"></div>
-        </div>
-
-        <div class="mb-3">
-          <label for="password" class="form-label">Contraseña:</label>
-          {{ form.password(class="form-control", id="password") }}
-          <div class="text-danger" id="passwordError"></div>
-        </div>
-
-        <div class="mb-3">
-          <label for="centro" class="form-label">Centro de estudios:</label>
-          {{ form.centro(class="form-control", id="centro") }}
-          <div class="text-danger" id="centroError"></div>
-        </div>
-
-        <div class="mb-3">
-          <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento:</label>
-          {{ form.fecha_nacimiento(class="form-control", id="fecha_nacimiento") }}
-          <div class="text-danger" id="fechaNacimientoError"></div>
-        </div>
+        <!-- 1. Nombre -->
+<div class="mb-3">
+    <label for="nombre_completo" class="form-label">Nombre completo:</label>
+    {{ form.nombre_completo(class="form-control", id="nombre_completo") }}
+  </div>
+  
+  <!-- 2. Género -->
+  <div class="mb-3">
+    <label for="genero" class="form-label">Género:</label>
+    {{ form.genero(class="form-select", id="genero") }}
+  </div>
+  
+  <!-- 3. Teléfono -->
+  <div class="mb-3">
+    <label for="telefono" class="form-label">Teléfono (opcional):</label>
+    {{ form.telefono(class="form-control", id="telefono") }}
+  </div>
+  
+  <!-- 4. Fecha de nacimiento -->
+  <div class="mb-3">
+    <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento:</label>
+    {{ form.fecha_nacimiento(class="form-control", id="fecha_nacimiento") }}
+  </div>
+  
+  <!-- 5. Centro de estudios -->
+  <div class="mb-3">
+    <label for="centro" class="form-label">Centro de estudios:</label>
+    {{ form.centro(class="form-control", id="centro") }}
+  </div>
+  
+  <!-- 6. Correo -->
+  <div class="mb-3">
+    <label for="email" class="form-label">Correo electrónico:</label>
+    {{ form.email(class="form-control", id="email") }}
+  </div>
+  
+  <!-- 7. Contraseña -->
+  <div class="mb-3">
+    <label for="password" class="form-label">Contraseña:</label>
+    {{ form.password(class="form-control", id="password") }}
+  </div>
+  
+  <!-- 8. País -->
+  <div class="mb-3">
+    <label for="pais" class="form-label">País:</label>
+    <select name="pais" id="pais" class="form-select" required>
+      <option value="">Selecciona un país</option>
+    </select>
+  </div>
+  
+  <!-- 9. Estado / Provincia -->
+  <div class="mb-3">
+    <label for="estado" class="form-label">Estado / Provincia:</label>
+    <select name="estado" id="estado" class="form-select" disabled required>
+      <option value="">Selecciona primero un país</option>
+    </select>
+  </div>
+  
+  <!-- 10. Ciudad -->
+  <div class="mb-3">
+    <label for="ciudad" class="form-label">Ciudad:</label>
+    <select name="ciudad" id="ciudad" class="form-select" disabled required>
+      <option value="">Selecciona primero un estado</option>
+    </select>
+  </div>
 
         <div class="d-grid">
           <button type="submit" class="btn btn-custom">Registrar</button>
@@ -127,49 +163,147 @@
 </div>
 
 <script>
-  document.getElementById("registerForm").addEventListener("submit", function(e) {
-    const username = document.getElementById("username");
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-    const centro = document.getElementById("centro");
-    const fechaNacimiento = document.getElementById("fecha_nacimiento");
+    document.addEventListener("DOMContentLoaded", async function () {
+      const paisSelect = document.getElementById("pais");
+      const estadoSelect = document.getElementById("estado");
+      const ciudadSelect = document.getElementById("ciudad");
+    
+      // Cargar países
+      try {
+        const res = await fetch("/static/data/countries.json");
+        const paises = await res.json();
+    
+        paises.forEach(pais => {
+          const opt = document.createElement("option");
+          opt.value = pais.id;
+          opt.textContent = pais.name;
+          paisSelect.appendChild(opt);
+        });
+      } catch (error) {
+        console.error("Error cargando países", error);
+      }
+    
+      // Al seleccionar país → cargar estados
+      paisSelect.addEventListener("change", async function () {
+        const paisId = this.value;
+        estadoSelect.innerHTML = "<option value=''>Cargando estados...</option>";
+        estadoSelect.disabled = true;
+        ciudadSelect.innerHTML = "<option value=''>Selecciona una ciudad</option>";
+        ciudadSelect.disabled = true;
+    
+        try {
+          const res = await fetch(`/api/estados?pais_id=${paisId}`);
+          const estados = await res.json();
+    
+          estadoSelect.innerHTML = "<option value=''>Selecciona un estado</option>";
+          estados.forEach(estado => {
+            const opt = document.createElement("option");
+            opt.value = estado.id;
+            opt.textContent = estado.name;
+            estadoSelect.appendChild(opt);
+          });
+    
+          estadoSelect.disabled = false;
+        } catch (error) {
+          console.error("Error cargando estados", error);
+          estadoSelect.innerHTML = "<option value=''>Error al cargar</option>";
+        }
+      });
+    
+      // Al seleccionar estado → cargar ciudades
+      estadoSelect.addEventListener("change", async function () {
+        const estadoId = this.value;
+        ciudadSelect.innerHTML = "<option value=''>Cargando ciudades...</option>";
+        ciudadSelect.disabled = true;
+    
+        try {
+          const res = await fetch(`/api/ciudades?estado_id=${estadoId}`);
+          const ciudades = await res.json();
+    
+          ciudadSelect.innerHTML = "<option value=''>Selecciona una ciudad</option>";
+          ciudades.forEach(ciudad => {
+            const opt = document.createElement("option");
+            opt.value = ciudad;
+            opt.textContent = ciudad;
+            ciudadSelect.appendChild(opt);
+          });
+    
+          ciudadSelect.disabled = false;
+        } catch (error) {
+          console.error("Error cargando ciudades", error);
+          ciudadSelect.innerHTML = "<option value=''>Error al cargar</option>";
+        }
+      });
+    });
+    </script>
 
-    document.getElementById("usernameError").textContent = "";
-    document.getElementById("emailError").textContent = "";
-    document.getElementById("passwordError").textContent = "";
-    document.getElementById("centroError").textContent = "";
-    document.getElementById("fechaNacimientoError").textContent = "";
-
-    if (username.value.length < 3) {
-      document.getElementById("usernameError").textContent = "El nombre de usuario debe tener al menos 3 caracteres.";
-      e.preventDefault();
-    }
-
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email.value)) {
-      document.getElementById("emailError").textContent = "Por favor, ingresa un correo electrónico válido.";
-      e.preventDefault();
-    }
-
-    if (password.value.length < 6) {
-      document.getElementById("passwordError").textContent = "La contraseña debe tener al menos 6 caracteres.";
-      e.preventDefault();
-    }
-
-    if (!centro.value) {
-      document.getElementById("centroError").textContent = "Por favor, ingresa el centro de estudios.";
-      e.preventDefault();
-    }
-
-    const birthDate = new Date(fechaNacimiento.value);
-    const today = new Date();
-    const age = today.getFullYear() - birthDate.getFullYear();
-    if (age < 16) {
-      document.getElementById("fechaNacimientoError").textContent = "Debes ser mayor de 16 años para registrarte.";
-      e.preventDefault();
-    }
-  });
-</script>
+<script>
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+      const nombreCompleto = document.getElementById("nombre_completo");
+      const email = document.getElementById("email");
+      const password = document.getElementById("password");
+      const centro = document.getElementById("centro");
+      const fechaNacimiento = document.getElementById("fecha_nacimiento");
+      const genero = document.getElementById("genero");
+      const pais = document.getElementById("pais");
+      const ciudad = document.getElementById("ciudad");
+  
+      // Limpiar mensajes de error
+      document.getElementById("usernameError").textContent = "";
+      document.getElementById("emailError").textContent = "";
+      document.getElementById("passwordError").textContent = "";
+      document.getElementById("centroError").textContent = "";
+      document.getElementById("fechaNacimientoError").textContent = "";
+      document.getElementById("generoError").textContent = "";
+      document.getElementById("paisError").textContent = "";
+      document.getElementById("ciudadError").textContent = "";
+  
+      // Validaciones
+      if (username.value.length < 3) {
+        document.getElementById("usernameError").textContent = "El nombre de usuario debe tener al menos 3 caracteres.";
+        e.preventDefault();
+      }
+  
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email.value)) {
+        document.getElementById("emailError").textContent = "Por favor, ingresa un correo electrónico válido.";
+        e.preventDefault();
+      }
+  
+      if (password.value.length < 6) {
+        document.getElementById("passwordError").textContent = "La contraseña debe tener al menos 6 caracteres.";
+        e.preventDefault();
+      }
+  
+      if (!centro.value) {
+        document.getElementById("centroError").textContent = "Por favor, ingresa el centro de estudios.";
+        e.preventDefault();
+      }
+  
+      const birthDate = new Date(fechaNacimiento.value);
+      const today = new Date();
+      const age = today.getFullYear() - birthDate.getFullYear();
+      if (age < 16) {
+        document.getElementById("fechaNacimientoError").textContent = "Debes ser mayor de 16 años para registrarte.";
+        e.preventDefault();
+      }
+  
+      if (!genero.value) {
+        document.getElementById("generoError").textContent = "Por favor, selecciona tu género.";
+        e.preventDefault();
+      }
+  
+      if (!pais.value) {
+        document.getElementById("paisError").textContent = "Por favor, selecciona un país.";
+        e.preventDefault();
+      }
+  
+      if (!ciudad.value) {
+        document.getElementById("ciudadError").textContent = "Por favor, selecciona una ciudad.";
+        e.preventDefault();
+      }
+    });
+  </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
