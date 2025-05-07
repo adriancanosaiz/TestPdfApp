@@ -17,6 +17,7 @@ from urllib.parse import urlparse
 import requests
 import os
 import json
+from markupsafe import Markup
 
 
 # Cargar variables de entorno
