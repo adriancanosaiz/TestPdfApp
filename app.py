@@ -14,7 +14,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, DateField, SelectField
 from wtforms.validators import DataRequired, Email, Length, Optional
 from urllib.parse import urlparse
-from celery import Celery
 import requests
 import os
 import json
