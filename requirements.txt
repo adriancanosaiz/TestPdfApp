@@ -9,3 +9,4 @@ python-dotenv==0.21.0
 email-validator==1.1.3
 gunicorn==21.2.0
 celery==5.5.2
+cohere==3.9.1
