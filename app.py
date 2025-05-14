@@ -27,20 +27,31 @@ app.config['SECRET_KEY'] = 'mysecretkey'  # Cambia esto en producción
 
 
 # Cargar la URL de conexión desde las variables de entorno
-mysql_url = os.getenv('MYSQL_URL')
+mysql_url = os.getenv('MYSQL_URL')  # Asegúrate de que esta variable esté configurada correctamente
+
+# Verificar que la URL esté cargada
+if not mysql_url:
+    raise ValueError("MYSQL_URL no está configurada correctamente en las variables de entorno.")
 
 # Analizar la URL
 url = urlparse(mysql_url)
 
 # Configuración de MySQL usando los valores de la URL
-app.config['MYSQL_HOST'] = url.hostname
-app.config['MYSQL_USER'] = url.username
-app.config['MYSQL_PASSWORD'] = url.password
-app.config['MYSQL_DB'] = url.path[1:]  # Eliminar el primer '/' en la ruta
-app.config['MYSQL_PORT'] = url.port
+app.config['MYSQL_HOST'] = url.hostname  # Host de DigitalOcean
+app.config['MYSQL_USER'] = url.username  # Usuario de la base de datos
+app.config['MYSQL_PASSWORD'] = url.password  # Contraseña de la base de datos
+app.config['MYSQL_DB'] = url.path[1:]  # Eliminar el primer '/' en la ruta para obtener el nombre de la base de datos
+app.config['MYSQL_PORT'] = url.port  # Puerto (25060 para DigitalOcean)
+
+# Aquí manejamos el parámetro de SSL requerido
+app.config['MYSQL_SSL'] = {
+    'ssl': {'ca': '/path/to/ca-cert.pem'}  # Asegúrate de tener el certificado de autoridad (CA) correcto
+}
 
 # Inicializar MySQL
 mysql = MySQL(app)
+
+# Ahora puedes usar mysql para hacer consultas o interactuar con tu base de datos
 
 # Formularios
 class RegisterForm(FlaskForm):
@@ -80,7 +91,21 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
 
-# Funciones auxiliares
+import os
+import json
+import requests
+import cohere
+import PyPDF2
+
+# Inicializar cliente de Cohere
+co = cohere.Client(os.getenv("COHERE_API_KEY"))
+
+import os
+import json
+import cohere
+import PyPDF2
+
+# Función para extraer texto de PDF
 def extraer_texto_pdf(pdf_file):
     try:
         reader = PyPDF2.PdfReader(pdf_file)
@@ -91,13 +116,30 @@ def extraer_texto_pdf(pdf_file):
     except Exception as e:
         print(f"Error al leer el PDF: {e}")
         return ""
-    
-def generar_preguntas(texto, cantidad=10, dificultad="medio"):
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        raise ValueError("La clave de API de Gemini no se ha cargado correctamente.")
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key={api_key}"
+# Función para intentar parsear JSON incluso si está incompleto
+def intentar_parsear_json(texto_generado):
+    try:
+        return json.loads(texto_generado)
+    except json.JSONDecodeError:
+        ultima_llave = texto_generado.rfind("}")
+        if ultima_llave != -1:
+            try:
+                texto_corregido = texto_generado[:ultima_llave + 1] + "]"
+                if not texto_corregido.startswith("["):
+                    texto_corregido = "[" + texto_corregido
+                return json.loads(texto_corregido)
+            except Exception as e2:
+                print("No se pudo corregir el JSON:", e2)
+        return []
+
+# Función para generar preguntas tipo test con Cohere
+def generar_preguntas(texto, cantidad=10, dificultad="medio"):
+    cohere_api_key = os.getenv("COHERE_API_KEY")
+    if not cohere_api_key:
+        raise ValueError("La clave de API de Cohere no se ha cargado correctamente.")
+
+    co = cohere.Client(cohere_api_key)
 
     prompt = f"""Crea {cantidad} preguntas tipo test basadas en el siguiente texto:
 {texto}
@@ -111,51 +153,30 @@ Para cada pregunta, proporciona:
 - "explicacion" (una breve explicación de la respuesta correcta).
 
 La respuesta debe ser estrictamente un JSON válido.
-No incluyas comentarios, explicaciones, ni bloques de código como ```json o similares.
 Solo responde con el JSON directamente, limpio y listo para parsear.
 """
 
-    data = {"contents": [{"parts": [{"text": prompt}]}]}
-    headers = {"Content-Type": "application/json"}
+    try:
+        response = co.generate(
+            model="command-r-plus",
+            prompt=prompt,
+            temperature=0.7
+        )
 
-    intentos = 0
-    max_intentos = 3  # Puedes ajustar el número de intentos antes de abandonar
+        texto_generado = response.generations[0].text.strip()
+        print("Respuesta cruda de Cohere:", texto_generado)
 
-    while intentos < max_intentos:
-        try:
-            response = requests.post(url, headers=headers, data=json.dumps(data))
-            response.raise_for_status()
+        preguntas = intentar_parsear_json(texto_generado)
 
-            # Si la solicitud fue exitosa, procesamos la respuesta
-            content = response.json()
-            texto_generado = content['candidates'][0]['content']['parts'][0]['text']
-            
-            if texto_generado.startswith("```"):
-                texto_generado = texto_generado.strip().lstrip("```json").lstrip("```").rstrip("```").strip()
+        # Guardar preguntas en un archivo
+        with open('test.json', 'w', encoding='utf-8') as f:
+            json.dump(preguntas, f, indent=4, ensure_ascii=False)
 
-            preguntas = json.loads(texto_generado)
+        return preguntas
 
-            with open('test.json', 'w', encoding='utf-8') as f:
-                json.dump(preguntas, f, indent=4, ensure_ascii=False)
-
-            return preguntas
-
-        except requests.exceptions.HTTPError as e:
-            if response.status_code == 429:
-                # Si es un error 429, esperamos antes de intentar nuevamente
-                print("Demasiadas solicitudes. Esperando antes de reintentar...")
-                time.sleep(60)  # Espera de 60 segundos antes de reintentar
-                intentos += 1
-            else:
-                print(f"Error al generar las preguntas: {e}")
-                return []
-
-        except Exception as e:
-            print(f"Error al generar las preguntas: {e}")
-            return []
-
-    print("Se ha superado el número máximo de intentos debido a errores de API.")
-    return []
+    except Exception as e:
+        print(f"Error al generar las preguntas con Cohere: {e}")
+        return []
     
 def obtener_historial_tests(user_id):
     # Consultar los resultados de los tests realizados por el usuario
