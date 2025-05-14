@@ -1,1 +1,112 @@
-[]
+[
+    {
+        "pregunta": "¿Cuál es el comando para crear un nuevo repositorio local desde cero?",
+        "opciones": [
+            "git clone",
+            "git init",
+            "git status",
+            "git add"
+        ],
+        "respuesta_correcta": "git init",
+        "explicacion": "El comando 'git init' se utiliza para inicializar un nuevo repositorio Git en el directorio actual, permitiendo comenzar a realizar un seguimiento de los archivos y cambios en ese directorio."
+    },
+    {
+        "pregunta": "¿Cómo puedes descargar un repositorio existente desde una URL remota?",
+        "opciones": [
+            "git init",
+            "git clone",
+            "git pull",
+            "git fetch"
+        ],
+        "respuesta_correcta": "git clone",
+        "explicacion": "El comando 'git clone' se utiliza para crear una copia local de un repositorio remoto. Requiere la URL del repositorio remoto para descargar todos los archivos y el historial del proyecto."
+    },
+    {
+        "pregunta": "¿Cómo puedes ver el estado actual de tu repositorio local?",
+        "opciones": [
+            "git diff",
+            "git status",
+            "git log",
+            "git show"
+        ],
+        "respuesta_correcta": "git status",
+        "explicacion": "El comando 'git status' muestra el estado actual del repositorio local, incluyendo los archivos modificados, creados o eliminados, así como los cambios que aún no han sido confirmados (committed)."
+    },
+    {
+        "pregunta": "¿Cómo puedes ver los cambios realizados en los archivos que aún no han sido confirmados?",
+        "opciones": [
+            "git status",
+            "git diff",
+            "git log",
+            "git show"
+        ],
+        "respuesta_correcta": "git diff",
+        "explicacion": "El comando 'git diff' muestra los cambios realizados en los archivos que aún no han sido confirmados (staged). Esto permite revisar las modificaciones antes de agregarlas al área de preparación (staging area)."
+    },
+    {
+        "pregunta": "¿Cómo puedes ver los cambios realizados en los archivos que ya han sido confirmados (staged)?",
+        "opciones": [
+            "git diff",
+            "git diff --cached",
+            "git show",
+            "git log"
+        ],
+        "respuesta_correcta": "git diff --cached",
+        "explicacion": "El comando 'git diff --cached' muestra los cambios realizados en los archivos que ya han sido agregados al área de preparación (staged). Esto permite revisar las modificaciones antes de confirmarlas (commit)."
+    },
+    {
+        "pregunta": "¿Cómo puedes ver todos los cambios realizados en los archivos, tanto los confirmados como los no confirmados?",
+        "opciones": [
+            "git diff",
+            "git diff HEAD",
+            "git show",
+            "git log"
+        ],
+        "respuesta_correcta": "git diff HEAD",
+        "explicacion": "El comando 'git diff HEAD' muestra todos los cambios realizados en los archivos en comparación con la última confirmación (commit). Esto incluye tanto los cambios confirmados como los no confirmados."
+    },
+    {
+        "pregunta": "¿Cómo puedes ver los cambios realizados entre dos confirmaciones (commits) específicas?",
+        "opciones": [
+            "git diff commit1 commit2",
+            "git show commit1 commit2",
+            "git log commit1..commit2",
+            "git diff --cached commit1 commit2"
+        ],
+        "respuesta_correcta": "git diff commit1 commit2",
+        "explicacion": "El comando 'git diff commit1 commit2' muestra los cambios realizados entre dos confirmaciones (commits) específicas, permitiendo comparar las diferencias en los archivos entre esas dos confirmaciones."
+    },
+    {
+        "pregunta": "¿Cómo puedes ver el historial de cambios de un archivo específico?",
+        "opciones": [
+            "git blame",
+            "git log",
+            "git show",
+            "git diff"
+        ],
+        "respuesta_correcta": "git blame",
+        "explicacion": "El comando 'git blame' muestra el historial de cambios de un archivo específico, incluyendo las fechas y los autores de cada modificación realizada en el archivo."
+    },
+    {
+        "pregunta": "¿Cómo puedes ver los cambios realizados en un archivo específico para una confirmación (commit) específica?",
+        "opciones": [
+            "git show commit:file",
+            "git diff commit:file",
+            "git log -p file",
+            "git blame file"
+        ],
+        "respuesta_correcta": "git show commit:file",
+        "explicacion": "El comando 'git show commit:file' muestra los cambios realizados en un archivo específico para una confirmación (commit) específica, permitiendo revisar las modificaciones hechas en ese archivo en esa confirmación en particular."
+    },
+    {
+        "pregunta": "¿Cómo puedes ver el historial completo de confirmaciones (commits) en tu repositorio?",
+        "opciones": [
+            "git log",
+            "git show",
+            "git diff",
+            "git status"
+        ],
+        "respuesta_correcta": "git log",
+        "explicacion": "El comando 'git log' muestra el historial completo de confirmaciones (commits) en tu repositorio, incluyendo información sobre cada confirmación, como el autor, la fecha y el mensaje asociado."
+    }
+]
