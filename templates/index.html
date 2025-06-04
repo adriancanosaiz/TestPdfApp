@@ -227,13 +227,6 @@
       return;
     }
 
-    const maxSizeMB = 5;
-    if (file.size > maxSizeMB * 1024 * 1024) {
-      fileError.textContent = `El archivo no debe superar los ${maxSizeMB}MB.`;
-      e.preventDefault();
-      return;
-    }
-
     loadingSpinner.style.display = "block";
     submitButton.textContent = "Procesando...";
     submitButton.disabled = true;
